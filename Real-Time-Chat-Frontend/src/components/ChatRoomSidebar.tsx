@@ -18,27 +18,29 @@ export default function ChatRoomSidebar() {
     });
   }, []);
   return (
-    <div className="hidden sm:block bg-indigo-500 text-white max-h-96 overflow-y-auto px-5 pt-5 pb-16">
-      <h3 className="mb-4 text-lg font-bold">
-        {" "}
+    <aside className="grid grid-cols-2 gap-x-5 items-center sm:block bg-indigo-500 text-white max-h-96 overflow-y-auto p-5 sm:pb-16">
+      <h3 className="sm:mb-4 text-lg font-bold">
         <Mails className="inline mr-0.5 mb-1" size={18} /> Room:
       </h3>
       <h2
-        className="text-xl p-3 mb-5 bg-black bg-opacity-10 rounded-lg"
+        className="text-xl p-3 sm:mb-5 bg-black bg-opacity-10 rounded-lg"
         id="room-name"
       >
         {roomName}
       </h2>
-      <h3 className="mb-4 text-lg font-bold">
-        <User className="inline mr-0.5 mb-1" size={18} /> Users:
-      </h3>
-      <ul id="users">
-        {usersList.map((user) => (
-          <li className="py-3" key={user.id}>
-            {user.username}
-          </li>
-        ))}
-      </ul>
-    </div>
+      <div className="hidden sm:block">
+        <h3 className="mb-4 text-lg font-bold">
+          <User className="inline mr-0.5 mb-1" size={18} /> Users(
+          {usersList.length}):
+        </h3>
+        <ul id="users">
+          {usersList.map((user) => (
+            <li className="py-3" key={user.id}>
+              {user.username}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </aside>
   );
 }

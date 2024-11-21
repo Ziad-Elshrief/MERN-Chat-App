@@ -1,6 +1,8 @@
 import { CirclePlus, Mails, MessagesSquare, User } from "lucide-react";
 import { socket } from "../socket";
 
+const MAX_LENGTH = 16;
+
 type joinChatProps = {
   setJoined: React.Dispatch<React.SetStateAction<boolean>>;
 };
@@ -36,6 +38,7 @@ export default function JoinChat({ setJoined }: joinChatProps) {
               id="username"
               placeholder="Enter username..."
               required
+              maxLength={MAX_LENGTH}
             />
           </div>
           <div>
@@ -49,6 +52,7 @@ export default function JoinChat({ setJoined }: joinChatProps) {
               id="room"
               placeholder="Enter room name..."
               required
+              maxLength={MAX_LENGTH}
             />
           </div>
           <button
