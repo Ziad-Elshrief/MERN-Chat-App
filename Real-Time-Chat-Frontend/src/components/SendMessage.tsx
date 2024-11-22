@@ -17,6 +17,7 @@ export default function SendMessage() {
     if (message !== "") {
       socket.emit("chatMessage", message);
       target.msg.value = "";
+      target.msg.style = "height:40px !important";
       target.msg.focus();
     }
   }
@@ -62,7 +63,7 @@ export default function SendMessage() {
           className="bg-white dark:bg-slate-800 p-[7px] min-h-10 flex-1 resize-none  caret-indigo-700 text-indigo-900 dark:text-indigo-300 focus:outline-none focus:border focus:border-indigo-300 focus:ring-0 focus:ring-offset-0"
           id="msg"
           name="msg"
-          placeholder="Enter Message..."
+          placeholder="Enter message..."
           maxRows={4}
           autoComplete="off"
         />

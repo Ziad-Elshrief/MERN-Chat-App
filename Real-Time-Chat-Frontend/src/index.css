@@ -16,7 +16,10 @@
     @apply rounded-md;
 }
 
-
 ::-webkit-scrollbar-thumb:hover {
     @apply bg-indigo-800
+}
+
+textarea::-webkit-scrollbar{
+    @apply w-0 sm:w-2.5
 }
