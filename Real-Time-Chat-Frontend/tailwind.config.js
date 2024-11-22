@@ -8,7 +8,7 @@ export default {
 
     extend: {
       height:{
-        "dynamic": "calc(100dvh - 64px)"
+        "app": "calc(100dvh - 64px)",
       },
     },
   },

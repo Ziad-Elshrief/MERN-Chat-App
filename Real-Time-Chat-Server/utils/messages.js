@@ -1,12 +1,13 @@
-const moment = require("moment");
+const moment = require("moment-timezone");
 
-function formatMessage(username,userId, text) {
+function formatMessage(username, userId, content, isImage = false) {
   return {
     username,
     userId,
-    text,
-    time: moment().format("h:mm A"),
+    content,
+    isImage,
+    time: moment().tz("Africa/Cairo").format("h:mm A"),
   };
-};
+}
 
 module.exports = { formatMessage };

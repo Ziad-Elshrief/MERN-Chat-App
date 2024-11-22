@@ -2,7 +2,8 @@ import { socket } from "../socket";
 import { useEffect, useRef, useState } from "react";
 
 type Message = {
-  text: string;
+  isImage: boolean;
+  content: string;
   time: string;
   username: string;
   userId: string;
@@ -23,7 +24,7 @@ export default function MessagesContainer() {
   }, [messagesList]);
   return (
     <div
-      className="bg-white dark:bg-slate-800 p-8 max-h-96 overflow-y-scroll border-l-2 border-l-indigo-700 sm:border-0"
+      className=" bg-white dark:bg-slate-800 p-8 overflow-y-scroll border-l-2 border-l-indigo-700 sm:border-0"
       ref={messagesRef}
     >
       {messagesList.map((msg, index) =>
@@ -32,7 +33,7 @@ export default function MessagesContainer() {
             className="mb-3 text-indigo-900 dark:text-indigo-300 block text-center"
             key={index}
           >
-            {msg.text}
+            {msg.content}
           </p>
         ) : (
           <div
@@ -47,7 +48,11 @@ export default function MessagesContainer() {
               {msg.username}
               <span className="text-gray-800 font-bold ml-1">{msg.time}</span>
             </p>
-            <p>{msg.text}</p>
+            {msg.isImage ? (
+              <img className="w-full" src={msg.content} />
+            ) : (
+              <p>{msg.content}</p>
+            )}
           </div>
         )
       )}

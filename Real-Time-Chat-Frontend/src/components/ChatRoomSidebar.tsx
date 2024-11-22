@@ -18,7 +18,8 @@ export default function ChatRoomSidebar() {
     });
   }, []);
   return (
-    <aside className="grid grid-cols-2 gap-x-5 items-center sm:block bg-indigo-500 text-white max-h-96 overflow-y-auto p-5 sm:pb-16">
+    // grid grid-cols-2
+    <aside className="hidden  gap-x-5 items-center sm:block bg-indigo-500 text-white overflow-y-auto p-5 sm:pb-16">
       <h3 className="sm:mb-4 text-lg font-bold">
         <Mails className="inline mr-0.5 mb-1" size={18} /> Room:
       </h3>

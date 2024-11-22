@@ -47,6 +47,14 @@ io.on("connection", (socket) => {
       formatMessage(user.username, user.id, msg)
     );
   });
+  // Listen for image message
+  socket.on("imageMessage", (image) => {
+    const user = getCurrentUser(socket.id);
+    io.to(user.room).emit(
+      "message",
+      formatMessage(user.username, user.id, image, true)
+    );
+  });
   // Runs when client disconnects
   socket.on("disconnect", () => {
     const user = userLeave(socket.id);

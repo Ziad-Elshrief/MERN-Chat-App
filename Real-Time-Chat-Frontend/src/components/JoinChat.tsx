@@ -32,7 +32,7 @@ export default function JoinChat({ setJoined }: joinChatProps) {
               <User className="inline mr-0.5 mb-1" size={16} /> Username
             </label>
             <input
-              className="bg-white dark:bg-slate-800 p-2 h-10 w-full caret-indigo-700 text-indigo-900 dark:text-indigo-300  rounded-lg focus:outline-indigo-700 autofill:shadow-[inset_0_0_0px_1000px_rgb(129,140,248)]"
+              className="bg-white dark:bg-slate-800 p-2 h-10 w-full caret-indigo-700 text-indigo-900 dark:text-indigo-300  rounded-lg focus:outline-none focus:border focus:border-indigo-300 focus:ring-0 focus:ring-offset-0 autofill:shadow-[inset_0_0_0px_1000px_rgb(129,140,248)]"
               type="text"
               name="username"
               id="username"
@@ -46,7 +46,7 @@ export default function JoinChat({ setJoined }: joinChatProps) {
               <Mails className="inline mr-0.5 mb-1" size={16} /> Room
             </label>
             <input
-              className="bg-white dark:bg-slate-800 p-2 h-10 w-full caret-indigo-700 text-indigo-900 dark:text-indigo-300 rounded-lg focus:outline-indigo-700 autofill:shadow-[inset_0_0_0px_1000px_rgb(129,140,248)]"
+              className="bg-white dark:bg-slate-800 p-2 h-10 w-full caret-indigo-700 text-indigo-900 dark:text-indigo-300 rounded-lg focus:outline-none focus:border focus:border-indigo-300 focus:ring-0 focus:ring-offset-0 autofill:shadow-[inset_0_0_0px_1000px_rgb(129,140,248)]"
               type="text"
               name="room"
               id="room"

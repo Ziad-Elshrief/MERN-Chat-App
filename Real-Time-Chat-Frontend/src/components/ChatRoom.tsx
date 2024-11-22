@@ -14,8 +14,8 @@ export default function ChatRoom({ setJoined }: chatRoomProps) {
     socket.disconnect();
   }
   return (
-    <div className="mx-5 md:w-4/5 max-w-5xl my-8 md:mx-auto overflow-hidden max-h-dynamic bg-white rounded-xl shadow-md">
-      <header className="text-white bg-indigo-700  p-4 flex justify-between items-center">
+    <div className="mx-5 md:w-4/5 max-w-5xl my-8 md:mx-auto overflow-hidden h-app bg-white rounded-xl shadow-md flex flex-col">
+      <header className="text-white bg-indigo-700  p-4 flex justify-between items-center h-[72px]">
         <h1 className="text-lg">
           <MessagesSquare className="inline mr-0.5 mb-1" /> Chat App
         </h1>
@@ -28,7 +28,7 @@ export default function ChatRoom({ setJoined }: chatRoomProps) {
           Leave Room
         </button>
       </header>
-      <main className="sm:grid sm:grid-cols-[1fr_3fr]">
+      <main className="sm:grid sm:grid-cols-[1fr_3fr] flex-1">
         <ChatRoomSidebar />
         <MessagesContainer />
       </main>
