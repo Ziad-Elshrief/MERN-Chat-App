@@ -7,9 +7,6 @@ export default {
   theme: {
 
     extend: {
-      height:{
-        "app": "calc(100dvh - 64px)",
-      },
     },
   },
   plugins: [],

@@ -8,7 +8,11 @@ type User = {
   username: string;
 };
 
-export default function ChatRoomSidebar() {
+type ChatRoomSidebarProps = {
+  customClass?: string;
+};
+
+export default function ChatRoomSidebar({ customClass }: ChatRoomSidebarProps) {
   const [roomName, setRoomName] = useState("");
   const [usersList, setUsersList] = useState<User[]>([]);
   useEffect(() => {
@@ -18,12 +22,14 @@ export default function ChatRoomSidebar() {
     });
   }, []);
   return (
-    <aside className="hidden sm:block bg-indigo-500 text-white overflow-y-auto p-5 sm:pb-16">
-      <h3 className="sm:mb-4 text-lg font-bold">
+    <aside
+      className={`${customClass} bg-indigo-500 text-white overflow-y-auto p-5 sm:pb-16`}
+    >
+      <h3 className="mb-4 text-lg font-bold">
         <Mails className="inline mr-0.5 mb-1" size={18} /> Room:
       </h3>
       <h2
-        className="text-xl p-3 sm:mb-5 bg-black bg-opacity-10 rounded-lg"
+        className="text-xl p-3 mb-5 bg-black bg-opacity-10 rounded-lg w-fit"
         id="room-name"
       >
         {roomName}
