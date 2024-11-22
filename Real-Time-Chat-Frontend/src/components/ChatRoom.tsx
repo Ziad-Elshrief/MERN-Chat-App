@@ -28,7 +28,7 @@ export default function ChatRoom({ setJoined }: chatRoomProps) {
           Leave Room
         </button>
       </header>
-      <main className="sm:grid sm:grid-cols-[1fr_3fr] flex-1">
+      <main className="grid grid-cols-1 sm:grid-cols-[1fr_3fr] flex-1 min-h-0">
         <ChatRoomSidebar />
         <MessagesContainer />
       </main>
