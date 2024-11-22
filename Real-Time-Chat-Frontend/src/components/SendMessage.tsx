@@ -1,6 +1,7 @@
 import { ImageUp, Send, X } from "lucide-react";
 import { socket } from "../socket";
 import { useRef, useState } from "react";
+import TextareaAutosize from "react-textarea-autosize";
 
 export default function SendMessage() {
   const [image, setImage] = useState("");
@@ -38,7 +39,11 @@ export default function SendMessage() {
           </button>
         </div>
       )}
-      <form id="chat-form" className="flex" onSubmit={(e) => sendMessage(e)}>
+      <form
+        id="chat-form"
+        className="flex items-end"
+        onSubmit={(e) => sendMessage(e)}
+      >
         <input
           type="file"
           className="hidden"
@@ -48,18 +53,18 @@ export default function SendMessage() {
         />
         <button
           type="button"
-          className="flex-shrink-0  bg-indigo-900 p-2 text-white hover:bg-indigo-500 rounded-s-lg focus:outline-none focus:border focus:border-indigo-300 focus:ring-0 focus:ring-offset-0"
+          className="flex-shrink-0 bg-indigo-900 p-2 text-white hover:bg-indigo-500 rounded-s-lg focus:outline-none focus:border focus:border-indigo-300 focus:ring-0 focus:ring-offset-0"
           onClick={() => fileInput.current?.click()}
         >
           <ImageUp />
         </button>
-        <input
-          autoComplete="off"
-          className="bg-white dark:bg-slate-800 p-2 h-10 flex-1  caret-indigo-700 text-indigo-900 dark:text-indigo-300 focus:outline-none focus:border focus:border-indigo-300 focus:ring-0 focus:ring-offset-0"
+        <TextareaAutosize
+          className="bg-white dark:bg-slate-800 p-[7px] min-h-10 flex-1 resize-none  caret-indigo-700 text-indigo-900 dark:text-indigo-300 focus:outline-none focus:border focus:border-indigo-300 focus:ring-0 focus:ring-offset-0"
           id="msg"
           name="msg"
-          type="text"
-          placeholder="Enter Message"
+          placeholder="Enter Message..."
+          maxRows={4}
+          autoComplete="off"
         />
         <button className="flex-shrink-0  bg-indigo-900 p-2 rounded-e-lg text-white hover:bg-indigo-500 focus:outline-none focus:border focus:border-indigo-300 focus:ring-0 focus:ring-offset-0">
           <Send className="mr-0.5 inline mb-1" size={14} /> Send
