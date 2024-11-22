@@ -49,7 +49,7 @@ export default function ChatRoom({ setJoined }: chatRoomProps) {
         <ChatRoomSidebar
           customClass={`${
             showSide
-              ? "absolute top-0 left-0 w-full h-[calc(100dvh-72px)]"
+              ? "absolute top-0 left-0 z-50 w-full h-[calc(100dvh-72px)]"
               : "hidden sm:block"
           } `}
         />
