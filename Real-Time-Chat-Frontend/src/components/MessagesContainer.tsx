@@ -44,10 +44,12 @@ export default function MessagesContainer() {
             } rounded-md w-10/12 sm:w-7/12 break-words shadow-md`}
             key={index}
           >
-            <p className="text-indigo-900 font-semibold opacity-70 mb-2 ">
-              {msg.username}
+            <div className="flex justify-between items-center">
+              <p className="text-indigo-900 font-semibold opacity-70 mb-2 ">
+                {msg.username}
+              </p>
               <span className="text-gray-800 font-bold ml-1">{msg.time}</span>
-            </p>
+            </div>
             {msg.isImage ? (
               <img className="w-full" src={msg.content} />
             ) : (

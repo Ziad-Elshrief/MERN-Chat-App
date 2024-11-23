@@ -23,7 +23,7 @@ export default function ChatRoomSidebar({ customClass }: ChatRoomSidebarProps) {
   }, []);
   return (
     <aside
-      className={`${customClass} bg-indigo-500 text-white overflow-y-auto p-5 sm:pb-16`}
+      className={`${customClass} bg-indigo-500 text-white overflow-y-auto pt-5 px-5 pb-16`}
     >
       <h3 className="mb-4 text-lg font-bold">
         <Mails className="inline mr-0.5 mb-1" size={18} /> Room:
