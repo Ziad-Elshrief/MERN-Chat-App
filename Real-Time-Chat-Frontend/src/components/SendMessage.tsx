@@ -5,7 +5,8 @@ import TextareaAutosize from "react-textarea-autosize";
 
 export default function SendMessage() {
   const [image, setImage] = useState("");
-  const fileInput = useRef<HTMLInputElement | null>(null);
+  const fileInput = useRef<HTMLInputElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   function sendMessage(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const target = e.target as HTMLFormElement;
@@ -21,17 +22,34 @@ export default function SendMessage() {
       target.msg.focus();
     }
   }
-  function getImage() {
+  async function getImage() {
     if (!fileInput.current?.files?.length) {
       return;
     }
-    setImage(URL.createObjectURL(fileInput.current?.files[0]));
+    await compressImage(fileInput.current?.files[0], {
+      quality: 0.5,
+    });
   }
+
+  const compressImage = async (
+    file: File,
+    { quality = 1, type = file.type }
+  ) => {
+    const imageBitmap = await createImageBitmap(file);
+    console.log(canvasRef)
+    if (canvasRef.current !== null) {
+      canvasRef.current.width = imageBitmap.width;
+      canvasRef.current.height = imageBitmap.height;
+      const ctx = canvasRef.current?.getContext("2d");
+      ctx?.drawImage(imageBitmap, 0, 0);
+      setImage(canvasRef.current?.toDataURL(type, quality) || "");
+    }
+  };
+
   return (
     <div className="py-5 px-4 sm:px-8 bg-indigo-700 h-fit">
-      {image !== "" && (
-        <div className="relative w-fit mb-2">
-          <img src={image} className="w-20" alt="messge" />
+        <div className={`${image === ""?"hidden":""} relative w-fit mb-2`}>
+          <canvas className="w-20" ref={canvasRef}></canvas>
           <button
             className="absolute right-0 top-0 translate-x-1/2 -translate-y-1/2 bg-indigo-300 border border-indigo-950 rounded-full"
             onClick={() => setImage("")}
@@ -39,7 +57,6 @@ export default function SendMessage() {
             <X className="text-indigo-950 " size={20} />
           </button>
         </div>
-      )}
       <form
         id="chat-form"
         className="flex items-end"
@@ -54,13 +71,13 @@ export default function SendMessage() {
         />
         <button
           type="button"
-          className="hidden flex-shrink-0 bg-indigo-900 p-2 text-white hover:bg-indigo-500 rounded-s-lg focus:outline-none focus:border focus:border-indigo-300 focus:ring-0 focus:ring-offset-0"
+          className="flex-shrink-0 bg-indigo-900 p-2 text-white hover:bg-indigo-500 rounded-s-lg focus:outline-none focus:border focus:border-indigo-300 focus:ring-0 focus:ring-offset-0"
           onClick={() => fileInput.current?.click()}
         >
           <ImageUp />
         </button>
         <TextareaAutosize
-          className="rounded-s-lg bg-white dark:bg-slate-800 p-[7px] min-h-10 flex-1 resize-none  caret-indigo-700 text-indigo-900 dark:text-indigo-300 focus:outline-none focus:border focus:border-indigo-300 focus:ring-0 focus:ring-offset-0"
+          className=" bg-white dark:bg-slate-800 p-[7px] min-h-10 flex-1 resize-none  caret-indigo-700 text-indigo-900 dark:text-indigo-300 focus:outline-none focus:border focus:border-indigo-300 focus:ring-0 focus:ring-offset-0"
           id="msg"
           name="msg"
           placeholder="Enter message..."

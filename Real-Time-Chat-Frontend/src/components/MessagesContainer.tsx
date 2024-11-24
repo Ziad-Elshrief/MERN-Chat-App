@@ -11,7 +11,7 @@ type Message = {
 
 export default function MessagesContainer() {
   const [messagesList, setMessagesList] = useState<Message[]>([]);
-  const messagesRef = useRef<HTMLDivElement | null>(null);
+  const messagesRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     socket.on("message", (message) => {
       setMessagesList((prev) => [...prev, message]);
