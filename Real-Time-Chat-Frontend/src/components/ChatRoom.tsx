@@ -25,7 +25,7 @@ export default function ChatRoom({ setJoined }: chatRoomProps) {
     return () => window.removeEventListener("resize", sidebarHandler);
   }, []);
   return (
-    <div className="mx-5 md:w-4/5 max-w-5xl my-8 md:mx-auto overflow-hidden h-[calc(100dvh-64px)] bg-white rounded-xl shadow-md flex flex-col">
+    <div className="mx-5 md:w-4/5 max-w-5xl my-8 md:mx-auto h-[calc(100dvh-64px)] bg-white rounded-xl shadow-md flex flex-col">
       <header className="text-white bg-indigo-700  p-4 flex justify-between items-center h-[72px]">
         <button
           className="sm:hidden"
@@ -49,7 +49,7 @@ export default function ChatRoom({ setJoined }: chatRoomProps) {
         <ChatRoomSidebar
           customClass={`${
             showSide
-              ? "absolute top-0 left-0 z-50 w-full h-[calc(100dvh-72px)]"
+              ? "absolute top-0 left-0 z-50 w-full h-[calc(100dvh-136px)]"
               : "hidden sm:block"
           } `}
         />

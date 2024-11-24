@@ -66,6 +66,7 @@ export default function SendMessage() {
           placeholder="Enter message..."
           maxRows={4}
           autoComplete="off"
+          dir="auto"
         />
         <button className="flex-shrink-0  bg-indigo-900 p-2 rounded-e-lg text-white hover:bg-indigo-500 focus:outline-none focus:border focus:border-indigo-300 focus:ring-0 focus:ring-offset-0">
           <Send className="mr-0.5 inline mb-1" size={14} /> Send

@@ -45,15 +45,15 @@ export default function MessagesContainer() {
             key={index}
           >
             <div className="flex justify-between items-center">
-              <p className="text-indigo-900 font-semibold opacity-70 mb-2 ">
+              <p className="text-indigo-900 font-semibold opacity-70">
                 {msg.username}
               </p>
-              <span className="text-gray-800 font-bold ml-1">{msg.time}</span>
+              <span className="text-gray-800 font-bold">{msg.time}</span>
             </div>
             {msg.isImage ? (
               <img className="w-full" src={msg.content} />
             ) : (
-              <p className="whitespace-pre-line">{msg.content}</p>
+              <p className="whitespace-pre-line" dir="auto">{msg.content}</p>
             )}
           </div>
         )
