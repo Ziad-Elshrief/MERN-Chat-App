@@ -53,7 +53,9 @@ export default function MessagesContainer() {
             {msg.isImage ? (
               <img className="w-full" src={msg.content} />
             ) : (
-              <p className="whitespace-pre-line" dir="auto">{msg.content}</p>
+              <p className="whitespace-pre-line" dir="auto">
+                {msg.content}
+              </p>
             )}
           </div>
         )

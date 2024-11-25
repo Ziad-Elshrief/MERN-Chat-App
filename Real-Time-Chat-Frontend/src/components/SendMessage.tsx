@@ -36,7 +36,7 @@ export default function SendMessage() {
     { quality = 1, type = file.type }
   ) => {
     const imageBitmap = await createImageBitmap(file);
-    console.log(canvasRef)
+    console.log(canvasRef);
     if (canvasRef.current !== null) {
       canvasRef.current.width = imageBitmap.width;
       canvasRef.current.height = imageBitmap.height;
@@ -48,21 +48,22 @@ export default function SendMessage() {
 
   return (
     <div className="py-5 px-4 sm:px-8 bg-indigo-700 h-fit">
-        <div className={`${image === ""?"hidden":""} relative w-fit mb-2`}>
-          <canvas className="w-20" ref={canvasRef}></canvas>
-          <button
-            className="absolute right-0 top-0 translate-x-1/2 -translate-y-1/2 bg-indigo-300 border border-indigo-950 rounded-full"
-            onClick={() => setImage("")}
-          >
-            <X className="text-indigo-950 " size={20} />
-          </button>
-        </div>
+      <div className={`${image === "" ? "hidden" : ""} relative w-fit mb-2`}>
+        <canvas className="w-20" ref={canvasRef}></canvas>
+        <button
+          className="absolute right-0 top-0 translate-x-1/2 -translate-y-1/2 bg-indigo-300 border border-indigo-950 rounded-full"
+          onClick={() => setImage("")}
+        >
+          <X className="text-indigo-950 " size={20} />
+        </button>
+      </div>
       <form
         id="chat-form"
         className="flex items-end"
         onSubmit={(e) => sendMessage(e)}
       >
         <input
+          tabIndex={-1}
           type="file"
           className="hidden"
           ref={fileInput}
