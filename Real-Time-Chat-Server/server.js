@@ -24,14 +24,14 @@ io.on("connection", (socket) => {
     //Welcome current user
     socket.emit(
       "message",
-      formatMessage("System", "0", `Welcome to ${user.room} room chat`)
+      formatMessage("System", "0",{content: `Welcome to ${user.room} room chat`})
     );
     //Broadcast when a user connects
     socket.broadcast
       .to(user.room)
       .emit(
         "message",
-        formatMessage("System", "0", `${user.username} has joined the chat`)
+        formatMessage("System", "0", {content:`${user.username} has joined the chat`})
       );
     // Send users and room info
     io.to(user.room).emit("roomUsers", {
@@ -47,21 +47,13 @@ io.on("connection", (socket) => {
       formatMessage(user.username, user.id, msg)
     );
   });
-  // Listen for image message
-  socket.on("imageMessage", (image) => {
-    const user = getCurrentUser(socket.id);
-    io.to(user.room).emit(
-      "message",
-      formatMessage(user.username, user.id, image, true)
-    );
-  });
   // Runs when client disconnects
   socket.on("disconnect", () => {
     const user = userLeave(socket.id);
     if (user) {
       io.to(user.room).emit(
         "message",
-        formatMessage("System", "0", `${user.username} has left the chat`)
+        formatMessage("System", "0", {content:`${user.username} has left the chat`})
       );
       // Send users and room info
       io.to(user.room).emit("roomUsers", {

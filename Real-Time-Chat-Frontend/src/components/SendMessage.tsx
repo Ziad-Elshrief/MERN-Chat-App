@@ -10,17 +10,15 @@ export default function SendMessage() {
   function sendMessage(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const target = e.target as HTMLFormElement;
-    if (image !== "") {
-      socket.emit("imageMessage", image);
-      setImage("");
-    }
     const message = target.msg.value.trim();
-    if (message !== "") {
-      socket.emit("chatMessage", message);
-      target.msg.value = "";
-      target.msg.style = "height:40px !important";
-      target.msg.focus();
-    }
+    socket.emit("chatMessage", {
+      content: message,
+      image,
+    });
+    setImage("");
+    target.msg.value = "";
+    target.msg.style = "height:40px !important";
+    target.msg.focus();
   }
   async function getImage() {
     if (!fileInput.current?.files?.length) {

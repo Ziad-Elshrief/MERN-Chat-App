@@ -1,11 +1,13 @@
 const moment = require("moment-timezone");
 
-function formatMessage(username, userId, content, isImage = false) {
+function formatMessage(username, userId, msg) {
   return {
     username,
     userId,
-    content,
-    isImage,
+    content: msg.content || "",
+    image:msg.image || "",
+    reply: msg.reply || "",
+    replySender: msg.replySender || "",
     time: moment().tz("Africa/Cairo").format("h:mm A"),
   };
 }

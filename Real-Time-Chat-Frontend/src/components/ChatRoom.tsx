@@ -58,7 +58,7 @@ export default function ChatRoom({ setJoined }: chatRoomProps) {
           </div>
         </div>
       )}
-      <div className="overflow-hidden mx-5 md:w-4/5 max-w-5xl my-8 md:mx-auto h-[calc(100dvh-64px) rounded-xl shadow-md flex flex-col">
+      <div className="overflow-hidden mx-5 md:w-4/5 max-w-5xl my-8 md:mx-auto h-[calc(100dvh-64px)] rounded-xl shadow-md flex flex-col">
         <header className="text-white bg-indigo-700  p-4 flex justify-between items-center h-[72px]">
           <button
             className="sm:hidden"
