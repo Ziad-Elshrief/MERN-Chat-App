@@ -22,10 +22,17 @@ export default function MessagesContainer({
   function addReply(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     const messageIndex = e.currentTarget.getAttribute("data-index");
     if (messageIndex !== null) {
-      setReply([
-        messagesList[+messageIndex].content,
-        messagesList[+messageIndex].username,
-      ]);
+      if (messagesList[+messageIndex].image !== "") {
+        setReply([
+          "📷 Photo\n" + messagesList[+messageIndex].content,
+          messagesList[+messageIndex].username,
+        ]);
+      } else {
+        setReply([
+          messagesList[+messageIndex].content,
+          messagesList[+messageIndex].username,
+        ]);
+      }
     }
   }
   useEffect(() => {

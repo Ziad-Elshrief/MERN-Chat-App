@@ -29,6 +29,9 @@ export default function SendMessage({
       target.msg.value = "";
       target.msg.style = "height:40px !important";
       target.msg.focus();
+      if (fileInput.current) {
+        fileInput.current.value = "";
+      }
     }
   }
   async function getImage() {
