@@ -1,4 +1,4 @@
-// import { Reply } from "lucide-react";
+import { Reply } from "lucide-react";
 import { socket } from "../socket";
 import { useEffect, useRef, useState } from "react";
 
@@ -8,13 +8,26 @@ type Message = {
   content: string;
   image: string;
   reply: string;
-  replySender?: string;
+  replySender: string;
   time: string;
 };
 
-export default function MessagesContainer() {
+export default function MessagesContainer({
+  setReply,
+}: {
+  setReply: React.Dispatch<React.SetStateAction<string[]>>;
+}) {
   const [messagesList, setMessagesList] = useState<Message[]>([]);
   const messagesRef = useRef<HTMLDivElement>(null);
+  function addReply(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+    const messageIndex = e.currentTarget.getAttribute("data-index");
+    if (messageIndex !== null) {
+      setReply([
+        messagesList[+messageIndex].content,
+        messagesList[+messageIndex].username,
+      ]);
+    }
+  }
   useEffect(() => {
     socket.on("message", (message) => {
       setMessagesList((prev) => [...prev, message]);
@@ -47,7 +60,9 @@ export default function MessagesContainer() {
           >
             <div
               className={`p-3 ${
-                msg.userId === socket.id ? "bg-violet-400" : "bg-indigo-300"
+                msg.userId === socket.id
+                  ? "bg-violet-400"
+                  : "bg-indigo-300 bg-opacity-75"
               } rounded-md w-10/12 sm:w-7/12 break-words shadow-md`}
             >
               <div className="pl-1 flex justify-between items-center flex-shrink-0">
@@ -57,7 +72,7 @@ export default function MessagesContainer() {
                 </span>
               </div>
               {msg.reply !== "" && (
-                <div className="my-1 rounded-xl bg-slate-800 p-2 bg-opacity-30 border-l-4 border-indigo-800">
+                <div className="my-1 rounded-xl bg-slate-800 p-2 bg-opacity-30 border-l-8 border-indigo-800">
                   <h6 className="text-indigo-900 font-semibold">
                     {msg.replySender}
                   </h6>
@@ -75,9 +90,13 @@ export default function MessagesContainer() {
                 <img className="mt-1 pl-1 w-full" src={msg.image} />
               )}
             </div>
-            {/* <button className="bg-indigo-800 p-2 rounded-full text-white">
+            <button
+              className="bg-indigo-800 p-1 rounded-full text-white"
+              data-index={index}
+              onClick={(e) => addReply(e)}
+            >
               <Reply />
-            </button> */}
+            </button>
           </div>
         )
       )}

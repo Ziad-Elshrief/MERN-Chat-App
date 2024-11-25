@@ -3,7 +3,13 @@ import { socket } from "../socket";
 import { useRef, useState } from "react";
 import TextareaAutosize from "react-textarea-autosize";
 
-export default function SendMessage() {
+export default function SendMessage({
+  setReply,
+  reply,
+}: {
+  setReply: React.Dispatch<React.SetStateAction<string[]>>;
+  reply: string[];
+}) {
   const [image, setImage] = useState("");
   const fileInput = useRef<HTMLInputElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -11,14 +17,19 @@ export default function SendMessage() {
     e.preventDefault();
     const target = e.target as HTMLFormElement;
     const message = target.msg.value.trim();
-    socket.emit("chatMessage", {
-      content: message,
-      image,
-    });
-    setImage("");
-    target.msg.value = "";
-    target.msg.style = "height:40px !important";
-    target.msg.focus();
+    if (!(message === "" && image === "")) {
+      socket.emit("chatMessage", {
+        content: message,
+        image,
+        reply: reply[0],
+        replySender: reply[1],
+      });
+      setImage("");
+      setReply(["", ""]);
+      target.msg.value = "";
+      target.msg.style = "height:40px !important";
+      target.msg.focus();
+    }
   }
   async function getImage() {
     if (!fileInput.current?.files?.length) {
@@ -55,6 +66,20 @@ export default function SendMessage() {
           <X className="text-indigo-950 " size={20} />
         </button>
       </div>
+      {reply[0] !== "" && (
+        <div className="relative mb-2 rounded-xl bg-violet-400 p-2 border-l-8 border-indigo-800">
+          <h6 className="text-indigo-900 font-semibold">{reply[1]}</h6>
+          <p className="whitespace-pre-line line-clamp-2" dir="auto">
+            {reply[0]}
+          </p>
+          <button
+            className="absolute right-0 top-0 translate-x-1/2 -translate-y-1/2 bg-indigo-300 border border-indigo-950 rounded-full"
+            onClick={() => setReply(["", ""])}
+          >
+            <X className="text-indigo-950 " size={20} />
+          </button>
+        </div>
+      )}
       <form
         id="chat-form"
         className="flex items-end"

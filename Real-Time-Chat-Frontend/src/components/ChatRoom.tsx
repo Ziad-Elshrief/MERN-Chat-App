@@ -12,6 +12,7 @@ type chatRoomProps = {
 };
 
 export default function ChatRoom({ setJoined }: chatRoomProps) {
+  const [reply, setReply] = useState<string[]>(["", ""]);
   const [showSide, setShowSide] = useState(false);
   const [willLeave, setWillLeave] = useState(false);
   function leaveRoom() {
@@ -86,9 +87,9 @@ export default function ChatRoom({ setJoined }: chatRoomProps) {
                 : "hidden sm:block"
             } `}
           />
-          <MessagesContainer />
+          <MessagesContainer setReply={setReply} />
         </main>
-        <SendMessage />
+        <SendMessage reply={reply} setReply={setReply} />
       </div>
     </>
   );
