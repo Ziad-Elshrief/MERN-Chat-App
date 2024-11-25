@@ -42,12 +42,12 @@ export default function MessagesContainer() {
           <div
             key={index}
             className={` mb-4 gap-3 flex items-center ${
-              socket.id === socket.id ? "ml-auto flex-row-reverse" : ""
+              msg.userId === socket.id ? "ml-auto flex-row-reverse" : ""
             }`}
           >
             <div
               className={`p-3 ${
-                socket.id === socket.id ? "bg-violet-400" : "bg-indigo-300"
+                msg.userId === socket.id ? "bg-violet-400" : "bg-indigo-300"
               } rounded-md w-10/12 sm:w-7/12 break-words shadow-md`}
             >
               <div className="pl-1 flex justify-between items-center flex-shrink-0">
