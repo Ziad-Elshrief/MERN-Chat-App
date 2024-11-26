@@ -1,6 +1,7 @@
 import { MessageSquareMore, Reply } from "lucide-react";
 import { socket } from "../socket";
 import { useEffect, useRef, useState } from "react";
+import UserPic from "/user.png"
 
 type MessageType = {
   username: string;
@@ -62,7 +63,7 @@ export default function MessagesContainer({
   }, [messagesList]);
   return (
     <div
-      className=" bg-white dark:bg-slate-800 p-5 overflow-y-scroll border-l-2 border-l-indigo-700 sm:border-0"
+      className=" bg-white dark:bg-slate-800 p-4 overflow-y-scroll border-l-2 border-l-indigo-700 sm:border-0"
       ref={messagesRef}
     >
       {messagesList.map((msg, index) =>
@@ -76,10 +77,11 @@ export default function MessagesContainer({
         ) : (
           <div
             key={index}
-            className={` mb-4 gap-3 flex items-center ${
+            className={` mb-4 gap-2 sm:gap-3 flex items-end ${
               msg.userId === socket.id ? "ml-auto flex-row-reverse" : ""
             }`}
           >
+            <img src={UserPic} alt="User" className="size-10 object-contain bg-indigo-900 border border-black rounded-full" />
             <div
               className={`p-3 ${
                 msg.userId === socket.id
@@ -113,7 +115,7 @@ export default function MessagesContainer({
               )}
             </div>
             <button
-              className="bg-indigo-800 p-1 rounded-full text-white"
+              className="bg-indigo-800 p-1 self-center rounded-full text-white"
               data-index={index}
               onClick={(e) => addReply(e)}
             >
@@ -124,7 +126,7 @@ export default function MessagesContainer({
       )}
       {typingPeople.length > 0 && (
         <p className="text-indigo-900 dark:text-indigo-300">
-          <MessageSquareMore className="mb-1 mr-1" />{" "}
+          <MessageSquareMore className="inline mb-1 mr-1" />{" "}
           {`${typingPeople.join(", ")} ${
             typingPeople.length > 1 ? "are typing..." : "is typing..."
           }`}
