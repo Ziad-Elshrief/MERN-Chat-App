@@ -16,6 +16,8 @@ app.use(
   express.static(path.join(__dirname, "..", "Real-Time-Chat-Frontend", "dist"))
 );
 
+let typingPeople = [];
+
 // Run when client connects
 io.on("connection", (socket) => {
   socket.on("joinRoom", ({ username, room }) => {
@@ -24,15 +26,17 @@ io.on("connection", (socket) => {
     //Welcome current user
     socket.emit(
       "message",
-      formatMessage("System", "0",{content: `Welcome to ${user.room} room chat`})
+      formatMessage("System", "0", {
+        content: `Welcome to ${user.room} room chat`,
+      })
     );
     //Broadcast when a user connects
-    socket.broadcast
-      .to(user.room)
-      .emit(
-        "message",
-        formatMessage("System", "0", {content:`${user.username} has joined the chat`})
-      );
+    socket.broadcast.to(user.room).emit(
+      "message",
+      formatMessage("System", "0", {
+        content: `${user.username} has joined the chat`,
+      })
+    );
     // Send users and room info
     io.to(user.room).emit("roomUsers", {
       room: user.room,
@@ -47,13 +51,29 @@ io.on("connection", (socket) => {
       formatMessage(user.username, user.id, msg)
     );
   });
+  // Send typing people to each client in room
+  socket.on("typing", () => {
+    const user = getCurrentUser(socket.id);
+    if (!typingPeople.find((person) => person.id === user.id)) {
+      typingPeople.push({ username: user.username, id: user.id });
+      io.to(user.room).emit("typingPeople", typingPeople);
+    }
+  });
+  socket.on("notTyping", () => {
+    const user = getCurrentUser(socket.id);
+    typingPeople = typingPeople.filter((typing) => typing.id !== user.id);
+    io.to(user.room).emit("typingPeople", typingPeople);
+  });
+
   // Runs when client disconnects
   socket.on("disconnect", () => {
     const user = userLeave(socket.id);
     if (user) {
       io.to(user.room).emit(
         "message",
-        formatMessage("System", "0", {content:`${user.username} has left the chat`})
+        formatMessage("System", "0", {
+          content: `${user.username} has left the chat`,
+        })
       );
       // Send users and room info
       io.to(user.room).emit("roomUsers", {

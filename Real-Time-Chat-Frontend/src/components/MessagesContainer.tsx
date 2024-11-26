@@ -2,7 +2,7 @@ import { Reply } from "lucide-react";
 import { socket } from "../socket";
 import { useEffect, useRef, useState } from "react";
 
-type Message = {
+type MessageType = {
   username: string;
   userId: string;
   content: string;
@@ -12,12 +12,18 @@ type Message = {
   time: string;
 };
 
+type typingPersonType = {
+  username: string;
+  id: string;
+};
+
 export default function MessagesContainer({
   setReply,
 }: {
   setReply: React.Dispatch<React.SetStateAction<string[]>>;
 }) {
-  const [messagesList, setMessagesList] = useState<Message[]>([]);
+  const [typingPeople, setTypingPeople] = useState<typingPersonType[]>([]);
+  const [messagesList, setMessagesList] = useState<MessageType[]>([]);
   const messagesRef = useRef<HTMLDivElement>(null);
   function addReply(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     const messageIndex = e.currentTarget.getAttribute("data-index");
@@ -40,6 +46,15 @@ export default function MessagesContainer({
       setMessagesList((prev) => [...prev, message]);
     });
   }, []);
+  socket.on("typingPeople", (typing) => {
+    setTypingPeople(
+      typing
+        .filter(
+          (typingPerson: typingPersonType) => typingPerson.id !== socket.id
+        )
+        .map((typingPerson: typingPersonType) => typingPerson.username)
+    );
+  });
   useEffect(() => {
     messagesRef.current?.lastElementChild?.scrollIntoView({
       behavior: "smooth",
@@ -53,7 +68,7 @@ export default function MessagesContainer({
       {messagesList.map((msg, index) =>
         msg.username === "System" ? (
           <p
-            className="mb-3 text-indigo-900 dark:text-indigo-300 block text-center"
+            className="mb-3 text-indigo-900 dark:text-indigo-300 text-center"
             key={index}
           >
             {msg.content}
@@ -69,7 +84,7 @@ export default function MessagesContainer({
               className={`p-3 ${
                 msg.userId === socket.id
                   ? "bg-violet-400"
-                  : "bg-indigo-300 bg-opacity-75"
+                  : "bg-indigo-300 bg-opacity-85"
               } rounded-md w-10/12 sm:w-7/12 break-words shadow-md`}
             >
               <div className="pl-1 flex justify-between items-center flex-shrink-0">
@@ -106,6 +121,11 @@ export default function MessagesContainer({
             </button>
           </div>
         )
+      )}
+      {typingPeople.length > 0 && (
+        <p className="text-indigo-900 dark:text-indigo-300">{`${typingPeople.join(
+          ", "
+        )} ${typingPeople.length > 1 ? "are typing..." : "is typing..."}`}</p>
       )}
     </div>
   );
