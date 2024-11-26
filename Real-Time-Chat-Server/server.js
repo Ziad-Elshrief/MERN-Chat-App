@@ -80,6 +80,9 @@ io.on("connection", (socket) => {
         room: user.room,
         users: getRoomUsers(user.room),
       });
+      // remove from typing
+      typingPeople = typingPeople.filter((typing) => typing.id !== user.id);
+      io.to(user.room).emit("typingPeople", typingPeople);
     }
   });
 });
