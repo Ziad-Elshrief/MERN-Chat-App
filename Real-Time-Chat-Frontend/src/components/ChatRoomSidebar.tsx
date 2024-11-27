@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { socket } from "../socket";
 import { Mails, User } from "lucide-react";
+import { profilePictures } from "../profilePictures";
 
 type User = {
   id: string;
   room: string;
   username: string;
+  avatar: number;
 };
 
 type ChatRoomSidebarProps = {
@@ -41,6 +43,11 @@ export default function ChatRoomSidebar({ customClass }: ChatRoomSidebarProps) {
       <ul id="users">
         {usersList.map((user) => (
           <li className="py-3" key={user.id}>
+            <img
+              src={profilePictures[user.avatar]}
+              alt="User"
+              className="size-10 object-contain rounded-full inline mr-1.5"
+            />
             {user.username}
           </li>
         ))}

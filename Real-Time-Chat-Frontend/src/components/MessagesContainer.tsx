@@ -1,11 +1,12 @@
 import { MessageSquareMore, Reply } from "lucide-react";
 import { socket } from "../socket";
 import { useEffect, useRef, useState } from "react";
-import UserPic from "/user.png"
+import { profilePictures } from "../profilePictures";
 
 type MessageType = {
   username: string;
   userId: string;
+  userAvatar:number;
   content: string;
   image: string;
   reply: string;
@@ -81,7 +82,11 @@ export default function MessagesContainer({
               msg.userId === socket.id ? "ml-auto flex-row-reverse" : ""
             }`}
           >
-            <img src={UserPic} alt="User" className="size-10 object-contain bg-indigo-900 border border-black rounded-full" />
+            <img
+              src={profilePictures[+msg.userAvatar]}
+              alt="User"
+              className="size-10 object-contain rounded-full"
+            />
             <div
               className={`p-3 ${
                 msg.userId === socket.id

@@ -1,9 +1,10 @@
 const moment = require("moment-timezone");
 
-function formatMessage(username, userId, msg) {
+function formatMessage(username, userId, msg, userAvatar) {
   return {
     username,
     userId,
+    userAvatar,
     content: msg.content || "",
     image:msg.image || "",
     reply: msg.reply || "",

@@ -20,8 +20,8 @@ let typingPeople = [];
 
 // Run when client connects
 io.on("connection", (socket) => {
-  socket.on("joinRoom", ({ username, room }) => {
-    const user = userJoin(socket.id, username, room);
+  socket.on("joinRoom", ({ username, room, avatar }) => {
+    const user = userJoin(socket.id, username, room, avatar);
     socket.join(user.room);
     //Welcome current user
     socket.emit(
@@ -48,7 +48,7 @@ io.on("connection", (socket) => {
     const user = getCurrentUser(socket.id);
     io.to(user.room).emit(
       "message",
-      formatMessage(user.username, user.id, msg)
+      formatMessage(user.username, user.id, msg, user.avatar)
     );
   });
   // Send typing people to each client in room

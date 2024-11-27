@@ -1,9 +1,9 @@
-import { socket } from "../socket";
 import SendMessage from "./SendMessage";
 import ChatRoomSidebar from "./ChatRoomSidebar";
 import MessagesContainer from "./MessagesContainer";
 import { Menu, MessagesSquare, SquareArrowOutUpRight } from "lucide-react";
 import { useEffect, useState } from "react";
+import LeaveMenu from "./LeaveMenu";
 
 const SMALL_SCREEN_WIDTH = 640;
 
@@ -15,10 +15,6 @@ export default function ChatRoom({ setJoined }: chatRoomProps) {
   const [reply, setReply] = useState<string[]>(["", ""]);
   const [showSide, setShowSide] = useState(false);
   const [willLeave, setWillLeave] = useState(false);
-  function leaveRoom() {
-    setJoined(false);
-    socket.disconnect();
-  }
   useEffect(() => {
     const sidebarHandler = () => {
       if (window.innerWidth > SMALL_SCREEN_WIDTH) setShowSide(false);
@@ -29,37 +25,9 @@ export default function ChatRoom({ setJoined }: chatRoomProps) {
   return (
     <>
       {willLeave && (
-        <div
-          className="absolute top-0 left-0 w-screen z-50 h-dvh bg-slate-800 bg-opacity-90 flex justify-center items-center"
-          onClick={() => setWillLeave(false)}
-        >
-          <div
-            className=" text-white shadow-md rounded-xl overflow-hidden m-5"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <header className="text-center p-5 bg-indigo-700 ">
-              <h1 className="text-lg">Are you sure you want to leave?</h1>
-            </header>
-            <main className="p-5 bg-indigo-500 flex justify-center items-center gap-5">
-              <button
-                type="button"
-                className=" bg-indigo-900 p-2 rounded-lg hover:bg-indigo-700"
-                onClick={() => leaveRoom()}
-              >
-                Leave
-              </button>
-              <button
-                type="button"
-                className=" bg-indigo-900 p-2 rounded-lg hover:bg-indigo-700"
-                onClick={() => setWillLeave(false)}
-              >
-                Cancel
-              </button>
-            </main>
-          </div>
-        </div>
+        <LeaveMenu setWillLeave={setWillLeave} setJoined={setJoined} />
       )}
-      <div className="overflow-hidden mx-5 md:w-4/5 max-w-5xl my-8 md:mx-auto h-[calc(100dvh-64px)] rounded-xl shadow-md flex flex-col">
+      <div className="overflow-hidden mx-5 md:w-4/5 max-w-5xl h-[calc(100dvh-64px)] rounded-xl shadow-md flex flex-col">
         <header className="text-white bg-indigo-700  p-4 flex justify-between items-center h-[72px]">
           <button
             className="sm:hidden"
