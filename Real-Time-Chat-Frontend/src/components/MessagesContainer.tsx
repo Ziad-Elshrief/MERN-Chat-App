@@ -1,12 +1,12 @@
 import { MessageSquareMore, Reply } from "lucide-react";
 import { socket } from "../socket";
 import { useEffect, useRef, useState } from "react";
-import { profilePictures } from "../profilePictures";
+import { profilePictures } from "../utils/profilePictures";
 
 type MessageType = {
   username: string;
   userId: string;
-  userAvatar:number;
+  userAvatar: number;
   content: string;
   image: string;
   reply: string;
