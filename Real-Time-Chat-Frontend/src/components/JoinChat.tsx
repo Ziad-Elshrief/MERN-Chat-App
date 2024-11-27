@@ -16,7 +16,7 @@ type joinChatProps = {
 };
 
 export default function JoinChat({ setJoined }: joinChatProps) {
-  const [avatar,setAvatar]=useState(0);
+  const [avatar, setAvatar] = useState(0);
   function joinRoom(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const target = e.target as HTMLFormElement;
@@ -65,14 +65,16 @@ export default function JoinChat({ setJoined }: joinChatProps) {
             <CircleUserRound className="inline mr-0.5 mb-1" size={16} /> Avatar
           </label>
           <div className="flex flex-wrap justify-center gap-3 py-2.5 h-36 sm:h-48 overflow-y-auto">
-            {profilePictures.map((pic,index) => (
+            {profilePictures.map((pic, index) => (
               <img
-              key={index}
+                key={index}
                 src={pic}
                 alt="User"
                 id={`profile${index}`}
-                className={`size-14 sm:size-20 object-contain rounded-full border-[6px] cursor-pointer ${avatar===index?"border-indigo-900":"border-gray-400"} `}
-                onClick={(e)=>setAvatar(Number(e.currentTarget.id.slice(7)))}
+                className={`size-14 sm:size-20 object-contain rounded-full border-[6px] cursor-pointer ${
+                  avatar === index ? "border-indigo-900" : "border-gray-400"
+                } `}
+                onClick={(e) => setAvatar(Number(e.currentTarget.id.slice(7)))}
               />
             ))}
           </div>
