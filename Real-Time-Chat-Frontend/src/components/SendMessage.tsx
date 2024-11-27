@@ -51,10 +51,7 @@ export default function SendMessage({
     });
   }
 
-  const compressImage = async (
-    file: File,
-    { quality = 1, type = file.type }
-  ) => {
+  const compressImage = async (file: File, { quality = 1 }) => {
     const imageBitmap = await createImageBitmap(file);
     console.log(canvasRef);
     if (canvasRef.current !== null) {
@@ -62,7 +59,7 @@ export default function SendMessage({
       canvasRef.current.height = imageBitmap.height;
       const ctx = canvasRef.current?.getContext("2d");
       ctx?.drawImage(imageBitmap, 0, 0);
-      setImage(canvasRef.current?.toDataURL(type, quality) || "");
+      setImage(canvasRef.current?.toDataURL("image/jpeg", quality) || "");
     }
   };
 
