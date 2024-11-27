@@ -6,7 +6,7 @@ import {
   User,
 } from "lucide-react";
 import { socket } from "../socket";
-import { profilePictures } from "../profilePictures";
+import { profilePictures } from "../utils/profilePictures";
 import { useState } from "react";
 
 const MAX_LENGTH = 16;

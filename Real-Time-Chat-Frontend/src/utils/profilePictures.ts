@@ -10,6 +10,10 @@ import knightProfile from "/knightProfile.png";
 import prirateProfile from "/prirateProfile.png";
 import samuraiProfile from "/samuraiProfile.png";
 import werewolfProfile from "/werewolfProfile.png";
+import spidermanProfile from "/spidermanProfile.png";
+import spidergirlProfile from "/spidergirlProfile.png";
+import batmanProfile from "/batmanProfile.png";
+import catwomanProfile from "/catwomanProfile.png";
 
 const profilePictures = [
   defaultProfile,
@@ -24,5 +28,9 @@ const profilePictures = [
   samuraiProfile,
   ninjaProfile,
   femaleNinjaProfile,
+  spidermanProfile,
+  spidergirlProfile,
+  batmanProfile,
+  catwomanProfile,
 ];
 export { profilePictures };

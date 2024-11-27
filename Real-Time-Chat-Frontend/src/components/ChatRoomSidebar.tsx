@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { socket } from "../socket";
 import { Mails, User } from "lucide-react";
-import { profilePictures } from "../profilePictures";
+import { profilePictures } from "../utils/profilePictures";
 
 type User = {
   id: string;
