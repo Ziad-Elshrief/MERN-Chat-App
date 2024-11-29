@@ -1,7 +1,7 @@
 import SendMessage from "./SendMessage";
 import ChatRoomSidebar from "./ChatRoomSidebar";
 import MessagesContainer from "./MessagesContainer";
-import { Menu, MessagesSquare, SquareArrowOutUpRight } from "lucide-react";
+import { LogOut, Menu, MessagesSquare } from "lucide-react";
 import { useEffect, useState } from "react";
 import LeaveMenu from "./LeaveMenu";
 import { MessageType } from "../lib/types";
@@ -28,7 +28,7 @@ export default function ChatRoom({ setJoined }: chatRoomProps) {
       {willLeave && (
         <LeaveMenu setWillLeave={setWillLeave} setJoined={setJoined} />
       )}
-      <div className="overflow-hidden mx-5 md:w-4/5 max-w-5xl h-[calc(100dvh-64px)] rounded-xl shadow-md flex flex-col">
+      <div className="overflow-hidden mx-5 w-full max-w-5xl h-[calc(100dvh-64px)] rounded-xl shadow-md flex flex-col">
         <header className="text-white bg-indigo-700  p-4 flex justify-between items-center h-[72px]">
           <button
             className="sm:hidden"
@@ -44,7 +44,7 @@ export default function ChatRoom({ setJoined }: chatRoomProps) {
             type="button"
             onClick={() => setWillLeave(true)}
           >
-            <SquareArrowOutUpRight className="inline mr-1 mb-1" size={14} />
+            <LogOut className="inline mr-1 mb-1" size={14} />
             Leave
           </button>
         </header>

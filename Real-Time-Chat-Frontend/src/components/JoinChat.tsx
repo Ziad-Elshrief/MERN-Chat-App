@@ -29,7 +29,7 @@ export default function JoinChat({ setJoined }: joinChatProps) {
     setJoined(true);
   }
   return (
-    <div className="max-w-lg text-white mx-5 shadow-md rounded-xl overflow-hidden">
+    <div className="w-full max-w-lg text-white mx-5 shadow-md rounded-xl overflow-hidden">
       <header className="text-center p-5 bg-indigo-700 ">
         <h1 className="text-lg">
           <MessagesSquare className="inline mr-0.5 mb-1" /> Chat App

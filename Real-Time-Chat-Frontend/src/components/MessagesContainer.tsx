@@ -1,4 +1,10 @@
-import { Ban, Image, MessageSquareMore, Reply } from "lucide-react";
+import {
+  Ban,
+  ChevronsDown,
+  Image,
+  MessageSquareMore,
+  Reply,
+} from "lucide-react";
 import { socket } from "../socket";
 import { useEffect, useRef, useState } from "react";
 import { profilePictures } from "../utils/profilePictures";
@@ -9,6 +15,8 @@ type typingPersonType = {
   id: string;
 };
 
+const SCROLL_DISTANCE = 200;
+
 export default function MessagesContainer({
   setReply,
 }: {
@@ -16,12 +24,18 @@ export default function MessagesContainer({
 }) {
   const [typingPeople, setTypingPeople] = useState<typingPersonType[]>([]);
   const [messagesList, setMessagesList] = useState<MessageType[]>([]);
+  const [messagesScroll, setMessageScroll] = useState(0);
   const messagesRef = useRef<HTMLDivElement>(null);
   function addReply(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     const replyId = e.currentTarget.getAttribute("data-id");
     if (replyId !== null) {
       setReply(messagesList.filter((msg) => msg.messageId === replyId)[0]);
     }
+  }
+  function scrollToBottom() {
+    messagesRef.current?.lastElementChild?.scrollIntoView({
+      behavior: "smooth",
+    });
   }
   useEffect(() => {
     socket.on("message", (message) => {
@@ -38,14 +52,19 @@ export default function MessagesContainer({
     );
   });
   useEffect(() => {
-    messagesRef.current?.lastElementChild?.scrollIntoView({
-      behavior: "smooth",
-    });
+    scrollToBottom();
   }, [messagesList]);
   return (
     <div
-      className=" bg-white dark:bg-slate-800 p-4 overflow-y-scroll border-l-2 border-l-indigo-700 sm:border-0"
+      className="relative bg-white dark:bg-slate-800 p-4 overflow-y-scroll border-l-2 border-l-indigo-700 sm:border-0"
       ref={messagesRef}
+      onScroll={(e) =>
+        setMessageScroll(
+          e.currentTarget.scrollHeight -
+            e.currentTarget.clientHeight -
+            e.currentTarget.scrollTop
+        )
+      }
     >
       {messagesList.map((msg) => {
         const replyIndex = messagesList.findIndex(
@@ -88,16 +107,19 @@ export default function MessagesContainer({
                 <>
                   {replyIndex !== -1 ? (
                     <div
-                      className="my-1 rounded-xl bg-slate-800 p-2 bg-opacity-30 border-l-8 border-indigo-800"
-                      // onClick={() =>
-
-                      //   messagesRef.current?.childNodes[replyIndex].scrollIntoView({
-                      //     behavior: "smooth",
-                      //   })
-                      // }
+                      className="cursor-pointer my-1 rounded-xl bg-slate-800 p-2 bg-opacity-30 border-l-8 border-indigo-800"
+                      onClick={() =>
+                        messagesRef.current?.children[
+                          replyIndex
+                        ].scrollIntoView({
+                          behavior: "smooth",
+                        })
+                      }
                     >
                       <h6 className="text-indigo-900 font-semibold">
-                      {messagesList[replyIndex].userId === socket.id ? "You" : messagesList[replyIndex].username}
+                        {messagesList[replyIndex].userId === socket.id
+                          ? "You"
+                          : messagesList[replyIndex].username}
                       </h6>
                       <div className="flex gap-x-2.5 justify-between">
                         <p
@@ -154,14 +176,24 @@ export default function MessagesContainer({
           </div>
         );
       })}
-      {typingPeople.length > 0 && (
-        <p className="text-indigo-900 dark:text-indigo-300">
-          <MessageSquareMore className="inline mb-1 mr-1" />
-          {`${typingPeople.join(", ")} ${
-            typingPeople.length > 1 ? "are typing..." : "is typing..."
-          }`}
-        </p>
-      )}
+      <button
+        className={`${
+          messagesScroll > SCROLL_DISTANCE ? "" : "hidden"
+        } sticky bottom-4 right-4 left-full p-1 bg-indigo-900 text-indigo-400 shadow-gray-900 rounded-full shadow-sm`}
+        onClick={scrollToBottom}
+      >
+        <ChevronsDown />
+      </button>
+      <p
+        className={`${
+          typingPeople.length > 0 ? "" : "h-0 overflow-hidden"
+        } text-indigo-900 dark:text-indigo-300`}
+      >
+        <MessageSquareMore className="inline mb-1 mr-1" />
+        {`${typingPeople.join(", ")} ${
+          typingPeople.length > 1 ? "are typing..." : "is typing..."
+        }`}
+      </p>
     </div>
   );
 }

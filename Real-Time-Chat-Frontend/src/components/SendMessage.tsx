@@ -60,7 +60,6 @@ export default function SendMessage({
 
   const compressImage = async (file: File, { quality = 1 }) => {
     const imageBitmap = await createImageBitmap(file);
-    console.log(canvasRef);
     if (canvasRef.current !== null) {
       canvasRef.current.width = imageBitmap.width;
       canvasRef.current.height = imageBitmap.height;
