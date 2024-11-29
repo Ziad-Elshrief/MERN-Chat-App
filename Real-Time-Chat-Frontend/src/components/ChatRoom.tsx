@@ -4,6 +4,7 @@ import MessagesContainer from "./MessagesContainer";
 import { Menu, MessagesSquare, SquareArrowOutUpRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import LeaveMenu from "./LeaveMenu";
+import { MessageType } from "../lib/types";
 
 const SMALL_SCREEN_WIDTH = 640;
 
@@ -12,7 +13,7 @@ type chatRoomProps = {
 };
 
 export default function ChatRoom({ setJoined }: chatRoomProps) {
-  const [reply, setReply] = useState<string[]>(["", ""]);
+  const [reply, setReply] = useState<MessageType>();
   const [showSide, setShowSide] = useState(false);
   const [willLeave, setWillLeave] = useState(false);
   useEffect(() => {

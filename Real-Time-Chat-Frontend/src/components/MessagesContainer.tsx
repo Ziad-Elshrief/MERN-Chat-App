@@ -1,18 +1,8 @@
-import { MessageSquareMore, Reply } from "lucide-react";
+import { Ban, Image, MessageSquareMore, Reply } from "lucide-react";
 import { socket } from "../socket";
 import { useEffect, useRef, useState } from "react";
 import { profilePictures } from "../utils/profilePictures";
-
-type MessageType = {
-  username: string;
-  userId: string;
-  userAvatar: number;
-  content: string;
-  image: string;
-  reply: string;
-  replySender: string;
-  time: string;
-};
+import { MessageType } from "../lib/types";
 
 type typingPersonType = {
   username: string;
@@ -22,25 +12,15 @@ type typingPersonType = {
 export default function MessagesContainer({
   setReply,
 }: {
-  setReply: React.Dispatch<React.SetStateAction<string[]>>;
+  setReply: React.Dispatch<React.SetStateAction<MessageType | undefined>>;
 }) {
   const [typingPeople, setTypingPeople] = useState<typingPersonType[]>([]);
   const [messagesList, setMessagesList] = useState<MessageType[]>([]);
   const messagesRef = useRef<HTMLDivElement>(null);
   function addReply(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
-    const messageIndex = e.currentTarget.getAttribute("data-index");
-    if (messageIndex !== null) {
-      if (messagesList[+messageIndex].image !== "") {
-        setReply([
-          "📷 Photo\n" + messagesList[+messageIndex].content,
-          messagesList[+messageIndex].username,
-        ]);
-      } else {
-        setReply([
-          messagesList[+messageIndex].content,
-          messagesList[+messageIndex].username,
-        ]);
-      }
+    const replyId = e.currentTarget.getAttribute("data-id");
+    if (replyId !== null) {
+      setReply(messagesList.filter((msg) => msg.messageId === replyId)[0]);
     }
   }
   useEffect(() => {
@@ -67,17 +47,20 @@ export default function MessagesContainer({
       className=" bg-white dark:bg-slate-800 p-4 overflow-y-scroll border-l-2 border-l-indigo-700 sm:border-0"
       ref={messagesRef}
     >
-      {messagesList.map((msg, index) =>
-        msg.username === "System" ? (
+      {messagesList.map((msg) => {
+        const replyIndex = messagesList.findIndex(
+          (replyMessage) => replyMessage.messageId === msg.repliedMessageId
+        );
+        return msg.username === "System" ? (
           <p
             className="mb-3 text-indigo-900 dark:text-indigo-300 text-center"
-            key={index}
+            key={msg.messageId}
           >
             {msg.content}
           </p>
         ) : (
           <div
-            key={index}
+            key={msg.messageId}
             className={` mb-4 gap-2 sm:gap-3 flex items-end ${
               msg.userId === socket.id ? "ml-auto flex-row-reverse" : ""
             }`}
@@ -100,16 +83,58 @@ export default function MessagesContainer({
                   {msg.time}
                 </span>
               </div>
-              {msg.reply !== "" && (
-                <div className="my-1 rounded-xl bg-slate-800 p-2 bg-opacity-30 border-l-8 border-indigo-800">
-                  <h6 className="text-indigo-900 font-semibold">
-                    {msg.replySender}
-                  </h6>
-                  <p className="whitespace-pre-line line-clamp-3" dir="auto">
-                    {msg.reply}
-                  </p>
-                </div>
+
+              {msg.repliedMessageId !== "" && (
+                <>
+                  {replyIndex !== -1 ? (
+                    <div
+                      className="my-1 rounded-xl bg-slate-800 p-2 bg-opacity-30 border-l-8 border-indigo-800"
+                      // onClick={() =>
+
+                      //   messagesRef.current?.childNodes[replyIndex].scrollIntoView({
+                      //     behavior: "smooth",
+                      //   })
+                      // }
+                    >
+                      <h6 className="text-indigo-900 font-semibold">
+                      {messagesList[replyIndex].userId === socket.id ? "You" : messagesList[replyIndex].username}
+                      </h6>
+                      <div className="flex gap-x-2.5 justify-between">
+                        <p
+                          className="whitespace-pre-line line-clamp-3"
+                          dir="auto"
+                        >
+                          {messagesList[replyIndex].content !== "" ? (
+                            messagesList[replyIndex].content
+                          ) : (
+                            <>
+                              <Image
+                                className="inline mb-0.5 mr-0.5"
+                                size={16}
+                              />
+                              Photo
+                            </>
+                          )}
+                        </p>
+                        {messagesList[replyIndex].image !== "" && (
+                          <img
+                            className="mt-1 pl-1 h-[72px]"
+                            src={messagesList[replyIndex].image}
+                          />
+                        )}
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="my-1 rounded-xl bg-slate-800 p-2 bg-opacity-30 border-l-8 border-indigo-800">
+                      <p className="text-indigo-900 font-semibold">
+                        <Ban className="inline mb-1 mr-1" size={16} />{" "}
+                        Unavailable Message
+                      </p>
+                    </div>
+                  )}
+                </>
               )}
+
               {msg.content !== "" && (
                 <p className="pl-1 whitespace-pre-line" dir="auto">
                   {msg.content}
@@ -121,17 +146,17 @@ export default function MessagesContainer({
             </div>
             <button
               className="bg-indigo-800 p-1 self-center rounded-full text-white"
-              data-index={index}
+              data-id={msg.messageId}
               onClick={(e) => addReply(e)}
             >
               <Reply />
             </button>
           </div>
-        )
-      )}
+        );
+      })}
       {typingPeople.length > 0 && (
         <p className="text-indigo-900 dark:text-indigo-300">
-          <MessageSquareMore className="inline mb-1 mr-1" />{" "}
+          <MessageSquareMore className="inline mb-1 mr-1" />
           {`${typingPeople.join(", ")} ${
             typingPeople.length > 1 ? "are typing..." : "is typing..."
           }`}

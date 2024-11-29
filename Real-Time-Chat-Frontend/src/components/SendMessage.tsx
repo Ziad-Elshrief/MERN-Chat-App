@@ -2,13 +2,14 @@ import { ImageUp, Send, X } from "lucide-react";
 import { socket } from "../socket";
 import { useRef, useState } from "react";
 import TextareaAutosize from "react-textarea-autosize";
+import { MessageType } from "../lib/types";
 
 export default function SendMessage({
   setReply,
   reply,
 }: {
-  setReply: React.Dispatch<React.SetStateAction<string[]>>;
-  reply: string[];
+  setReply: React.Dispatch<React.SetStateAction<MessageType | undefined>>;
+  reply: MessageType | undefined;
 }) {
   const [image, setImage] = useState("");
   const fileInput = useRef<HTMLInputElement>(null);
@@ -21,12 +22,11 @@ export default function SendMessage({
       socket.emit("chatMessage", {
         content: message,
         image,
-        reply: reply[0],
-        replySender: reply[1],
+        repliedMessageId: reply?.messageId || "",
       });
       socket.emit("notTyping");
       setImage("");
-      setReply(["", ""]);
+      setReply(undefined);
       target.msg.value = "";
       target.msg.style = "height:40px !important";
       target.msg.focus();
@@ -51,6 +51,13 @@ export default function SendMessage({
     });
   }
 
+  function cancelImage() {
+    setImage("");
+    if (fileInput.current) {
+      fileInput.current.value = "";
+    }
+  }
+
   const compressImage = async (file: File, { quality = 1 }) => {
     const imageBitmap = await createImageBitmap(file);
     console.log(canvasRef);
@@ -69,20 +76,28 @@ export default function SendMessage({
         <canvas className="w-20" ref={canvasRef}></canvas>
         <button
           className="absolute right-0 top-0 translate-x-1/2 -translate-y-1/2 bg-indigo-300 border border-indigo-950 rounded-full"
-          onClick={() => setImage("")}
+          onClick={() => cancelImage()}
         >
           <X className="text-indigo-950 " size={20} />
         </button>
       </div>
-      {reply[0] !== "" && (
-        <div className="relative mb-2 rounded-xl bg-violet-400 p-2 border-l-8 border-indigo-800">
-          <h6 className="text-indigo-900 font-semibold">{reply[1]}</h6>
-          <p className="whitespace-pre-line line-clamp-2" dir="auto">
-            {reply[0]}
-          </p>
+      {reply && (
+        <div className="relative mb-2 rounded-xl bg-violet-400 p-2 border-l-8 border-indigo-800 flex gap-x-2.5 w-full justify-between">
+          <div>
+            <h6 className="text-indigo-900 font-semibold">
+              Replying to{" "}
+              {reply.userId === socket.id ? "yourself" : reply.username}
+            </h6>
+            <p className="whitespace-pre-line line-clamp-2" dir="auto">
+              {reply.content}
+            </p>
+          </div>
+          {reply.image !== "" && (
+            <img className="mt-1 pl-1 h-[72px]" src={reply.image} />
+          )}
           <button
             className="absolute right-0 top-0 translate-x-1/2 -translate-y-1/2 bg-indigo-300 border border-indigo-950 rounded-full"
-            onClick={() => setReply(["", ""])}
+            onClick={() => setReply(undefined)}
           >
             <X className="text-indigo-950 " size={20} />
           </button>
@@ -103,7 +118,7 @@ export default function SendMessage({
         />
         <button
           type="button"
-          className="flex-shrink-0 bg-indigo-900 p-2 text-white hover:bg-indigo-500 rounded-s-lg focus:outline-none focus:border focus:border-indigo-300 focus:ring-0 focus:ring-offset-0"
+          className="h-10 w-10 flex-shrink-0 bg-indigo-900 p-2 text-white hover:bg-indigo-500 rounded-s-lg focus:outline-none focus:border focus:border-indigo-300 focus:ring-0 focus:ring-offset-0"
           onClick={() => fileInput.current?.click()}
         >
           <ImageUp />
@@ -118,7 +133,7 @@ export default function SendMessage({
           dir="auto"
           onChange={(e) => handleTyping(e)}
         />
-        <button className="flex-shrink-0  bg-indigo-900 p-2 rounded-e-lg text-white hover:bg-indigo-500 focus:outline-none focus:border focus:border-indigo-300 focus:ring-0 focus:ring-offset-0">
+        <button className="h-10 flex-shrink-0  bg-indigo-900 p-2 rounded-e-lg text-white hover:bg-indigo-500 focus:outline-none focus:border focus:border-indigo-300 focus:ring-0 focus:ring-offset-0">
           <Send className="mr-0.5 inline mb-1" size={14} /> Send
         </button>
       </form>
