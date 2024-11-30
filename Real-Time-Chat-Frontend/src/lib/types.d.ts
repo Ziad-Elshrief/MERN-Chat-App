@@ -1,3 +1,11 @@
+export type MessageReactType ={
+  username: string;
+  userId: string;
+  userAvatar: number;
+  messageId: string;
+  react:number;
+}
+
 export type MessageType = {
   username: string;
   userId: string;
@@ -6,6 +14,7 @@ export type MessageType = {
   content: string;
   image: string;
   repliedMessageId: string;
+  reactsList: MessageReactType[];
   time: string;
 };
 

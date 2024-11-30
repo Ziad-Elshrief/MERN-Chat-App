@@ -4,12 +4,15 @@ import {
   Image,
   MessageSquareMore,
   Reply,
+  Smile,
+  SmilePlus,
   X,
 } from "lucide-react";
 import { socket } from "../socket";
 import { useEffect, useRef, useState } from "react";
 import { profilePictures } from "../utils/profilePictures";
-import { MessageType } from "../lib/types";
+import { MessageReactType, MessageType } from "../lib/types";
+import { reacts } from "../utils/reacts";
 
 type typingPersonType = {
   username: string;
@@ -27,6 +30,8 @@ export default function MessagesContainer({
   const [messagesList, setMessagesList] = useState<MessageType[]>([]);
   const [messagesScroll, setMessageScroll] = useState(0);
   const [viewImage, setViewImage] = useState("");
+  const [reactMenu, setReactMenu] = useState(false);
+  const [viewReactsList, setViewReactsList] = useState(-1);
   const messagesRef = useRef<HTMLDivElement>(null);
   function addReply(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     const replyId = e.currentTarget.getAttribute("data-id");
@@ -39,9 +44,45 @@ export default function MessagesContainer({
       behavior: "smooth",
     });
   }
+  function sendReact(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+    const index = e.currentTarget.getAttribute("data-index");
+    const messageId = e.currentTarget.getAttribute("data-id");
+    socket.emit("sendReact", { react: index, messageId });
+    setReactMenu(false);
+  }
+  function removeReact(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+    const messageId = e.currentTarget.getAttribute("data-id");
+    socket.emit("sendReact", { react: -1, messageId });
+  }
+  function updateReacts(MessageReact: MessageReactType) {
+    setMessagesList((prev) =>
+      prev.map((msg) => {
+        if (msg.messageId === MessageReact.messageId) {
+          const reactIndex = msg.reactsList.findIndex(
+            (react) => react.userId === MessageReact.userId
+          );
+          if (MessageReact.react === -1) {
+            msg.reactsList = msg.reactsList.filter(
+              (react) => react.userId !== MessageReact.userId
+            );
+          } else {
+            if (reactIndex !== -1) {
+              msg.reactsList[reactIndex] = MessageReact;
+            } else {
+              msg.reactsList = [...msg.reactsList, MessageReact];
+            }
+          }
+        }
+        return msg;
+      })
+    );
+  }
   useEffect(() => {
     socket.on("message", (message) => {
       setMessagesList((prev) => [...prev, message]);
+    });
+    socket.on("updateReact", (MessageReact: MessageReactType) => {
+      updateReacts(MessageReact);
     });
   }, []);
   socket.on("typingPeople", (typing) => {
@@ -80,7 +121,46 @@ export default function MessagesContainer({
           )
         }
       >
-        {messagesList.map((msg) => {
+        {viewReactsList !== -1 && (
+          <div className="absolute bottom-5 right-[10%] rounded-xl  z-20 p-3 space-y-4 h-40 w-4/5 shadow-md bg-slate-300 dark:bg-slate-600 dark:text-white overflow-y-auto">
+            <header className="flex justify-between items-center">
+              <h3 className="">Reactions</h3>
+              <button onClick={() => setViewReactsList(-1)}>
+                <X className="text-indigo-900" size={24} />
+              </button>
+            </header>
+            <ul className="space-y-2.5">
+              {messagesList[viewReactsList].reactsList.map((reactElement) => (
+                <li className="w-full flex gap-x-5  justify-between">
+                  <div className="flex items-center gap-x-2">
+                    <img
+                      src={profilePictures[reactElement.userAvatar]}
+                      alt="User"
+                      className="size-10 object-contain rounded-full"
+                    />
+                    <div>
+                      <h5>{reactElement.username}</h5>
+                      {reactElement.userId === socket.id && (
+                        <button
+                          className="text-sm font-semibold"
+                          data-id={reactElement.messageId}
+                          onClick={(e) => {
+                            removeReact(e);
+                            setViewReactsList(-1);
+                          }}
+                        >
+                          Tap to remove
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                  {reactElement.react}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+        {messagesList.map((msg, index) => {
           const replyIndex = messagesList.findIndex(
             (replyMessage) => replyMessage.messageId === msg.repliedMessageId
           );
@@ -94,7 +174,7 @@ export default function MessagesContainer({
           ) : (
             <div
               key={msg.messageId}
-              className={` mb-4 gap-2 sm:gap-3 flex items-end ${
+              className={` mb-5 gap-2 sm:gap-3 flex items-end ${
                 msg.userId === socket.id ? "ml-auto flex-row-reverse" : ""
               }`}
             >
@@ -104,20 +184,53 @@ export default function MessagesContainer({
                 className="size-10 object-contain rounded-full"
               />
               <div
-                className={`p-3 ${
+                className={`relative p-3 ${
                   msg.userId === socket.id
                     ? "bg-violet-400"
                     : "bg-indigo-300 bg-opacity-85"
                 } rounded-md w-[calc(100%-88px)] break-words shadow-md`}
               >
-                <div className="pl-1 flex justify-between items-center flex-shrink-0">
-                  <p className="text-indigo-900 font-semibold ">
-                    {msg.username}
-                  </p>
-                  <span className="text-gray-800 font-semibold text-sm">
-                    {msg.time}
-                  </span>
-                </div>
+                <button
+                  className={`absolute  ${
+                    msg.userId === socket.id ? "right-2" : "left-2"
+                  } bottom-0 translate-y-1/2 py-1 px-1.5 rounded-2xl bg-gray-500`}
+                  onClick={() => setReactMenu((prev) => !prev)}
+                >
+                  <SmilePlus size={16} />
+                </button>
+                {msg.reactsList.length > 0 && (
+                  <button
+                    className={`absolute  ${
+                      msg.userId === socket.id ? "right-11" : "left-11"
+                    } bottom-0 translate-y-1/2 py-1 px-1.5 rounded-2xl bg-gray-500 text-sm font-semibold`}
+                    data-index={index}
+                    onClick={(e) =>
+                      setViewReactsList(
+                        Number(e.currentTarget.getAttribute("data-index"))
+                      )
+                    }
+                  >
+                    {msg.reactsList.length}{" "}
+                    <Smile className="mb-0.5 inline" size={16} />
+                  </button>
+                )}
+                {reactMenu && (
+                  <div className="absolute bottom-5 right-0 translate-x-1/2 flex gap-2 bg-gray-700 rounded-lg w-fit p-2 ">
+                    {reacts.map((react, index) => (
+                      <button
+                        key={index}
+                        data-index={index}
+                        data-id={msg.messageId}
+                        onClick={(e) => sendReact(e)}
+                      >
+                        {react}
+                      </button>
+                    ))}
+                  </div>
+                )}
+                <p className="pl-1 text-indigo-900 font-semibold">
+                  {msg.username}
+                </p>
 
                 {msg.repliedMessageId !== "" && (
                   <>
@@ -185,6 +298,13 @@ export default function MessagesContainer({
                     onClick={(e) => setViewImage(e.currentTarget.src)}
                   />
                 )}
+                <p
+                  className={` ${
+                    msg.userId === socket.id ? "" : "text-right"
+                  } mt-1 text-gray-800 font-semibold text-xs pl-1 `}
+                >
+                  {msg.time}
+                </p>
               </div>
               <button
                 className="bg-indigo-800 p-1 self-center rounded-full text-white"

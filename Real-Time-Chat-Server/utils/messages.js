@@ -10,6 +10,7 @@ function formatMessage(username, userId, msg, userAvatar) {
     content: msg.content || "",
     image: msg.image || "",
     repliedMessageId: msg.repliedMessageId || "",
+    reactsList: [],
     time: moment().tz("Africa/Cairo").format("h:mm A"),
   };
 }

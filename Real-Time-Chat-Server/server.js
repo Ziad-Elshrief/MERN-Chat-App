@@ -18,6 +18,15 @@ app.use(
 
 let typingPeople = [];
 
+function updateReact(reactInfo, user) {
+  return {
+    ...reactInfo,
+    userId: user.id,
+    userAvatar: user.avatar,
+    username: user.username,
+  };
+}
+
 // Run when client connects
 io.on("connection", (socket) => {
   socket.on("joinRoom", ({ username, room, avatar }) => {
@@ -50,6 +59,11 @@ io.on("connection", (socket) => {
       "message",
       formatMessage(user.username, user.id, msg, user.avatar)
     );
+  });
+  //Listen for react
+  socket.on("sendReact", (reactInfo) => {
+    const user = getCurrentUser(socket.id);
+    io.to(user.room).emit("updateReact", updateReact(reactInfo, user));
   });
   // Send typing people to each client in room
   socket.on("typing", () => {
