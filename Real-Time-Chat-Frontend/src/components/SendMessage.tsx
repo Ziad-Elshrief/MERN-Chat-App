@@ -72,7 +72,7 @@ export default function SendMessage({
   return (
     <div className="py-5 px-4 sm:px-8 bg-indigo-700 h-fit">
       <div className={`${image === "" ? "hidden" : ""} relative w-fit mb-2`}>
-        <canvas className="w-20" ref={canvasRef}></canvas>
+        <canvas className="w-20 rounded-lg" ref={canvasRef}></canvas>
         <button
           className="absolute right-0 top-0 translate-x-1/2 -translate-y-1/2 bg-indigo-300 border border-indigo-950 rounded-full"
           onClick={() => cancelImage()}
@@ -81,8 +81,8 @@ export default function SendMessage({
         </button>
       </div>
       {reply && (
-        <div className="relative mb-2 rounded-xl bg-violet-400 p-2 border-l-8 border-indigo-800 flex gap-x-2.5 w-full justify-between">
-          <div>
+        <div className={`${reply.image !== "" ? "h-[88px]" : ""} relative mb-2 overflow-hidden rounded-xl bg-violet-400  flex gap-x-2.5 w-full justify-between`}>
+          <div className="border-l-8 border-indigo-800 p-2">
             <h6 className="text-indigo-900 font-semibold">
               Replying to{" "}
               {reply.userId === socket.id ? "yourself" : reply.username}
@@ -92,10 +92,10 @@ export default function SendMessage({
             </p>
           </div>
           {reply.image !== "" && (
-            <img className="mt-1 pl-1 h-[72px]" src={reply.image} />
+            <img className="h-auto aspect-square object-cover object-center rounded-e-xl" src={reply.image} />
           )}
           <button
-            className="absolute right-0 top-0 translate-x-1/2 -translate-y-1/2 bg-indigo-300 border border-indigo-950 rounded-full"
+            className="absolute right-1 top-1  bg-indigo-300 border border-indigo-950 rounded-full"
             onClick={() => setReply(undefined)}
           >
             <X className="text-indigo-950 " size={20} />

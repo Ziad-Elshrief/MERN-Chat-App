@@ -107,7 +107,7 @@ export default function MessagesContainer({
                 <>
                   {replyIndex !== -1 ? (
                     <div
-                      className="cursor-pointer my-1 rounded-xl bg-slate-800 p-2 bg-opacity-30 border-l-8 border-indigo-800"
+                      className="cursor-pointer my-1 rounded-xl bg-slate-800 bg-opacity-30 flex gap-x-2.5 justify-between items-end overflow-hidden"
                       onClick={() =>
                         messagesRef.current?.children[
                           replyIndex
@@ -116,12 +116,12 @@ export default function MessagesContainer({
                         })
                       }
                     >
+                      <div  className="border-l-8 border-indigo-800 p-2">
                       <h6 className="text-indigo-900 font-semibold">
                         {messagesList[replyIndex].userId === socket.id
                           ? "You"
                           : messagesList[replyIndex].username}
                       </h6>
-                      <div className="flex gap-x-2.5 justify-between">
                         <p
                           className="whitespace-pre-line line-clamp-3"
                           dir="auto"
@@ -138,13 +138,13 @@ export default function MessagesContainer({
                             </>
                           )}
                         </p>
-                        {messagesList[replyIndex].image !== "" && (
+                      </div>
+                      {messagesList[replyIndex].image !== "" && (
                           <img
-                            className="mt-1 pl-1 h-[72px]"
+                            className="w-16 self-stretch object-cover object-center rounded-e-xl"
                             src={messagesList[replyIndex].image}
                           />
                         )}
-                      </div>
                     </div>
                   ) : (
                     <div className="my-1 rounded-xl bg-slate-800 p-2 bg-opacity-30 border-l-8 border-indigo-800">
@@ -163,7 +163,7 @@ export default function MessagesContainer({
                 </p>
               )}
               {msg.image !== "" && (
-                <img className="mt-1 pl-1 w-full" src={msg.image} />
+                <img className="mt-1 pl-1 w-full rounded-lg" src={msg.image} />
               )}
             </div>
             <button
