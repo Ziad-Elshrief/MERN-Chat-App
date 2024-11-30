@@ -81,8 +81,10 @@ export default function SendMessage({
         </button>
       </div>
       {reply && (
-        <div className={`${reply.image !== "" ? "h-[88px]" : ""} relative mb-2 overflow-hidden rounded-xl bg-violet-400  flex gap-x-2.5 w-full justify-between`}>
-          <div className="border-l-8 border-indigo-800 p-2">
+        <div
+          className={` relative mb-2 overflow-hidden rounded-xl bg-violet-400  flex gap-x-2.5 w-full justify-between`}
+        >
+          <div className="border-l-8 border-indigo-800 p-2 max-w-[80%]">
             <h6 className="text-indigo-900 font-semibold">
               Replying to{" "}
               {reply.userId === socket.id ? "yourself" : reply.username}
@@ -92,7 +94,10 @@ export default function SendMessage({
             </p>
           </div>
           {reply.image !== "" && (
-            <img className="h-auto aspect-square object-cover object-center rounded-e-xl" src={reply.image} />
+            <img
+              className="w-1/5 self-stretch object-cover object-center rounded-e-xl"
+              src={reply.image}
+            />
           )}
           <button
             className="absolute right-1 top-1  bg-indigo-300 border border-indigo-950 rounded-full"

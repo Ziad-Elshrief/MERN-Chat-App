@@ -108,7 +108,7 @@ export default function MessagesContainer({
                   msg.userId === socket.id
                     ? "bg-violet-400"
                     : "bg-indigo-300 bg-opacity-85"
-                } rounded-md w-10/12 sm:w-7/12 break-words shadow-md`}
+                } rounded-md w-[calc(100%-88px)] break-words shadow-md`}
               >
                 <div className="pl-1 flex justify-between items-center flex-shrink-0">
                   <p className="text-indigo-900 font-semibold ">
@@ -132,7 +132,7 @@ export default function MessagesContainer({
                           })
                         }
                       >
-                        <div className="border-l-8 border-indigo-800 p-2">
+                        <div className="border-l-8 border-indigo-800 p-2 max-w-[calc(100%-64px)]">
                           <h6 className="text-indigo-900 font-semibold">
                             {messagesList[replyIndex].userId === socket.id
                               ? "You"
