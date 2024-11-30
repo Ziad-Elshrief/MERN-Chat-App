@@ -8,3 +8,10 @@ export type MessageType = {
   repliedMessageId: string;
   time: string;
 };
+
+export type UserType = {
+  id: string;
+  room: string;
+  username: string;
+  avatar: number;
+};

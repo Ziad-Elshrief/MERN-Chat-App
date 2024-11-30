@@ -1,28 +1,18 @@
-import { useEffect, useState } from "react";
-import { socket } from "../socket";
 import { Mails, User } from "lucide-react";
 import { profilePictures } from "../utils/profilePictures";
-
-type User = {
-  id: string;
-  room: string;
-  username: string;
-  avatar: number;
-};
+import { UserType } from "../lib/types";
 
 type ChatRoomSidebarProps = {
   customClass?: string;
+  roomName: string;
+  usersList: UserType[];
 };
 
-export default function ChatRoomSidebar({ customClass }: ChatRoomSidebarProps) {
-  const [roomName, setRoomName] = useState("");
-  const [usersList, setUsersList] = useState<User[]>([]);
-  useEffect(() => {
-    socket.on("roomUsers", ({ room, users }) => {
-      setRoomName(room);
-      setUsersList(users);
-    });
-  }, []);
+export default function ChatRoomSidebar({
+  customClass,
+  usersList,
+  roomName,
+}: ChatRoomSidebarProps) {
   return (
     <aside
       className={`${customClass} bg-indigo-500 text-white overflow-y-auto pt-5 px-5 pb-16`}
