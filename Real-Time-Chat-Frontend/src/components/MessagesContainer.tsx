@@ -73,11 +73,7 @@ export default function MessagesContainer({
     if (positionX > (messagesRef.current?.getClientRects()[0].width || 0) / 2) {
       positionX -= 80;
     }
-    if (positionY - (reactMenuInfo?.positionY || 0) < 40) {
-      setViewReactMenu((prev) => !prev);
-    } else {
-      setViewReactMenu(true);
-    }
+    setViewReactMenu(true);
     setReactMenuInfo({ messageId, positionX, positionY });
   }
 
@@ -160,7 +156,10 @@ export default function MessagesContainer({
               <header className="flex justify-between items-center px-1.5">
                 <h3 className="">Reactions</h3>
                 <button onClick={() => setViewReactsList(-1)}>
-                  <X className="text-indigo-900" size={24} />
+                  <X
+                    className="text-indigo-900 dark:text-indigo-300"
+                    size={24}
+                  />
                 </button>
               </header>
               <ul className="space-y-2.5 h-[98px] overflow-y-auto px-1.5">
@@ -372,6 +371,7 @@ export default function MessagesContainer({
                 left: `${reactMenuInfo?.positionX}px`,
               }}
               className={`absolute -translate-y-16 flex gap-2 bg-gray-700 rounded-lg w-fit p-2 `}
+              onClick={(e) => e.stopPropagation()}
             >
               {reacts.map((react, index) => (
                 <button
