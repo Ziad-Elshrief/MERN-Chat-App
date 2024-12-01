@@ -6,23 +6,18 @@ import {
   Reply,
   Smile,
   SmilePlus,
-  X,
 } from "lucide-react";
 import { socket } from "../socket";
 import { useEffect, useRef, useState } from "react";
 import { profilePictures } from "../utils/profilePictures";
-import { MessageReactType, MessageType } from "../lib/types";
-import { reacts } from "../utils/reacts";
+import { MessageReactType, MessageType, ReactMenuInfoType } from "../lib/types";
+import ReactsMenu from "./ReactsMenu";
+import ImageViewer from "./ImageViewer";
+import ReactsListPopup from "./ReactsListPopup";
 
 type typingPersonType = {
   username: string;
   id: string;
-};
-
-type ReactMenuInfoType = {
-  messageId: string;
-  positionX: number;
-  positionY: number;
 };
 
 const SCROLL_DISTANCE = 200;
@@ -51,18 +46,6 @@ export default function MessagesContainer({
     messagesRef.current?.lastElementChild?.scrollIntoView({
       behavior: "smooth",
     });
-  }
-  function sendReact(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
-    const index = e.currentTarget.getAttribute("data-index");
-    socket.emit("sendReact", {
-      react: index,
-      messageId: reactMenuInfo?.messageId,
-    });
-    setViewReactMenu(false);
-  }
-  function removeReact(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
-    const messageId = e.currentTarget.getAttribute("data-id");
-    socket.emit("sendReact", { react: -1, messageId });
   }
   function handleReactMenu(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     const messageId = e.currentTarget.getAttribute("data-id") || "";
@@ -129,15 +112,7 @@ export default function MessagesContainer({
   return (
     <>
       {viewImage !== "" && (
-        <div className="absolute top-0 left-0 w-full z-30 h-[calc(100dvh-136px)] bg-black flex justify-center items-center overflow-hidden">
-          <img src={viewImage} alt="image" className="max-h-96" />
-          <button
-            className="absolute right-2 top-2 z-[35]"
-            onClick={() => setViewImage("")}
-          >
-            <X className="text-indigo-400 " size={24} />
-          </button>
-        </div>
+        <ImageViewer setViewImage={setViewImage} viewImage={viewImage} />
       )}
       <section className="relative overflow-hidden">
         <div
@@ -152,50 +127,10 @@ export default function MessagesContainer({
           }
         >
           {viewReactsList !== -1 && (
-            <div className="absolute bottom-5 right-[5%] rounded-xl  z-20 p-3 space-y-4 h-fit w-[90%] shadow-md bg-slate-300 dark:bg-slate-700 dark:text-white overflow-hidden">
-              <header className="flex justify-between items-center px-1.5">
-                <h3 className="">Reactions</h3>
-                <button onClick={() => setViewReactsList(-1)}>
-                  <X
-                    className="text-indigo-900 dark:text-indigo-300"
-                    size={24}
-                  />
-                </button>
-              </header>
-              <ul className="space-y-2.5 h-[98px] overflow-y-auto px-1.5">
-                {messagesList[viewReactsList].reactsList.map((reactElement) => (
-                  <li className="w-full flex gap-x-5 items-center justify-between">
-                    <div className="flex items-center gap-x-2">
-                      <img
-                        src={profilePictures[reactElement.userAvatar]}
-                        alt="User"
-                        className="size-10 object-contain rounded-full"
-                      />
-                      <div>
-                        <h5>{reactElement.username}</h5>
-                        {reactElement.userId === socket.id && (
-                          <button
-                            className="text-sm font-semibold"
-                            data-id={reactElement.messageId}
-                            onClick={(e) => {
-                              removeReact(e);
-                              setViewReactsList(-1);
-                            }}
-                          >
-                            Tap to remove
-                          </button>
-                        )}
-                      </div>
-                    </div>
-                    <img
-                      className="size-8"
-                      src={reacts[reactElement.react]}
-                      alt="react"
-                    />
-                  </li>
-                ))}
-              </ul>
-            </div>
+            <ReactsListPopup
+              message={messagesList[viewReactsList]}
+              setViewReactsList={setViewReactsList}
+            />
           )}
           {messagesList.map((msg, index) => {
             const replyIndex = messagesList.findIndex(
@@ -361,29 +296,10 @@ export default function MessagesContainer({
           </p>
         </div>
         {viewReactMenu && (
-          <div
-            className="absolute top-0 left-0 w-full h-full"
-            onClick={() => setViewReactMenu(false)}
-          >
-            <div
-              style={{
-                top: `${reactMenuInfo?.positionY}px`,
-                left: `${reactMenuInfo?.positionX}px`,
-              }}
-              className={`absolute -translate-y-16 flex gap-2 bg-gray-700 rounded-lg w-fit p-2 `}
-              onClick={(e) => e.stopPropagation()}
-            >
-              {reacts.map((react, index) => (
-                <button
-                  key={index}
-                  data-index={index}
-                  onClick={(e) => sendReact(e)}
-                >
-                  <img className="size-4" src={react} alt="react" />
-                </button>
-              ))}
-            </div>
-          </div>
+          <ReactsMenu
+            setViewReactMenu={setViewReactMenu}
+            reactMenuInfo={reactMenuInfo}
+          />
         )}
       </section>
     </>

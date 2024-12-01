@@ -24,3 +24,9 @@ export type UserType = {
   username: string;
   avatar: number;
 };
+
+export type ReactMenuInfoType = {
+  messageId: string;
+  positionX: number;
+  positionY: number;
+};
