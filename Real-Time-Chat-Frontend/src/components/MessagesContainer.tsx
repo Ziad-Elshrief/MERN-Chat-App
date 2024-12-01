@@ -1,12 +1,4 @@
-import {
-  Ban,
-  ChevronsDown,
-  Image,
-  MessageSquareMore,
-  Reply,
-  Smile,
-  SmilePlus,
-} from "lucide-react";
+import { Ban, ChevronsDown, Reply, Smile, SmilePlus } from "lucide-react";
 import { socket } from "../socket";
 import { useEffect, useRef, useState } from "react";
 import { profilePictures } from "../utils/profilePictures";
@@ -14,11 +6,8 @@ import { MessageReactType, MessageType, ReactMenuInfoType } from "../lib/types";
 import ReactsMenu from "./ReactsMenu";
 import ImageViewer from "./ImageViewer";
 import ReactsListPopup from "./ReactsListPopup";
-
-type typingPersonType = {
-  username: string;
-  id: string;
-};
+import TypingPeopleInfo from "./TypingPeopleInfo";
+import RepliedMessage from "./RepliedMessage";
 
 const SCROLL_DISTANCE = 200;
 
@@ -27,7 +16,6 @@ export default function MessagesContainer({
 }: {
   setReply: React.Dispatch<React.SetStateAction<MessageType | undefined>>;
 }) {
-  const [typingPeople, setTypingPeople] = useState<typingPersonType[]>([]);
   const [messagesList, setMessagesList] = useState<MessageType[]>([]);
   const [scrolledUp, setScrolledUp] = useState(0);
   const [messageArrived, setMessageArrived] = useState(true); //true or false doesn't indicate anything
@@ -96,15 +84,7 @@ export default function MessagesContainer({
       updateReacts(MessageReact);
     });
   }, []);
-  socket.on("typingPeople", (typing) => {
-    setTypingPeople(
-      typing
-        .filter(
-          (typingPerson: typingPersonType) => typingPerson.id !== socket.id
-        )
-        .map((typingPerson: typingPersonType) => typingPerson.username)
-    );
-  });
+
   useEffect(() => {
     setViewReactMenu(false);
     scrollToBottom();
@@ -205,35 +185,9 @@ export default function MessagesContainer({
                             })
                           }
                         >
-                          <div className="border-l-8 border-indigo-800 p-2 max-w-[calc(100%-64px)]">
-                            <h6 className="text-indigo-900 font-semibold">
-                              {messagesList[replyIndex].userId === socket.id
-                                ? "You"
-                                : messagesList[replyIndex].username}
-                            </h6>
-                            <p
-                              className="whitespace-pre-line line-clamp-3"
-                              dir="auto"
-                            >
-                              {messagesList[replyIndex].content !== "" ? (
-                                messagesList[replyIndex].content
-                              ) : (
-                                <>
-                                  <Image
-                                    className="inline mb-0.5 mr-0.5"
-                                    size={16}
-                                  />
-                                  Photo
-                                </>
-                              )}
-                            </p>
-                          </div>
-                          {messagesList[replyIndex].image !== "" && (
-                            <img
-                              className="w-16 self-stretch object-cover object-center rounded-e-xl"
-                              src={messagesList[replyIndex].image}
-                            />
-                          )}
+                          <RepliedMessage
+                            messageInReply={messagesList[replyIndex]}
+                          />
                         </div>
                       ) : (
                         <div className="my-1 rounded-xl bg-slate-800 p-2 bg-opacity-30 border-l-8 border-indigo-800">
@@ -245,7 +199,6 @@ export default function MessagesContainer({
                       )}
                     </>
                   )}
-
                   {msg.content !== "" && (
                     <p className="pl-1 whitespace-pre-line" dir="auto">
                       {msg.content}
@@ -284,16 +237,7 @@ export default function MessagesContainer({
           >
             <ChevronsDown />
           </button>
-          <p
-            className={`${
-              typingPeople.length > 0 ? "" : "h-0 overflow-hidden"
-            } text-indigo-900 dark:text-indigo-300`}
-          >
-            <MessageSquareMore className="inline mb-1 mr-1" />
-            {`${typingPeople.join(", ")} ${
-              typingPeople.length > 1 ? "are typing..." : "is typing..."
-            }`}
-          </p>
+          <TypingPeopleInfo />
         </div>
         {viewReactMenu && (
           <ReactsMenu
