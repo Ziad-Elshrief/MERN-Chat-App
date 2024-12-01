@@ -96,7 +96,11 @@ export default function MessagesContainer({
             if (reactIndex !== -1) {
               msg.reactsList[reactIndex] = MessageReact;
             } else {
-              msg.reactsList = [...msg.reactsList, MessageReact];
+              if (MessageReact.userId === socket.id) {
+                msg.reactsList = [MessageReact, ...msg.reactsList];
+              } else {
+                msg.reactsList = [...msg.reactsList, MessageReact];
+              }
             }
           }
         }
@@ -152,16 +156,16 @@ export default function MessagesContainer({
           }
         >
           {viewReactsList !== -1 && (
-            <div className="absolute bottom-5 right-[5%] rounded-xl  z-20 p-3 space-y-4 h-40 w-[90%] shadow-md bg-slate-300 dark:bg-slate-600 dark:text-white overflow-y-auto">
-              <header className="flex justify-between items-center">
+            <div className="absolute bottom-5 right-[5%] rounded-xl  z-20 p-3 space-y-4 h-fit w-[90%] shadow-md bg-slate-300 dark:bg-slate-700 dark:text-white overflow-hidden">
+              <header className="flex justify-between items-center px-1.5">
                 <h3 className="">Reactions</h3>
                 <button onClick={() => setViewReactsList(-1)}>
                   <X className="text-indigo-900" size={24} />
                 </button>
               </header>
-              <ul className="space-y-2.5">
+              <ul className="space-y-2.5 h-[98px] overflow-y-auto px-1.5">
                 {messagesList[viewReactsList].reactsList.map((reactElement) => (
-                  <li className="w-full flex gap-x-5  justify-between">
+                  <li className="w-full flex gap-x-5 items-center justify-between">
                     <div className="flex items-center gap-x-2">
                       <img
                         src={profilePictures[reactElement.userAvatar]}
