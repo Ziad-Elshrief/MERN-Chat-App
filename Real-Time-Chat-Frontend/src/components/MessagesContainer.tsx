@@ -19,6 +19,12 @@ type typingPersonType = {
   id: string;
 };
 
+type ReactMenuInfoType = {
+  messageId: string;
+  positionX: number;
+  positionY: number;
+};
+
 const SCROLL_DISTANCE = 200;
 
 export default function MessagesContainer({
@@ -31,7 +37,8 @@ export default function MessagesContainer({
   const [scrolledUp, setScrolledUp] = useState(0);
   const [messageArrived, setMessageArrived] = useState(true); //true or false doesn't indicate anything
   const [viewImage, setViewImage] = useState("");
-  const [reactMenu, setReactMenu] = useState(false);
+  const [viewReactMenu, setViewReactMenu] = useState(false);
+  const [reactMenuInfo, setReactMenuInfo] = useState<ReactMenuInfoType>();
   const [viewReactsList, setViewReactsList] = useState(-1);
   const messagesRef = useRef<HTMLDivElement>(null);
   function addReply(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
@@ -47,14 +54,33 @@ export default function MessagesContainer({
   }
   function sendReact(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     const index = e.currentTarget.getAttribute("data-index");
-    const messageId = e.currentTarget.getAttribute("data-id");
-    socket.emit("sendReact", { react: index, messageId });
-    setReactMenu(false);
+    socket.emit("sendReact", {
+      react: index,
+      messageId: reactMenuInfo?.messageId,
+    });
+    setViewReactMenu(false);
   }
   function removeReact(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     const messageId = e.currentTarget.getAttribute("data-id");
     socket.emit("sendReact", { react: -1, messageId });
   }
+  function handleReactMenu(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+    const messageId = e.currentTarget.getAttribute("data-id") || "";
+    const positionY =
+      (e.clientY || 0) - (messagesRef.current?.getClientRects()[0].y || 0);
+    let positionX =
+      (e.clientX || 0) - (messagesRef.current?.getClientRects()[0].x || 0);
+    if (positionX > (messagesRef.current?.getClientRects()[0].width || 0) / 2) {
+      positionX -= 80;
+    }
+    if (positionY - (reactMenuInfo?.positionY || 0) < 40) {
+      setViewReactMenu((prev) => !prev);
+    } else {
+      setViewReactMenu(true);
+    }
+    setReactMenuInfo({ messageId, positionX, positionY });
+  }
+
   function updateReacts(MessageReact: MessageReactType) {
     setMessagesList((prev) =>
       prev.map((msg) => {
@@ -97,6 +123,7 @@ export default function MessagesContainer({
     );
   });
   useEffect(() => {
+    setViewReactMenu(false);
     scrollToBottom();
   }, [messageArrived]);
   return (
@@ -114,7 +141,7 @@ export default function MessagesContainer({
       )}
       <section className="relative overflow-hidden">
         <div
-          className=" bg-white dark:bg-slate-800 p-4 h-full overflow-y-scroll border-l-2 border-l-indigo-700 sm:border-0"
+          className=" bg-white dark:bg-slate-800 p-4 h-full overflow-x-hidden overflow-y-scroll border-l-2 border-l-indigo-700 sm:border-0"
           ref={messagesRef}
           onScroll={(e) =>
             setScrolledUp(
@@ -157,7 +184,11 @@ export default function MessagesContainer({
                         )}
                       </div>
                     </div>
-                    {reactElement.react}
+                    <img
+                      className="size-8"
+                      src={reacts[reactElement.react]}
+                      alt="react"
+                    />
                   </li>
                 ))}
               </ul>
@@ -194,10 +225,11 @@ export default function MessagesContainer({
                   } rounded-md w-[calc(100%-88px)] break-words shadow-md`}
                 >
                   <button
+                    data-id={msg.messageId}
                     className={`absolute  ${
                       msg.userId === socket.id ? "right-2" : "left-2"
                     } bottom-0 translate-y-1/2 py-1 px-1.5 rounded-2xl bg-gray-500`}
-                    onClick={() => setReactMenu((prev) => !prev)}
+                    onClick={(e) => handleReactMenu(e)}
                   >
                     <SmilePlus size={16} />
                   </button>
@@ -205,7 +237,7 @@ export default function MessagesContainer({
                     <button
                       className={`absolute  ${
                         msg.userId === socket.id ? "right-11" : "left-11"
-                      } bottom-0 translate-y-1/2 py-1 px-1.5 rounded-2xl bg-gray-500 text-sm font-semibold`}
+                      } bottom-0 translate-y-1/2 p-1 rounded-2xl bg-gray-500 text-sm font-semibold`}
                       data-index={index}
                       onClick={(e) =>
                         setViewReactsList(
@@ -214,23 +246,10 @@ export default function MessagesContainer({
                       }
                     >
                       {msg.reactsList.length}{" "}
-                      <Smile className="mb-0.5 inline" size={16} />
+                      <Smile className="mb-0.5 inline" size={14} />
                     </button>
                   )}
-                  {reactMenu && (
-                    <div className="absolute bottom-5 right-0 translate-x-1/2 flex gap-2 bg-gray-700 rounded-lg w-fit p-2 ">
-                      {reacts.map((react, index) => (
-                        <button
-                          key={index}
-                          data-index={index}
-                          data-id={msg.messageId}
-                          onClick={(e) => sendReact(e)}
-                        >
-                          {react}
-                        </button>
-                      ))}
-                    </div>
-                  )}
+
                   <p className="pl-1 text-indigo-900 font-semibold">
                     {msg.username}
                   </p>
@@ -338,6 +357,30 @@ export default function MessagesContainer({
             }`}
           </p>
         </div>
+        {viewReactMenu && (
+          <div
+            className="absolute top-0 left-0 w-full h-full"
+            onClick={() => setViewReactMenu(false)}
+          >
+            <div
+              style={{
+                top: `${reactMenuInfo?.positionY}px`,
+                left: `${reactMenuInfo?.positionX}px`,
+              }}
+              className={`absolute -translate-y-16 flex gap-2 bg-gray-700 rounded-lg w-fit p-2 `}
+            >
+              {reacts.map((react, index) => (
+                <button
+                  key={index}
+                  data-index={index}
+                  onClick={(e) => sendReact(e)}
+                >
+                  <img className="size-4" src={react} alt="react" />
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
       </section>
     </>
   );
