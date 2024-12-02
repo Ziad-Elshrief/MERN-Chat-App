@@ -35,7 +35,7 @@ export default function ChatRoomSidebar({
           <li className="py-3" key={user.id}>
             <img
               src={profilePictures[user.avatar]}
-              alt="User"
+              alt={`${user.avatar}-${user.username}`}
               className="size-10 object-contain rounded-full inline mr-1.5"
             />
             {user.username}

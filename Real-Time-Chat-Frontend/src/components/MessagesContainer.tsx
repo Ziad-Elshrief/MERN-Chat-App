@@ -1,4 +1,4 @@
-import { Ban, ChevronsDown, Reply, Smile, SmilePlus } from "lucide-react";
+import { Ban, ChevronsDown, Reply, SmilePlus } from "lucide-react";
 import { socket } from "../socket";
 import { useEffect, useRef, useState } from "react";
 import { profilePictures } from "../utils/profilePictures";
@@ -8,6 +8,8 @@ import ImageViewer from "./ImageViewer";
 import ReactsListPopup from "./ReactsListPopup";
 import TypingPeopleInfo from "./TypingPeopleInfo";
 import RepliedMessage from "./RepliedMessage";
+import TotalReactsButton from "./TotalReactsButton";
+import ProfilePictureViewer from "./ProfilePictureViewer";
 
 const SCROLL_DISTANCE = 200;
 
@@ -20,6 +22,7 @@ export default function MessagesContainer({
   const [scrolledUp, setScrolledUp] = useState(0);
   const [messageArrived, setMessageArrived] = useState(true); //true or false doesn't indicate anything
   const [viewImage, setViewImage] = useState("");
+  const [viewProfilePicture, setViewProfilePicture] = useState("");
   const [viewReactMenu, setViewReactMenu] = useState(false);
   const [reactMenuInfo, setReactMenuInfo] = useState<ReactMenuInfoType>();
   const [viewReactsList, setViewReactsList] = useState(-1);
@@ -47,7 +50,6 @@ export default function MessagesContainer({
     setViewReactMenu(true);
     setReactMenuInfo({ messageId, positionX, positionY });
   }
-
   function updateReacts(MessageReact: MessageReactType) {
     setMessagesList((prev) =>
       prev.map((msg) => {
@@ -91,6 +93,12 @@ export default function MessagesContainer({
   }, [messageArrived]);
   return (
     <>
+      {viewProfilePicture !== "" && (
+        <ProfilePictureViewer
+          setViewProfilePicture={setViewProfilePicture}
+          viewProfilePicture={viewProfilePicture}
+        />
+      )}
       {viewImage !== "" && (
         <ImageViewer setViewImage={setViewImage} viewImage={viewImage} />
       )}
@@ -132,8 +140,9 @@ export default function MessagesContainer({
               >
                 <img
                   src={profilePictures[+msg.userAvatar]}
-                  alt="User"
-                  className="size-10 object-contain rounded-full"
+                  alt={`${msg.userAvatar}-${msg.username}`}
+                  className="size-10 object-contain rounded-full cursor-pointer"
+                  onClick={(e) => setViewProfilePicture(e.currentTarget.alt)}
                 />
                 <div
                   className={`relative p-3 ${
@@ -152,22 +161,12 @@ export default function MessagesContainer({
                     <SmilePlus size={16} />
                   </button>
                   {msg.reactsList.length > 0 && (
-                    <button
-                      className={`absolute  ${
-                        msg.userId === socket.id ? "right-11" : "left-11"
-                      } bottom-0 translate-y-1/2 p-1 rounded-2xl bg-gray-500 text-sm font-semibold`}
-                      data-index={index}
-                      onClick={(e) =>
-                        setViewReactsList(
-                          Number(e.currentTarget.getAttribute("data-index"))
-                        )
-                      }
-                    >
-                      {msg.reactsList.length}{" "}
-                      <Smile className="mb-0.5 inline" size={14} />
-                    </button>
+                    <TotalReactsButton
+                      Message={msg}
+                      MessageIndex={index}
+                      setViewReactsList={setViewReactsList}
+                    />
                   )}
-
                   <p className="pl-1 text-indigo-900 font-semibold">
                     {msg.username}
                   </p>
