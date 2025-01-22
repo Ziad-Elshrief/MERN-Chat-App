@@ -9,10 +9,19 @@ const {
   userLeave,
   getRoomUsers,
 } = require("./utils/users");
+const { errorHandler } = require("./middleware/errorMiddleware");
+const connectDB = require("./config/db");
+const bp = require("body-parser");
+const cookieParser = require("cookie-parser");
 
+connectDB();
 const app = express();
 
 let corsOptions = {};
+
+app.use(bp.json());
+app.use(bp.urlencoded({ extended: false }));
+app.use(cookieParser());
 
 if (process.env.NODE_ENV === "production") {
   app.use(
@@ -35,12 +44,15 @@ if (process.env.NODE_ENV === "production") {
   corsOptions = {
     origin: "*",
   };
-
+  
   app.use(cors({ origin: process.env.FRONTEND_DEV_URL }));
   app.get("/", (req, res) =>
     res.send("Please convert to production enviroment")
   );
 }
+
+app.use("/api/users", require("./routes/userRoutes"));
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 3000;
 
