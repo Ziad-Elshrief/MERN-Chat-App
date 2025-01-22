@@ -1,10 +1,34 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.tsx'
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import "./index.css";
+import App from "./App.tsx";
+import {
+  createBrowserRouter,
+  createRoutesFromElements,
+  Route,
+  RouterProvider,
+} from "react-router-dom";
 
-createRoot(document.getElementById('root')!).render(
+import JoinChat from "./components/JoinChat.tsx";
+import ChatRoom from "./components/ChatRoom.tsx";
+import PrivateRoute from "./components/PrivateRoute.tsx";
+import { JoinedContextProvider } from "./context/JoinedContext.tsx";
+
+const router = createBrowserRouter(
+  createRoutesFromElements(
+    <Route path="/" element={<App />}>
+      <Route path="/join-chat" element={<JoinChat />} />
+      <Route path="" element={<PrivateRoute />}>
+        <Route path="/room/:id" element={<ChatRoom />} />
+      </Route>
+    </Route>
+  )
+);
+
+createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <App />
-  </StrictMode>,
-)
+    <JoinedContextProvider>
+      <RouterProvider router={router} />
+    </JoinedContextProvider>
+  </StrictMode>
+);

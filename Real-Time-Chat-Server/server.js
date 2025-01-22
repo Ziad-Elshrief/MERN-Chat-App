@@ -1,5 +1,6 @@
 const http = require("http");
 const path = require("path");
+const cors = require("cors");
 const express = require("express");
 const socketio = require("socket.io");
 const { formatMessage } = require("./utils/messages");
@@ -9,12 +10,33 @@ const {
   userLeave,
   getRoomUsers,
 } = require("./utils/users");
+
 const app = express();
+
+let corsOptions = {};
+
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "../frontend/dist")));
+  app.get("*", (req, res) =>
+    res.sendFile(
+      path.resolve(__dirname, "../", "frontend", "dist", "index.html")
+    )
+  );
+} else {
+  corsOptions = {
+    origin: "*",
+  };
+
+  app.use(cors({ origin: process.env.FRONTEND_DEV_URL }));
+  app.get("/", (req, res) =>
+    res.send("Please convert to production enviroment")
+  );
+}
+
 const server = http.createServer(app);
-const io = socketio(server);
-app.use(
-  express.static(path.join(__dirname, "..", "Real-Time-Chat-Frontend", "dist"))
-);
+const io = socketio(server, {
+  cors: corsOptions,
+});
 
 let typingPeople = [];
 

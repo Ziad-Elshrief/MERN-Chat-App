@@ -8,25 +8,28 @@ import {
 import { socket } from "../socket";
 import { profilePictures } from "../utils/profilePictures";
 import { useState } from "react";
+import { useJoined } from "../context/JoinedContext";
+import { useNavigate } from "react-router-dom";
 
 const MAX_LENGTH = 16;
 
-type joinChatProps = {
-  setJoined: React.Dispatch<React.SetStateAction<boolean>>;
-};
 
-export default function JoinChat({ setJoined }: joinChatProps) {
+export default function JoinChat() {
+  const {setJoined}=useJoined()
   const [avatar, setAvatar] = useState(0);
+  const navigate = useNavigate()
   function joinRoom(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const target = e.target as HTMLFormElement;
+    const room = target.room.value.trim()
     socket.connect();
     socket.emit("joinRoom", {
       username: target.username.value.trim(),
-      room: target.room.value.trim(),
+      room,
       avatar,
     });
     setJoined(true);
+    navigate(`/room/${room}`)
   }
   return (
     <div className="w-full max-w-lg text-white mx-5 shadow-md rounded-xl overflow-hidden">

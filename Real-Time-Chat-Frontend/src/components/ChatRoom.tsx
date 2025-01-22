@@ -6,14 +6,12 @@ import { useEffect, useState } from "react";
 import LeaveMenu from "./LeaveMenu";
 import { MessageType, UserType } from "../lib/types";
 import { socket } from "../socket";
+import { useJoined } from "../context/JoinedContext";
 
 const SMALL_SCREEN_WIDTH = 640;
 
-type chatRoomProps = {
-  setJoined: React.Dispatch<React.SetStateAction<boolean>>;
-};
-
-export default function ChatRoom({ setJoined }: chatRoomProps) {
+export default function ChatRoom() {
+  const { setJoined } = useJoined();
   const [reply, setReply] = useState<MessageType>();
   const [showSide, setShowSide] = useState(false);
   const [willLeave, setWillLeave] = useState(false);
