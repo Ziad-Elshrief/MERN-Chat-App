@@ -5,7 +5,6 @@ import {
   MessagesSquare,
   User,
 } from "lucide-react";
-import { socket } from "../socket";
 import { profilePictures } from "../utils/profilePictures";
 import { useState } from "react";
 import { useJoined } from "../context/JoinedContext";
@@ -22,14 +21,13 @@ export default function JoinChat() {
     e.preventDefault();
     const target = e.target as HTMLFormElement;
     const room = target.room.value.trim()
-    socket.connect();
-    socket.emit("joinRoom", {
-      username: target.username.value.trim(),
+    navigate(`/room/${room}`)
+    setJoined({
+      state:true,
+      username:target.username.value.trim(),
       room,
       avatar,
     });
-    setJoined(true);
-    navigate(`/room/${room}`)
   }
   return (
     <div className="w-full max-w-lg text-white mx-5 shadow-md rounded-xl overflow-hidden">

@@ -6,16 +6,26 @@ import { useEffect, useState } from "react";
 import LeaveMenu from "../components/LeaveMenu";
 import { MessageType, UserType } from "../lib/types";
 import { socket } from "../socket";
+import { useJoined } from "../context/JoinedContext";
 
 const SMALL_SCREEN_WIDTH = 640;
 
 export default function ChatRoom() {
+  const {joined}=useJoined()
   const [reply, setReply] = useState<MessageType>();
   const [showSide, setShowSide] = useState(false);
   const [willLeave, setWillLeave] = useState(false);
   const [roomName, setRoomName] = useState("");
   const [usersList, setUsersList] = useState<UserType[]>([]);
   useEffect(() => {
+    if(joined.state){
+      socket.connect();
+      socket.emit("joinRoom", {
+        username: joined.username,
+        room:joined.room,
+        avatar:joined.avatar,
+      });
+    }
     socket.on("roomUsers", ({ room, users }) => {
       setRoomName(room);
       setUsersList(users);

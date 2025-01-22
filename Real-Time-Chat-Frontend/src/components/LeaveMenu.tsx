@@ -10,7 +10,12 @@ export default function LeaveMenu({ setWillLeave }: leaveMenuProps) {
   const navigate = useNavigate();
    const { setJoined } = useJoined();
   function leaveRoom() {
-    setJoined(false);
+    setJoined({
+      state:false,
+      room:"",
+      avatar:0,
+      username:"",
+    });
     socket.disconnect();
     navigate("/join-chat");
   }
