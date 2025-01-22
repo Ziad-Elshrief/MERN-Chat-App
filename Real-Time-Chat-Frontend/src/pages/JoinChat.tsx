@@ -12,19 +12,18 @@ import { useNavigate } from "react-router-dom";
 
 const MAX_LENGTH = 16;
 
-
 export default function JoinChat() {
-  const {setJoined}=useJoined()
+  const { setJoined } = useJoined();
   const [avatar, setAvatar] = useState(0);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   function joinRoom(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const target = e.target as HTMLFormElement;
-    const room = target.room.value.trim()
-    navigate(`/room/${room}`)
+    const room = target.room.value.trim();
+    navigate(`/room/${room}`);
     setJoined({
-      state:true,
-      username:target.username.value.trim(),
+      state: true,
+      username: target.username.value.trim(),
       room,
       avatar,
     });

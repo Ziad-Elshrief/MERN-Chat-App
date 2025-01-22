@@ -11,23 +11,21 @@ import { useJoined } from "../context/JoinedContext";
 const SMALL_SCREEN_WIDTH = 640;
 
 export default function ChatRoom() {
-  const {joined}=useJoined()
+  const { joined } = useJoined();
   const [reply, setReply] = useState<MessageType>();
   const [showSide, setShowSide] = useState(false);
   const [willLeave, setWillLeave] = useState(false);
-  const [roomName, setRoomName] = useState("");
   const [usersList, setUsersList] = useState<UserType[]>([]);
   useEffect(() => {
-    if(joined.state){
+    if (joined.state) {
       socket.connect();
       socket.emit("joinRoom", {
         username: joined.username,
-        room:joined.room,
-        avatar:joined.avatar,
+        room: joined.room,
+        avatar: joined.avatar,
       });
     }
-    socket.on("roomUsers", ({ room, users }) => {
-      setRoomName(room);
+    socket.on("roomUsers", ({ users }) => {
       setUsersList(users);
     });
     const sidebarHandler = () => {
@@ -35,7 +33,7 @@ export default function ChatRoom() {
     };
     window.addEventListener("resize", sidebarHandler);
     return () => window.removeEventListener("resize", sidebarHandler);
-  }, []);
+  }, [joined.avatar, joined.room, joined.state, joined.username]);
   return (
     <>
       {willLeave && <LeaveMenu setWillLeave={setWillLeave} />}
@@ -52,7 +50,7 @@ export default function ChatRoom() {
               <Info className="size-5" />
             </button>
             <div className="text-indigo-900 dark:text-white bg-slate-200 dark:bg-slate-800 px-2 min-w-24">
-              <h2 className="font-semibold">{roomName}</h2>
+              <h2 className="font-semibold">{joined.room}</h2>
               <h4 className="text-slate-700 dark:text-slate-400  text-xs">
                 <Users className="inline mr-0.5 mb-1 size-3" />
                 {usersList.length} users
@@ -71,7 +69,6 @@ export default function ChatRoom() {
         <main className="relative grid grid-cols-1 sm:grid-cols-[1fr_3fr] flex-1 min-h-0">
           <ChatRoomSidebar
             usersList={usersList}
-            roomName={roomName}
             customClass={`${
               showSide
                 ? "absolute top-0 left-0 z-40 w-full h-[calc(100dvh-136px)]"
