@@ -15,4 +15,13 @@ function formatMessage(username, userId, msg, userAvatar) {
   };
 }
 
-module.exports = { formatMessage };
+function updateReact(reactInfo, user) {
+  return {
+    ...reactInfo,
+    userId: user.id,
+    userAvatar: user.avatar,
+    username: user.username,
+  };
+}
+
+module.exports = { formatMessage,updateReact };

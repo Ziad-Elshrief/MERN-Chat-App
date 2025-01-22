@@ -1,9 +1,8 @@
-const http = require("http");
 const path = require("path");
 const cors = require("cors");
 const express = require("express");
 const socketio = require("socket.io");
-const { formatMessage } = require("./utils/messages");
+const { formatMessage, updateReact } = require("./utils/messages");
 const {
   getCurrentUser,
   userJoin,
@@ -33,21 +32,17 @@ if (process.env.NODE_ENV === "production") {
   );
 }
 
-const server = http.createServer(app);
+const PORT = process.env.PORT || 3000;
+
+const server = app.listen(PORT, () =>
+  console.log(`Server running on http://localhost:${PORT}`)
+);
+
 const io = socketio(server, {
   cors: corsOptions,
 });
 
 let typingPeople = [];
-
-function updateReact(reactInfo, user) {
-  return {
-    ...reactInfo,
-    userId: user.id,
-    userAvatar: user.avatar,
-    username: user.username,
-  };
-}
 
 // Run when client connects
 io.on("connection", (socket) => {
@@ -122,9 +117,3 @@ io.on("connection", (socket) => {
     }
   });
 });
-
-const PORT = process.env.PORT || 3000;
-
-server.listen(PORT, () =>
-  console.log(`Server running on http://localhost:${PORT}`)
-);
