@@ -20,7 +20,6 @@ export default function MessagesContainer({
 }) {
   const [messagesList, setMessagesList] = useState<MessageType[]>([]);
   const [scrolledUp, setScrolledUp] = useState(0);
-  const [messageArrived, setMessageArrived] = useState(true); //true or false doesn't indicate anything
   const [viewImage, setViewImage] = useState("");
   const [viewProfilePicture, setViewProfilePicture] = useState("");
   const [viewReactMenu, setViewReactMenu] = useState(false);
@@ -80,17 +79,11 @@ export default function MessagesContainer({
   useEffect(() => {
     socket.on("message", (message) => {
       setMessagesList((prev) => [...prev, message]);
-      setMessageArrived((prev) => !prev);
     });
     socket.on("updateReact", (MessageReact: MessageReactType) => {
       updateReacts(MessageReact);
     });
   }, []);
-
-  useEffect(() => {
-    setViewReactMenu(false);
-    scrollToBottom();
-  }, [messageArrived]);
   return (
     <>
       {viewProfilePicture !== "" && (
