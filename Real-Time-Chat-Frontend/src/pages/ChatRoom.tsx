@@ -1,17 +1,15 @@
-import SendMessage from "./SendMessage";
-import ChatRoomSidebar from "./ChatRoomSidebar";
-import MessagesContainer from "./MessagesContainer";
+import SendMessage from "../components/SendMessage";
+import ChatRoomSidebar from "../components/ChatRoomSidebar";
+import MessagesContainer from "../components/MessagesContainer";
 import { Info, LogOut, MessagesSquare, Users } from "lucide-react";
 import { useEffect, useState } from "react";
-import LeaveMenu from "./LeaveMenu";
+import LeaveMenu from "../components/LeaveMenu";
 import { MessageType, UserType } from "../lib/types";
 import { socket } from "../socket";
-import { useJoined } from "../context/JoinedContext";
 
 const SMALL_SCREEN_WIDTH = 640;
 
 export default function ChatRoom() {
-  const { setJoined } = useJoined();
   const [reply, setReply] = useState<MessageType>();
   const [showSide, setShowSide] = useState(false);
   const [willLeave, setWillLeave] = useState(false);
@@ -30,9 +28,7 @@ export default function ChatRoom() {
   }, []);
   return (
     <>
-      {willLeave && (
-        <LeaveMenu setWillLeave={setWillLeave} setJoined={setJoined} />
-      )}
+      {willLeave && <LeaveMenu setWillLeave={setWillLeave} />}
       <div className="relative overflow-hidden mx-5 w-full max-w-5xl h-[calc(100dvh-64px)] rounded-xl shadow-md flex flex-col">
         <header className="text-white bg-indigo-700  p-4 flex justify-between items-center h-[72px]">
           <h1 className="hidden sm:block text-lg">

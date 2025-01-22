@@ -9,8 +9,8 @@ import {
   RouterProvider,
 } from "react-router-dom";
 
-import JoinChat from "./components/JoinChat.tsx";
-import ChatRoom from "./components/ChatRoom.tsx";
+import JoinChat from "./pages/JoinChat.tsx";
+import ChatRoom from "./pages/ChatRoom.tsx";
 import PrivateRoute from "./components/PrivateRoute.tsx";
 import { JoinedContextProvider } from "./context/JoinedContext.tsx";
 

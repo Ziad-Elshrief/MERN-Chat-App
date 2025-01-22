@@ -1,14 +1,14 @@
 import { useNavigate } from "react-router-dom";
 import { socket } from "../socket";
+import { useJoined } from "../context/JoinedContext";
 
 type leaveMenuProps = {
-  setJoined: React.Dispatch<React.SetStateAction<boolean>>;
   setWillLeave: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export default function LeaveMenu({ setJoined, setWillLeave }: leaveMenuProps) {
+export default function LeaveMenu({ setWillLeave }: leaveMenuProps) {
   const navigate = useNavigate();
-
+   const { setJoined } = useJoined();
   function leaveRoom() {
     setJoined(false);
     socket.disconnect();
