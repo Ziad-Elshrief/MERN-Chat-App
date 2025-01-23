@@ -45,7 +45,7 @@ export const JoinedContextProvider = ({
 export const useJoined = () => {
   const context = useContext(JoinedContext);
   if (!context) {
-    throw new Error("useAuth must be used within an AuthProvider");
+    throw new Error("useJoined must be used within an joinedProvider");
   }
   return context;
 };

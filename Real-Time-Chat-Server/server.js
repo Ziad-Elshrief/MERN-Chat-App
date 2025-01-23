@@ -44,8 +44,10 @@ if (process.env.NODE_ENV === "production") {
   corsOptions = {
     origin: "*",
   };
-  
-  app.use(cors({ origin: process.env.FRONTEND_DEV_URL }));
+
+  app.use(
+    cors({ origin: [process.env.FRONTEND_DEV_URL], methods: ["GET", "POST"] })
+  );
   app.get("/", (req, res) =>
     res.send("Please convert to production enviroment")
   );

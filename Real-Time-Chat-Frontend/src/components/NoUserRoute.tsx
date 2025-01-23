@@ -1,7 +1,7 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { useUserInfo } from "../context/UserInfoContext";
 
-export default function PrivateRoute() {
+export default function NoUserRoute() {
   const { userInfo } = useUserInfo();
-  return userInfo ? <Outlet /> : <Navigate to="/login" />;
+  return userInfo ? <Navigate to="/" /> : <Outlet />;
 }

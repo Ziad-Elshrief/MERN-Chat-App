@@ -1,10 +1,17 @@
-export type MessageReactType ={
+export type MessageReactType = {
   username: string;
   userId: string;
   userAvatar: number;
   messageId: string;
-  react:number;
-}
+  react: number;
+};
+
+export type UserInfoType = {
+  _id: string;
+  username: string;
+  email: string;
+  avatar: number;
+};
 
 export type MessageType = {
   username: string;
