@@ -11,6 +11,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { FormEvent, useState } from "react";
 import { toast } from "react-toastify";
 import { UserInfoApi } from "../api/userApi";
+import { Input } from "../components/Input";
 
 const MAX_LENGTH = 16;
 
@@ -56,8 +57,7 @@ export default function Register() {
             <label htmlFor="username" className="mb-1 block">
               <User className="inline mr-0.5 mb-1" size={16} /> Username
             </label>
-            <input
-              className="bg-white dark:bg-slate-800 mb-5 p-2 h-10 w-full caret-indigo-700 text-indigo-900 dark:text-indigo-300  rounded-lg focus:outline-none focus:border focus:border-indigo-300 focus:ring-0 focus:ring-offset-0 autofill:shadow-[inset_0_0_0px_1000px_rgb(129,140,248)]"
+            <Input
               type="text"
               name="username"
               id="username"
@@ -68,8 +68,7 @@ export default function Register() {
             <label htmlFor="email" className="mb-1 block">
               <Mail className="inline mr-0.5 mb-1" size={16} /> Email
             </label>
-            <input
-              className="bg-white dark:bg-slate-800 p-2 mb-5 h-10 w-full caret-indigo-700 text-indigo-900 dark:text-indigo-300 rounded-lg focus:outline-none focus:border focus:border-indigo-300 focus:ring-0 focus:ring-offset-0 autofill:shadow-[inset_0_0_0px_1000px_rgb(129,140,248)]"
+            <Input
               type="email"
               name="email"
               id="email"
@@ -79,8 +78,7 @@ export default function Register() {
             <label htmlFor="password" className="mb-1 block">
               <KeySquare className="inline mr-0.5 mb-1" size={16} /> Password
             </label>
-            <input
-              className="bg-white dark:bg-slate-800 p-2 mb-5 h-10 w-full caret-indigo-700 text-indigo-900 dark:text-indigo-300 rounded-lg focus:outline-none focus:border focus:border-indigo-300 focus:ring-0 focus:ring-offset-0 autofill:shadow-[inset_0_0_0px_1000px_rgb(129,140,248)]"
+            <Input
               type="password"
               name="password"
               id="password"
@@ -91,8 +89,7 @@ export default function Register() {
               <KeySquare className="inline mr-0.5 mb-1" size={16} /> Confirm
               Password
             </label>
-            <input
-              className="bg-white dark:bg-slate-800 p-2 mb-5 h-10 w-full caret-indigo-700 text-indigo-900 dark:text-indigo-300 rounded-lg focus:outline-none focus:border focus:border-indigo-300 focus:ring-0 focus:ring-offset-0 autofill:shadow-[inset_0_0_0px_1000px_rgb(129,140,248)]"
+            <Input
               type="password"
               name="confirmPassword"
               id="confirmPassword"

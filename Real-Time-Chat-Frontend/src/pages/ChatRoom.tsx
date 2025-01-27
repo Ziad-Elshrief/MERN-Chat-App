@@ -3,19 +3,31 @@ import ChatRoomSidebar from "../components/ChatRoomSidebar";
 import MessagesContainer from "../components/MessagesContainer";
 import { Info, LogOut, MessagesSquare, Users } from "lucide-react";
 import { useEffect, useState } from "react";
-import LeaveMenu from "../components/LeaveMenu";
 import { MessageType, UserType } from "../lib/types";
 import { socket } from "../socket";
 import { useJoined } from "../context/JoinedContext";
+import { useNavigate } from "react-router-dom";
+import Popup from "../components/Popup";
 
 const SMALL_SCREEN_WIDTH = 640;
 
 export default function ChatRoom() {
-  const { joined } = useJoined();
+  const { joined, setJoined } = useJoined();
   const [reply, setReply] = useState<MessageType>();
   const [showSide, setShowSide] = useState(false);
   const [willLeave, setWillLeave] = useState(false);
   const [usersList, setUsersList] = useState<UserType[]>([]);
+  const navigate = useNavigate();
+  function leaveRoom() {
+    setJoined({
+      state: false,
+      room: "",
+      avatar: 0,
+      username: "",
+    });
+    socket.disconnect();
+    navigate("/join-chat");
+  }
   useEffect(() => {
     if (joined.state) {
       socket.connect();
@@ -36,9 +48,17 @@ export default function ChatRoom() {
   }, [joined.avatar, joined.room, joined.state, joined.username]);
   return (
     <>
-      {willLeave && <LeaveMenu setWillLeave={setWillLeave} />}
-      <div className="h-dvh">
-        <div className="relative overflow-hidden mx-5 mt-8 w-full max-w-5xl h-[calc(100dvh-64px)] rounded-xl shadow-md flex flex-col">
+      {willLeave && (
+        <Popup
+          popupHeader="Are you sure you want to leave?"
+          confirmText="Leave"
+          confirmOnClick={leaveRoom}
+          cancelText="Cancel"
+          cancelOnClick={() => setWillLeave(false)}
+        />
+      )}
+      <div className="  w-full max-w-5xl h-dvh px-5  pt-8 ">
+        <div className="relative overflow-hidden rounded-xl shadow-md w-full h-[calc(100dvh-64px)] flex flex-col">
           <header className="text-white bg-indigo-700  p-4 flex justify-between items-center h-[72px]">
             <h1 className="hidden sm:block text-lg">
               <MessagesSquare className="inline mr-0.5 mb-1" /> Chat App
