@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import { UserInfoApi } from "../api/userApi";
 import { useUserInfo } from "../context/UserInfoContext";
 import { Input } from "../components/Input";
+import Container from "../components/Container";
 
 export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
@@ -36,14 +37,14 @@ export default function Login() {
   };
 
   return (
-    <>
+    <Container>
       <div className="w-full my-6 max-w-xl text-white shadow-md rounded-xl overflow-hidden">
         <header className="text-center p-5 bg-indigo-700 ">
           <h1 className="text-lg">
             <UserCheck2 className="inline mr-0.5 mb-1" /> Sign In
           </h1>
         </header>
-        <main className="py-6 px-8 bg-indigo-500">
+        <main className="py-4 px-8 bg-indigo-500">
           <form onSubmit={submitHandler}>
             <label htmlFor="email" className="mb-1 block">
               <Mail className="inline mr-0.5 mb-1" size={16} /> Email
@@ -81,6 +82,6 @@ export default function Login() {
           </p>
         </main>
       </div>
-    </>
+    </Container>
   );
 }

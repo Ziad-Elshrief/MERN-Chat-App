@@ -6,12 +6,13 @@ import {
   User,
   UserPlus2,
 } from "lucide-react";
-import { profilePictures } from "../utils/profilePictures";
 import { Link, useNavigate } from "react-router-dom";
 import { FormEvent, useState } from "react";
 import { toast } from "react-toastify";
 import { UserInfoApi } from "../api/userApi";
 import { Input } from "../components/Input";
+import Container from "../components/Container";
+import AvatarPicker from "../components/AvatarPicker";
 
 const MAX_LENGTH = 16;
 
@@ -44,7 +45,7 @@ export default function Register() {
   };
 
   return (
-    <>
+    <Container>
       <div className="w-full my-6 max-w-xl text-white shadow-md rounded-xl overflow-hidden">
         <header className="text-center p-5 bg-indigo-700 ">
           <h1 className="text-lg">
@@ -52,7 +53,7 @@ export default function Register() {
           </h1>
           <p className="text-gray-300">Create a new account</p>
         </header>
-        <main className="py-6 px-8 bg-indigo-500">
+        <main className="py-4 px-8 bg-indigo-500">
           <form method="post" onSubmit={submitHandler}>
             <label htmlFor="username" className="mb-1 block">
               <User className="inline mr-0.5 mb-1" size={16} /> Username
@@ -101,24 +102,9 @@ export default function Register() {
               Avatar
             </label>
             <p className="text-gray-300 mb-3">
-              You can change your avatar any time in your profile page
+              You can change your avatar any time later
             </p>
-            <div className="flex flex-wrap justify-center gap-3 py-2.5 h-36 sm:h-48 overflow-y-auto">
-              {profilePictures.map((pic, index) => (
-                <img
-                  key={index}
-                  src={pic}
-                  alt="User"
-                  id={`profile${index}`}
-                  className={`size-14 sm:size-20 object-contain rounded-full border-[6px] cursor-pointer ${
-                    avatar === index ? "border-indigo-900" : "border-gray-400"
-                  } `}
-                  onClick={(e) =>
-                    setAvatar(Number(e.currentTarget.id.slice(7)))
-                  }
-                />
-              ))}
-            </div>
+           <AvatarPicker setAvatar={setAvatar} avatar={avatar} />
             <button
               type="submit"
               disabled={isLoading}
@@ -135,6 +121,6 @@ export default function Register() {
           </p>
         </main>
       </div>
-    </>
+    </Container>
   );
 }

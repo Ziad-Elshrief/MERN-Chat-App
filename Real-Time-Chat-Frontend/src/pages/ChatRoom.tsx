@@ -8,6 +8,7 @@ import { socket } from "../socket";
 import { useJoined } from "../context/JoinedContext";
 import { useNavigate } from "react-router-dom";
 import Popup from "../components/Popup";
+import Container from "../components/Container";
 
 const SMALL_SCREEN_WIDTH = 640;
 
@@ -57,9 +58,9 @@ export default function ChatRoom() {
           cancelOnClick={() => setWillLeave(false)}
         />
       )}
-      <div className="  w-full max-w-5xl h-dvh px-5  pt-8 ">
-        <div className="relative overflow-hidden rounded-xl shadow-md w-full h-[calc(100dvh-64px)] flex flex-col">
-          <header className="text-white bg-indigo-700  p-4 flex justify-between items-center h-[72px]">
+      <Container>
+        <div className="relative overflow-hidden rounded-xl shadow-md w-full max-w-5xl h-[calc(100dvh-100px)] flex flex-col">
+          <header className="text-white bg-indigo-700 px-4 py-3.5 flex justify-between items-center h-[68px]">
             <h1 className="hidden sm:block text-lg">
               <MessagesSquare className="inline mr-0.5 mb-1" /> Chat App
             </h1>
@@ -92,7 +93,7 @@ export default function ChatRoom() {
               usersList={usersList}
               customClass={`${
                 showSide
-                  ? "absolute top-0 left-0 z-40 w-full h-[calc(100dvh-136px)]"
+                  ? "absolute top-0 left-0 z-40 w-full h-[calc(100dvh-168px)]"
                   : "hidden sm:block"
               } `}
             />
@@ -100,7 +101,7 @@ export default function ChatRoom() {
           </main>
           <SendMessage reply={reply} setReply={setReply} />
         </div>
-      </div>
+      </Container>
     </>
   );
 }

@@ -1,14 +1,33 @@
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
-import { ChevronDown, Settings } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { MouseEventHandler, ReactNode } from "react";
 import { Link } from "react-router-dom";
 
-export default function DropdownMenu({ children }: { children: ReactNode }) {
+type DropdownMenuProps = {
+  children: ReactNode;
+  heading: ReactNode;
+  direction?: "right-0" | "left-0";
+  variant?: "indigo-btn" | "muted";
+};
+
+export default function DropdownMenu({
+  children,
+  heading,
+  direction = "right-0",
+  variant = "muted",
+}: DropdownMenuProps) {
+  const variants = {
+    "indigo-btn":
+      "bg-indigo-700  px-3 py-2 ring-1 shadow-xs ring-indigo-400 ring-inset hover:bg-indigo-500 data-focus:bg-indigo-500",
+    muted: "hover:text-indigo-400 data-focus:text-indigo-400",
+  };
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
-        <MenuButton className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-indigo-700  px-3 py-2 text-sm font-semibold text-white ring-1 shadow-xs ring-indigo-400 ring-inset hover:bg-indigo-500 data-focus:bg-indigo-500">
-          <Settings className="inline size-4 mt-0.5" /> Settings
+        <MenuButton
+          className={`inline-flex w-full justify-center gap-x-1.5 rounded-md  text-sm font-semibold text-white ${variants[variant]}`}
+        >
+          {heading}
           <ChevronDown
             aria-hidden="true"
             className="-mr-1 size-5 text-gray-400"
@@ -18,7 +37,7 @@ export default function DropdownMenu({ children }: { children: ReactNode }) {
 
       <MenuItems
         transition
-        className="overflow-hidden absolute right-0 z-10 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white ring-1 shadow-lg ring-black/5 transition data-focus:outline-hidden data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in dark:bg-slate-700 dark:ring-white/70"
+        className={`overflow-hidden absolute ${direction} z-10 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white ring-1 shadow-lg ring-black/5 transition data-focus:outline-hidden data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in dark:bg-slate-700 dark:ring-white/70`}
       >
         {children}
       </MenuItems>
@@ -27,7 +46,7 @@ export default function DropdownMenu({ children }: { children: ReactNode }) {
 }
 
 type DropdownMenuLinkItemProps = {
-  linkLabel: string;
+  linkLabel: ReactNode;
   linkHref: string;
 };
 
@@ -48,7 +67,7 @@ export function DropdownMenuLinkItem({
 }
 
 type DropdownMenuButtonItemProps = {
-  buttonLabel: string;
+  buttonLabel: ReactNode;
   onClick: MouseEventHandler<HTMLButtonElement> | undefined;
 };
 
