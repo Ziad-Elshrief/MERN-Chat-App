@@ -24,13 +24,12 @@ export default function Login() {
       toast.error(res.errorMessage);
     } else {
       toast.success("Successfully logged in");
-      setUserInfo((prev) => ({
-        ...prev,
+      setUserInfo({
         _id: res._id,
         email: res.email,
         username: res.name,
         avatar: res.avatar,
-      }));
+      });
       navigate("/");
     }
     setIsLoading(false);

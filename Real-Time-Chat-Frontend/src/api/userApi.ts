@@ -36,6 +36,21 @@ export class UserInfoApi {
       console.log(error);
     }
   };
+  static logout = async () => {
+    try {
+      const response = await fetch("api/users/logout", {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+      });
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.log(error);
+    }
+  };
   static getUserInfo = async () => {
     try {
       const response = await fetch("api/users/profile");

@@ -18,6 +18,7 @@ import { UserInfoContextProvider } from "./context/UserInfoContext.tsx";
 import MustJoinRoute from "./components/MustJoinRoute.tsx";
 import NoUserRoute from "./components/NoUserRoute.tsx";
 import Home from "./pages/Home.tsx";
+import PrivateRoute from "./components/PrivateRoute.tsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -27,9 +28,11 @@ const router = createBrowserRouter(
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
       </Route>
-      <Route path="/join-chat" element={<JoinChat />} />
-      <Route path="" element={<MustJoinRoute />}>
-        <Route path="/room/:id" element={<ChatRoom />} />
+      <Route path="" element={<PrivateRoute />}>
+        <Route path="/join-chat" element={<JoinChat />} />
+        <Route path="" element={<MustJoinRoute />}>
+          <Route path="/room/:id" element={<ChatRoom />} />
+        </Route>
       </Route>
     </Route>
   )

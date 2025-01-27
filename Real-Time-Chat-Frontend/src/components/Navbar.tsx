@@ -6,18 +6,21 @@ import {
   Mails,
   Menu,
   MessagesSquare,
-  Settings,
   User2,
 } from "lucide-react";
 import DropdownMenu, {
   DropdownMenuButtonItem,
   DropdownMenuLinkItem,
 } from "./DropdownMenu";
+import { UserInfoApi } from "../api/userApi";
+import { profilePictures } from "../utils/profilePictures";
 
 export default function Navbar() {
-  const { userInfo } = useUserInfo();
-  // const userInfo = true;
-
+  const { userInfo, setUserInfo } = useUserInfo();
+  function logout() {
+    UserInfoApi.logout();
+    setUserInfo(null);
+  }
   return (
     <nav className="flex items-center justify-between w-full bg-indigo-900 py-4 px-4 sm:px-5">
       <div className="flex items-center gap-3">
@@ -72,7 +75,12 @@ export default function Navbar() {
             variant="indigo-btn"
             heading={
               <>
-                <Settings className="inline size-4 mt-0.5" /> Settings
+                <img
+                  src={profilePictures[userInfo.avatar]}
+                  alt={userInfo.username}
+                  className="size-5 rounded-full"
+                />{" "}
+                {userInfo.username}
               </>
             }
           >
@@ -90,7 +98,7 @@ export default function Navbar() {
                   <DoorClosed className="inline size-3.5 mb-1" /> Sign Out
                 </>
               }
-              onClick={() => console.log("Clicked")}
+              onClick={logout}
             />
           </DropdownMenu>
         ) : (
