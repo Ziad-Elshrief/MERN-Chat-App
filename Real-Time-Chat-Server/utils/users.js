@@ -24,11 +24,9 @@ function getRoomUsers(room) {
 function checkUserInRoom(room, username) {
   const userRooms = users.filter((user) => user.username === username);
   if (userRooms.length > 0) {
-    if (userRooms.find((userRoom) => userRoom.room === room)) {
-      return true;
-    }
+    return userRooms.find((userRoom) => userRoom.room === room);
   }
-  return false;
+  return undefined;
 }
 
 module.exports = {

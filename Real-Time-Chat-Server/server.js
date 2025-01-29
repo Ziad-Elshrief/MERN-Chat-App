@@ -72,7 +72,24 @@ let typingPeople = [];
 // Run when client connects
 io.on("connection", (socket) => {
   socket.on("joinRoom", ({ username, room, avatar }) => {
-    if (!checkUserInRoom(room, username)) {
+    let userInroom = checkUserInRoom(room, username);
+    if (userInroom) {
+      socket.emit("rejoin");
+      /* check if user tries to join from another tab or device and disconnect them from old session if they conrifm */
+      socket.on("rejoinConfirm", ({ username, room, avatar }) => {
+        userLeave(userInroom.id);
+        const oldSocket = io.sockets.sockets.get(userInroom.id);
+        oldSocket.emit("leave");
+        oldSocket.disconnect();
+        const user = userJoin(socket.id, username, room, avatar);
+        socket.join(user.room);
+        // Send users and room info
+        io.to(user.room).emit("roomUsers", {
+          room: user.room,
+          users: getRoomUsers(user.room),
+        });
+      });
+    } else {
       const user = userJoin(socket.id, username, room, avatar);
       socket.join(user.room);
       //Welcome current user
