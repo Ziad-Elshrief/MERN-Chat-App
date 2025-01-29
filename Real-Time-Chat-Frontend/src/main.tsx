@@ -11,11 +11,9 @@ import {
 
 import JoinChat from "./pages/JoinChat.tsx";
 import ChatRoom from "./pages/ChatRoom.tsx";
-import { JoinedContextProvider } from "./context/JoinedContext.tsx";
 import Register from "./pages/Register.tsx";
 import Login from "./pages/Login.tsx";
 import { UserInfoContextProvider } from "./context/UserInfoContext.tsx";
-import MustJoinRoute from "./components/MustJoinRoute.tsx";
 import NoUserRoute from "./components/NoUserRoute.tsx";
 import Home from "./pages/Home.tsx";
 import PrivateRoute from "./components/PrivateRoute.tsx";
@@ -30,9 +28,7 @@ const router = createBrowserRouter(
       </Route>
       <Route path="" element={<PrivateRoute />}>
         <Route path="/join-chat" element={<JoinChat />} />
-        <Route path="" element={<MustJoinRoute />}>
-          <Route path="/room/:id" element={<ChatRoom />} />
-        </Route>
+        <Route path="/room/:room" element={<ChatRoom />} />
       </Route>
     </Route>
   )
@@ -41,9 +37,7 @@ const router = createBrowserRouter(
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <UserInfoContextProvider>
-      <JoinedContextProvider>
         <RouterProvider router={router} />
-      </JoinedContextProvider>
     </UserInfoContextProvider>
   </StrictMode>
 );

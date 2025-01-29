@@ -21,4 +21,20 @@ function getRoomUsers(room) {
   return users.filter((user) => user.room === room);
 }
 
-module.exports = { userJoin, getCurrentUser, userLeave, getRoomUsers };
+function checkUserInRoom(room, username) {
+  const userRooms = users.filter((user) => user.username === username);
+  if (userRooms.length > 0) {
+    if (userRooms.find((userRoom) => userRoom.room === room)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+module.exports = {
+  userJoin,
+  getCurrentUser,
+  userLeave,
+  getRoomUsers,
+  checkUserInRoom,
+};

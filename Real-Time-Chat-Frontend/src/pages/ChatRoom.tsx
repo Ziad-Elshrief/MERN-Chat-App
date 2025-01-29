@@ -5,48 +5,43 @@ import { Info, LogOut, MessagesSquare, Users } from "lucide-react";
 import { useEffect, useState } from "react";
 import { MessageType, UserType } from "../lib/types";
 import { socket } from "../socket";
-import { useJoined } from "../context/JoinedContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Popup from "../components/Popup";
 import Container from "../components/Container";
+import { useUserInfo } from "../context/UserInfoContext";
 
 const SMALL_SCREEN_WIDTH = 640;
 
 export default function ChatRoom() {
-  const { joined, setJoined } = useJoined();
+  const { room } = useParams();
+  const { userInfo } = useUserInfo();
   const [reply, setReply] = useState<MessageType>();
   const [showSide, setShowSide] = useState(false);
   const [willLeave, setWillLeave] = useState(false);
   const [usersList, setUsersList] = useState<UserType[]>([]);
   const navigate = useNavigate();
   function leaveRoom() {
-    setJoined({
-      state: false,
-      room: "",
-      avatar: 0,
-      username: "",
-    });
     socket.disconnect();
     navigate("/join-chat");
   }
   useEffect(() => {
-    if (joined.state) {
+    if (userInfo) {
       socket.connect();
       socket.emit("joinRoom", {
-        username: joined.username,
-        room: joined.room,
-        avatar: joined.avatar,
+        username: userInfo.username,
+        room,
+        avatar: userInfo.avatar,
+      });
+      socket.on("roomUsers", ({ users }) => {
+        setUsersList(users);
       });
     }
-    socket.on("roomUsers", ({ users }) => {
-      setUsersList(users);
-    });
     const sidebarHandler = () => {
       if (window.innerWidth > SMALL_SCREEN_WIDTH) setShowSide(false);
     };
     window.addEventListener("resize", sidebarHandler);
     return () => window.removeEventListener("resize", sidebarHandler);
-  }, [joined.avatar, joined.room, joined.state, joined.username]);
+  }, [room, userInfo]);
   return (
     <>
       {willLeave && (
@@ -72,7 +67,7 @@ export default function ChatRoom() {
                 <Info className="size-5" />
               </button>
               <div className="text-indigo-900 dark:text-white bg-slate-200 dark:bg-slate-800 px-2 min-w-24">
-                <h2 className="font-semibold">{joined.room}</h2>
+                <h2 className="font-semibold">{room}</h2>
                 <h4 className="text-slate-700 dark:text-slate-400  text-xs">
                   <Users className="inline mr-0.5 mb-1 size-3" />
                   {usersList.length} users

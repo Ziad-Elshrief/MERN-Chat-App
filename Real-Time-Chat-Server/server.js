@@ -8,6 +8,7 @@ const {
   userJoin,
   userLeave,
   getRoomUsers,
+  checkUserInRoom,
 } = require("./utils/users");
 const { errorHandler } = require("./middleware/errorMiddleware");
 const connectDB = require("./config/db");
@@ -71,27 +72,29 @@ let typingPeople = [];
 // Run when client connects
 io.on("connection", (socket) => {
   socket.on("joinRoom", ({ username, room, avatar }) => {
-    const user = userJoin(socket.id, username, room, avatar);
-    socket.join(user.room);
-    //Welcome current user
-    socket.emit(
-      "message",
-      formatMessage("System", "0", {
-        content: `Welcome to ${user.room} room chat`,
-      })
-    );
-    //Broadcast when a user connects
-    socket.broadcast.to(user.room).emit(
-      "message",
-      formatMessage("System", "0", {
-        content: `${user.username} has joined the chat`,
-      })
-    );
-    // Send users and room info
-    io.to(user.room).emit("roomUsers", {
-      room: user.room,
-      users: getRoomUsers(user.room),
-    });
+    if (!checkUserInRoom(room, username)) {
+      const user = userJoin(socket.id, username, room, avatar);
+      socket.join(user.room);
+      //Welcome current user
+      socket.emit(
+        "message",
+        formatMessage("System", "0", {
+          content: `Welcome to ${user.room} room chat`,
+        })
+      );
+      //Broadcast when a user connects
+      socket.broadcast.to(user.room).emit(
+        "message",
+        formatMessage("System", "0", {
+          content: `${user.username} has joined the chat`,
+        })
+      );
+      // Send users and room info
+      io.to(user.room).emit("roomUsers", {
+        room: user.room,
+        users: getRoomUsers(user.room),
+      });
+    }
   });
   //  Listen for chat message
   socket.on("chatMessage", (msg) => {

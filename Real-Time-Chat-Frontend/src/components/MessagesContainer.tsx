@@ -79,6 +79,7 @@ export default function MessagesContainer({
   useEffect(() => {
     socket.on("message", (message) => {
       setMessagesList((prev) => [...prev, message]);
+      if (message.userId === socket.id) scrollToBottom();
     });
     socket.on("updateReact", (MessageReact: MessageReactType) => {
       updateReacts(MessageReact);

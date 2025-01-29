@@ -14,6 +14,11 @@ const registerUser = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error("User with this email already exists");
   }
+  const isNameUnique = await User.findOne({ name });
+  if (isNameUnique) {
+    res.status(400);
+    throw new Error("This username is already taken");
+  }
   const avatar = req.body.avatar ? Number(req.body.avatar) : 0;
 
   const user = await User.create({
