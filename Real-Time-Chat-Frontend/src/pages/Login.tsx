@@ -1,5 +1,5 @@
 import { DoorOpen, KeySquare, Mail, UserCheck2 } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { FormEvent, useState } from "react";
 import { toast } from "react-toastify";
 import { UserInfoApi } from "../api/userApi";
@@ -10,7 +10,6 @@ import Container from "../components/Container";
 export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const { setUserInfo } = useUserInfo();
-  const navigate = useNavigate();
 
   const submitHandler = async (e: FormEvent<HTMLFormElement>) => {
     setIsLoading(true);
@@ -30,7 +29,6 @@ export default function Login() {
         username: res.name,
         avatar: res.avatar,
       });
-      navigate("/");
     }
     setIsLoading(false);
   };
