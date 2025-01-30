@@ -1,6 +1,6 @@
 import { Image } from "lucide-react";
-import { socket } from "../socket";
 import { MessageType } from "../lib/types";
+import { useUserInfo } from "../context/UserInfoContext";
 
 type RepliedMessagePropsType = {
   messageInReply: MessageType;
@@ -9,11 +9,12 @@ type RepliedMessagePropsType = {
 export default function RepliedMessage({
   messageInReply,
 }: RepliedMessagePropsType) {
+  const { userInfo } = useUserInfo();
   return (
     <>
       <div className="border-l-8 border-indigo-800 p-2 max-w-[calc(100%-64px)]">
         <h6 className="text-indigo-900 font-semibold">
-          {messageInReply.userId === socket.id
+          {messageInReply.username === userInfo?.username
             ? "You"
             : messageInReply.username}
         </h6>

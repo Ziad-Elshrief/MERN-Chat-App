@@ -10,6 +10,7 @@ import TypingPeopleInfo from "./TypingPeopleInfo";
 import RepliedMessage from "./RepliedMessage";
 import TotalReactsButton from "./TotalReactsButton";
 import ProfilePictureViewer from "./ProfilePictureViewer";
+import { useUserInfo } from "../context/UserInfoContext";
 
 const SCROLL_DISTANCE = 200;
 
@@ -21,6 +22,7 @@ export default function MessagesContainer({
   const intialMessageList = sessionStorage.getItem(`room-${location.pathname}`)
     ? JSON.parse(sessionStorage.getItem(`room-${location.pathname}`) as string)
     : [];
+    const {userInfo}=useUserInfo()
   const [messagesList, setMessagesList] = useState<MessageType[]>(intialMessageList);
   const [scrolledUp, setScrolledUp] = useState(0);
   const [viewImage, setViewImage] = useState("");
@@ -149,7 +151,7 @@ export default function MessagesContainer({
               <div
                 key={msg.messageId}
                 className={` mb-5 gap-2 sm:gap-3 flex items-end ${
-                  msg.userId === socket.id ? "ml-auto flex-row-reverse" : ""
+                  msg.username === userInfo?.username ? "ml-auto flex-row-reverse" : ""
                 }`}
               >
                 <img
@@ -160,7 +162,7 @@ export default function MessagesContainer({
                 />
                 <div
                   className={`relative p-3 ${
-                    msg.userId === socket.id
+                    msg.username === userInfo?.username
                       ? "bg-violet-400"
                       : "bg-indigo-300 bg-opacity-85"
                   } rounded-md w-[calc(100%-88px)] break-words shadow-md`}
@@ -168,7 +170,7 @@ export default function MessagesContainer({
                   <button
                     data-id={msg.messageId}
                     className={`absolute  ${
-                      msg.userId === socket.id ? "right-2" : "left-2"
+                      msg.c "right-2" : "left-2"
                     } bottom-0 translate-y-1/2 py-1 px-1.5 rounded-2xl bg-gray-500`}
                     onClick={(e) => handleReactMenu(e)}
                   >
