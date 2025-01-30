@@ -18,7 +18,10 @@ export default function MessagesContainer({
 }: {
   setReply: React.Dispatch<React.SetStateAction<MessageType | undefined>>;
 }) {
-  const [messagesList, setMessagesList] = useState<MessageType[]>([]);
+  const intialMessageList = sessionStorage.getItem(`room-${location.pathname}`)
+    ? JSON.parse(sessionStorage.getItem(`room-${location.pathname}`) as string)
+    : [];
+  const [messagesList, setMessagesList] = useState<MessageType[]>(intialMessageList);
   const [scrolledUp, setScrolledUp] = useState(0);
   const [viewImage, setViewImage] = useState("");
   const [viewProfilePicture, setViewProfilePicture] = useState("");
@@ -78,14 +81,13 @@ export default function MessagesContainer({
     );
   }
   useEffect(() => {
+    sessionStorage.setItem(
+      `room-${location.pathname}`,
+      JSON.stringify(messagesList)
+    );
+  }, [messagesList]);
+  useEffect(() => {
     socket.on("message", (message: MessageType) => {
-      console.log(
-        new Date(message.time).toLocaleTimeString(["en-US"], {
-          hour: "2-digit",
-          minute: "2-digit",
-          hour12: true,
-        })
-      );
       setMessagesList((prev) => [
         ...prev,
         {

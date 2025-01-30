@@ -22,7 +22,8 @@ Once you join a room, a chat box gets displayed where you can send messages that
 
 ## For deployment:
 
-- **Custom build command:** cd Real-Time-Chat-Server && npm install && npm run build && cd Real-Time-Chat-Frontend && npm install && npm run build
+- **Custom build command:** cd Real-Time-Chat-Frontend && npm install && npm run build  
+&& cd .. && cdReal-Time-Chat-Server && npm install && npm run build 
 
 - **Custom start command:** cd Real-Time-Chat-Server && node dist/server.js
 
