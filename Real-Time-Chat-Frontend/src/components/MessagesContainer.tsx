@@ -78,8 +78,25 @@ export default function MessagesContainer({
     );
   }
   useEffect(() => {
-    socket.on("message", (message) => {
-      setMessagesList((prev) => [...prev, message]);
+    socket.on("message", (message: MessageType) => {
+      console.log(
+        new Date(message.time).toLocaleTimeString(["en-US"], {
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: true,
+        })
+      );
+      setMessagesList((prev) => [
+        ...prev,
+        {
+          ...message,
+          time: new Date(message.time).toLocaleTimeString(["en-US"], {
+            hour: "numeric",
+            minute: "2-digit",
+            hour12: true,
+          }),
+        },
+      ]);
       if (message.userId === socket.id) scrollToBottom();
     });
     socket.on("updateReact", (MessageReact: MessageReactType) => {

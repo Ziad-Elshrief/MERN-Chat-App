@@ -22,12 +22,7 @@ const formatMessage = (
     image: msg.image || "",
     repliedMessageId: msg.repliedMessageId || "",
     reactsList: [],
-    time: new Date().toLocaleTimeString([], {
-      hour: "2-digit",
-      minute: "2-digit",
-      timeZone: "UTC",
-      hour12: true,
-    }),
+    time: new Date().toISOString(),
   };
 };
 
