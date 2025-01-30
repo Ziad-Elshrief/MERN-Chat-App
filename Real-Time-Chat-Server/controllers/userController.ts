@@ -1,6 +1,12 @@
-const asyncHandler = require("express-async-handler");
-const User = require("../models/userModel");
-const generateToken = require("../utils/generateToken");
+import asyncHandler from "express-async-handler";
+import User from "../models/userModel.js";
+import generateToken from "../utils/generateToken.js";
+import { Request } from "express";
+import { UserInfoType } from "../lib/types";
+
+interface UserRequest extends Request {
+  user?: UserInfoType;
+}
 
 const registerUser = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
@@ -44,7 +50,7 @@ const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
   if (user && (await user.matchPassword(password))) {
-    generateToken(res, user._id);
+    generateToken(res, user.id);
     res.json({
       _id: user.id,
       name: user.name,
@@ -65,21 +71,26 @@ const logoutUser = asyncHandler(async (req, res) => {
   res.status(200).json({ message: "Logged out" });
 });
 
-const getUserProfile = asyncHandler(async (req, res) => {
+const getUserProfile = asyncHandler(async (req:UserRequest, res) => {
+  if(req.user){
   const user = await User.findById(req.user._id);
   if (user) {
     res.json({
-      _id: user._id,
+      _id: user.id,
       name: user.name,
       email: user.email,
       avatar: user.avatar,
     });
-  } else {
+  }} else {
     res.status(404);
     throw new Error("User not found");
   }
 });
-const updateUserProfile = asyncHandler(async (req, res) => {
+
+
+
+const updateUserProfile = asyncHandler(async (req: UserRequest, res) => {
+  if(req.user){
   const user = await User.findById(req.user._id);
   if (user) {
     user.name = req.body.name || user.name;
@@ -95,13 +106,13 @@ const updateUserProfile = asyncHandler(async (req, res) => {
       email: updatedUser.email,
       avatar: updatedUser.avatar,
     });
-  } else {
+  } }else {
     res.status(404);
     throw new Error("User not found");
   }
 });
 
-module.exports = {
+export {
   registerUser,
   loginUser,
   logoutUser,
