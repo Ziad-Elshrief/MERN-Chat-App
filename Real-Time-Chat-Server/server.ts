@@ -80,10 +80,10 @@ let typingPeople: { username: string; id: string }[] = [];
 // Run when client connects
 io.on("connection", (socket: Socket) => {
   socket.on("joinRoom", ({ username, room, avatar }) => {
-    let userInroom = checkUserInRoom(room, username);
+    let userInroom = checkUserInRoom(room, username,socket.id);
     if (userInroom) {
       socket.emit("rejoin");
-      /* check if user tries to join from another tab or device 
+      /* Check if user tries to join from another tab or device 
       and disconnect them from old session if they confirm */
       socket.on("rejoinConfirm", ({ username, room, avatar }) => {
         userLeave(userInroom.id);

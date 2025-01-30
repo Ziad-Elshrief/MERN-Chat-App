@@ -90,7 +90,7 @@ export default function Navbar() {
                   <User2 className="inline size-3.5 mb-1" /> Profile
                 </>
               }
-              linkHref="/"
+              linkHref="/profile"
             />
             <DropdownMenuButtonItem
               buttonLabel={

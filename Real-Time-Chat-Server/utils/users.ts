@@ -24,8 +24,8 @@ function getRoomUsers(room:string):UserType[] {
   return users.filter((user) => user.room === room);
 }
 
-function checkUserInRoom(room:string, username:string) {
-  const userRooms = users.filter((user) => user.username === username);
+function checkUserInRoom(room:string, username:string,userId:string) {
+  const userRooms = users.filter((user) => user.username === username && user.id !== userId);
   if (userRooms.length > 0) {
     return userRooms.find((userRoom) => userRoom.room === room);
   }

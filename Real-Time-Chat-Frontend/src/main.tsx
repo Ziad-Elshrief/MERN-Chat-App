@@ -17,6 +17,8 @@ import { UserInfoContextProvider } from "./context/UserInfoContext.tsx";
 import NoUserRoute from "./components/NoUserRoute.tsx";
 import Home from "./pages/Home.tsx";
 import PrivateRoute from "./components/PrivateRoute.tsx";
+import Profile from "./pages/Profile.tsx";
+import NotFound from "./pages/NotFound.tsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -27,9 +29,11 @@ const router = createBrowserRouter(
         <Route path="/login" element={<Login />} />
       </Route>
       <Route path="" element={<PrivateRoute />}>
+        <Route path="/profile" element={<Profile />} />
         <Route path="/join-chat" element={<JoinChat />} />
         <Route path="/room/:room" element={<ChatRoom />} />
       </Route>
+      <Route path="*" element={<NotFound/>}  />
     </Route>
   )
 );

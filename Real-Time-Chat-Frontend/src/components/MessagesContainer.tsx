@@ -37,6 +37,7 @@ export default function MessagesContainer({
       behavior: "smooth",
     });
   }
+
   function handleReactMenu(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     const messageId = e.currentTarget.getAttribute("data-id") || "";
     const positionY =

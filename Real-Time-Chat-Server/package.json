@@ -6,7 +6,7 @@
     "build": "tsc",
     "start": "node dist/server",
     "startDev": "node --watch dist/server",
-    "buildDev": "tsc && node  dist/server"
+    "buildDev": "tsc && node --watch  dist/server"
   },
   "author": "",
   "license": "ISC",
