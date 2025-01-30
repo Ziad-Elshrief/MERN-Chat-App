@@ -3,6 +3,7 @@ import { socket } from "../socket";
 import { useRef, useState } from "react";
 import TextareaAutosize from "react-textarea-autosize";
 import { MessageType } from "../lib/types";
+import { useUserInfo } from "../context/UserInfoContext";
 
 export default function SendMessage({
   setReply,
@@ -12,6 +13,7 @@ export default function SendMessage({
   reply: MessageType | undefined;
 }) {
   const [image, setImage] = useState("");
+  const { userInfo } = useUserInfo();
   const fileInput = useRef<HTMLInputElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   function sendMessage(e: React.FormEvent<HTMLFormElement>) {
@@ -87,7 +89,9 @@ export default function SendMessage({
           <div className="border-l-8 border-indigo-800 p-2 max-w-[80%]">
             <h6 className="text-indigo-900 font-semibold">
               Replying to{" "}
-              {reply.userId === socket.id ? "yourself" : reply.username}
+              {reply.username === userInfo?.username
+                ? "yourself"
+                : reply.username}
             </h6>
             <p className="whitespace-pre-line line-clamp-2" dir="auto">
               {reply.content}
