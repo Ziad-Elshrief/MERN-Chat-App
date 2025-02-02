@@ -73,6 +73,7 @@ export function UpdateProfileForm({ onClose }: UpdateProfileFormProps) {
       </div>
       <div className="flex justify-end space-x-4 items-center">
         <button
+          type="button"
           onClick={onClose}
           className="inline-flex justify-center gap-x-1.5 text-sm font-semibold  hover:text-indigo-400 focus:text-indigo-400"
         >

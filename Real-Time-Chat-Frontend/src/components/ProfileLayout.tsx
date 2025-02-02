@@ -6,7 +6,7 @@ import {
   SidebarSection,
   SidebarLinkItem,
   SidebarButtonItem,
-} from "../components/ProfileSidebar";
+} from "./Sidebar";
 
 import { useUserInfo } from "../context/UserInfoContext";
 import { profilePictures } from "../utils/profilePictures";
@@ -21,7 +21,7 @@ export default function ProfileLayout() {
   }
   return (
     <div className="flex flex-col md:flex-row min-h-[calc(100dvh-68px)] md:h-[calc(100dvh-68px)] md:overflow-hidden bg-indigo-50">
-      <Sidebar>
+      <Sidebar mobileHeader="Profile">
         <SidebarHeader>
           <div className="flex items-center space-x-3">
             <img
@@ -37,10 +37,7 @@ export default function ProfileLayout() {
         </SidebarHeader>
         <SidebarContent>
           <SidebarSection title="Navigation">
-            <SidebarLinkItem
-              href="/profile"
-              icon={<User className="size-5" />}
-            >
+            <SidebarLinkItem href="/profile" icon={<User className="size-5" />}>
               Profile
             </SidebarLinkItem>
             <SidebarLinkItem
@@ -64,7 +61,7 @@ export default function ProfileLayout() {
         <h1 className="text-3xl font-bold mb-6 text-indigo-800">
           Welcome, {userInfo?.username}!
         </h1>
-      <Outlet />
+        <Outlet />
       </main>
     </div>
   );

@@ -4,15 +4,16 @@ import { Link, useLocation } from "react-router-dom";
 
 interface SidebarProps {
   children: ReactNode;
+  mobileHeader: ReactNode;
 }
 
-export function Sidebar({ children }: SidebarProps) {
+export function Sidebar({ children, mobileHeader }: SidebarProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
     <>
       <div className="md:hidden bg-indigo-600 text-white p-4 flex justify-between items-center">
-        <h1 className="text-xl font-bold">Profile</h1>
+        <h1 className="text-xl font-bold">{mobileHeader}</h1>
         <button
           onClick={() => setIsOpen(!isOpen)}
           className="text-white hover:bg-indigo-500"
@@ -67,7 +68,7 @@ export function SidebarLinkItem({
   icon,
   children,
 }: SidebarLinkItemProps) {
-  const {pathname}= useLocation();
+  const { pathname } = useLocation();
   const isActive = pathname === href;
 
   return (

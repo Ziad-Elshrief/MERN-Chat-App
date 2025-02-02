@@ -16,6 +16,7 @@ Once you join a room, a chat box gets displayed where you can send messages that
 6. Ability to react to messages and view others' reacts on messages.
 7. Scroll to bottom button in the corner of the chat window.
 8. Ability to view images inside the chat window.
+9. Ability to update your profile info.
 
 ## Tech Features:
 
