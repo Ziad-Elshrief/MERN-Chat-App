@@ -1,13 +1,6 @@
 import { Link } from "react-router-dom";
 import { useUserInfo } from "../context/UserInfoContext";
-import {
-  DoorClosed,
-  Home,
-  Mails,
-  Menu,
-  MessagesSquare,
-  User2,
-} from "lucide-react";
+import { Home, LogOut, Mails, Menu, MessagesSquare, User2 } from "lucide-react";
 import DropdownMenu, {
   DropdownMenuButtonItem,
   DropdownMenuLinkItem,
@@ -95,7 +88,7 @@ export default function Navbar() {
             <DropdownMenuButtonItem
               buttonLabel={
                 <>
-                  <DoorClosed className="inline size-3.5 mb-1" /> Sign Out
+                  <LogOut className="inline size-3.5 mb-1" /> Sign Out
                 </>
               }
               onClick={logout}
@@ -105,7 +98,7 @@ export default function Navbar() {
           <div className="flex items-center gap-2">
             <Link
               to="/login"
-              className="inline-flex justify-center gap-x-1.5 rounded-md bg-black  px-3 py-2 text-sm font-semibold text-white ring-1 shadow-xs ring-indigo-400 ring-inset hover:bg-indigo-500 focus:bg-indigo-500"
+              className="inline-flex justify-center gap-x-1.5 rounded-md bg-slate-900  px-3 py-2 text-sm font-semibold text-white ring-1 shadow-xs ring-indigo-400 ring-inset hover:bg-indigo-500 focus:bg-indigo-500"
             >
               Sign In
             </Link>

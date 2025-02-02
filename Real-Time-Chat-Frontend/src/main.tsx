@@ -19,6 +19,8 @@ import Home from "./pages/Home.tsx";
 import PrivateRoute from "./components/PrivateRoute.tsx";
 import Profile from "./pages/Profile.tsx";
 import NotFound from "./pages/NotFound.tsx";
+import ProfileLayout from "./components/ProfileLayout.tsx";
+import ProfileUpdate from "./pages/ProfileUpdate.tsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -29,7 +31,10 @@ const router = createBrowserRouter(
         <Route path="/login" element={<Login />} />
       </Route>
       <Route path="" element={<PrivateRoute />}>
-        <Route path="/profile" element={<Profile />} />
+        <Route path="/profile" element={<ProfileLayout />}>
+          <Route index element={<Profile />} />
+          <Route path="/profile/update" element={<ProfileUpdate />} />
+        </Route>
         <Route path="/join-chat" element={<JoinChat />} />
         <Route path="/room/:room" element={<ChatRoom />} />
       </Route>

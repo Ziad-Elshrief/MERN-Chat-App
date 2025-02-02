@@ -1,4 +1,4 @@
-import { DoorOpen, KeySquare, Mail, UserCheck2 } from "lucide-react";
+import { KeySquare, LogIn, Mail, UserCheck2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { FormEvent, useState } from "react";
 import { toast } from "react-toastify";
@@ -68,7 +68,7 @@ export default function Login() {
               disabled={isLoading}
               className="mt-5 w-full bg-indigo-900 p-2 rounded-lg hover:bg-indigo-700"
             >
-              <DoorOpen className="inline mr-0.5 mb-1" size={14} /> Sign In
+              <LogIn className="inline mr-0.5 mb-1" size={14} /> Sign In
             </button>
           </form>
           <p className="mt-3">

@@ -1,34 +1,51 @@
-import { Mail, User } from "lucide-react";
-import Container from "../components/Container";
+import { useState } from "react";
+import {Edit, UserRoundPen } from "lucide-react";
+import { UpdateProfileForm } from "../components/UpdateProfileForm";
 import { useUserInfo } from "../context/UserInfoContext";
-import { profilePictures } from "../utils/profilePictures";
 
 export default function Profile() {
+  const [isUpdateFormOpen, setIsUpdateFormOpen] = useState(false);
   const { userInfo } = useUserInfo();
   return (
-    <Container>
-      <div className="shadow-lg border border-indigo-800">
-        <h1 className="bg-indigo-800 text-white py-3 px-5 text-center text-2xl">
-          <User className="inline mb-1 mr-0.5 size-6" /> Profile
+      <main className="flex-1 p-8 w-full md:overflow-y-auto">
+        <h1 className="text-3xl font-bold mb-6 text-indigo-800">
+          Welcome, {userInfo?.username}!
         </h1>
-        <div className="p-3 divide-y-2 divide-indigo-800 space-y-3 text-xl dark:text-white">
-          <div className="flex items-center gap-3">
-            <img
-              src={profilePictures[Number(userInfo?.avatar)]}
-              alt={userInfo?.username}
-              className="size-20 object-contain rounded-full"
-            />
-            <h2>{userInfo?.username}</h2>
-          </div>
-          <h2 className="pt-2">
-            <strong className="block">
-              {" "}
-              <Mail className="inline mb-1 mr-0.5 size-4" /> Email:
-            </strong>
-            {userInfo?.email}
+        <div className="bg-white p-6 rounded-lg shadow-md">
+          <h2 className="text-xl font-semibold mb-4 text-indigo-700">
+            Profile Information
           </h2>
+          <div className="mb-4">
+            <p className="text-gray-600">
+              Username:{" "}
+              <span className="font-medium text-indigo-600">
+                {userInfo?.username}
+              </span>
+            </p>
+            <p className="text-gray-600">
+              Email:{" "}
+              <span className="font-medium text-indigo-600">
+                {userInfo?.email}
+              </span>
+            </p>
+          </div>
+          <button
+            onClick={() => setIsUpdateFormOpen(true)}
+            className="inline-flex justify-center gap-x-1.5 rounded-md bg-slate-900  px-3 py-2 text-sm font-semibold text-white ring-1 shadow-xs ring-indigo-400 ring-inset hover:bg-indigo-500 focus:bg-indigo-500"
+          >
+            <Edit className="mr-2 size-4" />
+            Update Profile
+          </button>
+
+          {isUpdateFormOpen && (
+            <div className="mt-6">
+              <h3 className="text-lg font-semibold mb-4 text-indigo-700">
+                <UserRoundPen className="mr-0.5 mb-1 size-5 inline" /> Update Profile
+              </h3>
+              <UpdateProfileForm onClose={() => setIsUpdateFormOpen(false)} />
+            </div>
+          )}
         </div>
-      </div>
-    </Container>
+      </main>
   );
 }
