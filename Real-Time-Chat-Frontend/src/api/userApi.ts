@@ -75,6 +75,16 @@ export class UserInfoApi {
         body: JSON.stringify({ email, username, avatar }),
       });
       const data = await response.json();
+      console.log(data)
+      return data;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  static refreshToken = async () => {
+    try {
+      const response = await fetch("/api/refresh-token");
+      const data = await response.json();
       return data;
     } catch (error) {
       console.log(error);

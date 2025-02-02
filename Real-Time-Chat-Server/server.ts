@@ -29,6 +29,9 @@ app.use(bp.json());
 app.use(bp.urlencoded({ extended: false }));
 app.use(cookieParser());
 
+app.use("/api/users", usersRouter);
+app.use("/api/refresh-token", refreshRouter);
+
 if (process.env.NODE_ENV === "production") {
   const __dirname = path.resolve();
   app.use(
@@ -36,17 +39,19 @@ if (process.env.NODE_ENV === "production") {
       path.join(__dirname, "..", "Real-Time-Chat-Frontend", "dist")
     )
   );
-  app.get("*", (req, res) =>
-    res.sendFile(
-      path.resolve(
-        __dirname,
-        "../",
-        "Real-Time-Chat-Frontend",
-        "dist",
-        "index.html"
-      )
-    )
-  );
+  app.get("*", (req, res) => {
+    if (!req.path.startsWith("/api")) {
+      return res.sendFile(
+        path.resolve(
+          __dirname,
+          "../",
+          "Real-Time-Chat-Frontend",
+          "dist",
+          "index.html"
+        )
+      );
+    }
+  });
 } else {
   corsOptions = {
     origin: "*",
@@ -63,8 +68,6 @@ if (process.env.NODE_ENV === "production") {
   });
 }
 
-app.use("/api/users", usersRouter);
-app.use("/api/refresh-token", refreshRouter);
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 3000;

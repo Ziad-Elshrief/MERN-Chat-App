@@ -23,8 +23,8 @@ const registerUser = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error("User with this email already exists");
   }
-  const isNameUnique = await User.findOne({ name });
-  if (isNameUnique) {
+  const isNameTaken = await User.findOne({ name });
+  if (isNameTaken) {
     res.status(400);
     throw new Error("This username is already taken");
   }
@@ -100,6 +100,15 @@ const updateUserProfile = asyncHandler(async (req: UserRequest, res) => {
   if (req.user) {
     const user = await User.findById(req.user._id);
     if (user) {
+      if (req.body.name && user.name !== req.body.name) {
+        const isNameTaken = await User.findOne({
+          name: user.name,
+        });
+        if (isNameTaken != null) {
+          res.status(400);
+          throw new Error("This username is already taken");
+        }
+      }
       user.name = req.body.name || user.name;
       user.email = req.body.email || user.email;
       user.avatar = req.body.avatar || user.avatar;
@@ -119,7 +128,6 @@ const updateUserProfile = asyncHandler(async (req: UserRequest, res) => {
     throw new Error("User not found");
   }
 });
-
 
 export {
   registerUser,

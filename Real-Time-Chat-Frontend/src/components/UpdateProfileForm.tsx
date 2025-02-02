@@ -30,6 +30,7 @@ export function UpdateProfileForm({ onClose }: UpdateProfileFormProps) {
       toast.error(res.errorMessage);
     } else {
       toast.success("Successfully updated your profile");
+      onClose();
       setUserInfo({
         _id: res._id,
         email: res.email,
@@ -38,7 +39,6 @@ export function UpdateProfileForm({ onClose }: UpdateProfileFormProps) {
       });
     }
     setIsLoading(false);
-    onClose();
   };
 
   return (

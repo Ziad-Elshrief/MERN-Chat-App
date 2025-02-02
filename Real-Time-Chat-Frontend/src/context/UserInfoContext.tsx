@@ -1,5 +1,12 @@
-import { createContext, useContext, useState, ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useEffect,
+} from "react";
 import { UserInfoType } from "../lib/types";
+import { UserInfoApi } from "../api/userApi";
 
 type UserInfoContextType = {
   userInfo: UserInfoType | null;
@@ -13,23 +20,42 @@ export const UserInfoContextProvider = ({
 }: {
   children: ReactNode;
 }) => {
-  const initialState: UserInfoType = localStorage.getItem("userInfo")
-    ? JSON.parse(localStorage.getItem("userInfo") as string)
-    : null;
-  const [userInfo, setUser] = useState<UserInfoType | null>(initialState);
+  const [userInfo, setUser] = useState<UserInfoType | null>(null);
+  useEffect(() => {
+    async function getUserInfoContext() {
+      const res = await UserInfoApi.getUserInfo();
+      if (res.errorMessage) {
+        const refreshTokenResult = await UserInfoApi.refreshToken();
+        if (refreshTokenResult.errorMessage) {
+          return setUserInfo(null);
+        } else {
+          const res = await UserInfoApi.getUserInfo();
+          return setUserInfo({
+            _id: res._id,
+            email: res.email,
+            username: res.name,
+            avatar: res.avatar,
+          });
+        }
+      } else {
+        return setUserInfo({
+          _id: res._id,
+          email: res.email,
+          username: res.name,
+          avatar: res.avatar,
+        });
+      }
+    }
+    getUserInfoContext();
+  }, [userInfo]);
   function setUserInfo(user: UserInfoType | null) {
     if (user) {
       setUser((prev) => ({
         ...prev,
         ...user,
       }));
-      localStorage.setItem(
-        "userInfo",
-        JSON.stringify({ ...userInfo, ...user })
-      );
     } else {
       setUser(null);
-      localStorage.removeItem("userInfo");
     }
   }
   return (
