@@ -10,7 +10,8 @@ import {
   getRoomUsers,
   checkUserInRoom,
 } from "./utils/users.js";
-import router from "./routes/userRoutes.js";
+import { router as usersRouter } from "./routes/userRoutes.js";
+import { router as refreshRouter } from "./routes/refreshTokenRoute.js";
 import { errorHandler } from "./middleware/errorMiddleware.js";
 import { connectDB } from "./config/db.js";
 import bp from "body-parser";
@@ -62,7 +63,8 @@ if (process.env.NODE_ENV === "production") {
   });
 }
 
-app.use("/api/users", router);
+app.use("/api/users", usersRouter);
+app.use("/api/refresh-token", refreshRouter);
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 3000;
