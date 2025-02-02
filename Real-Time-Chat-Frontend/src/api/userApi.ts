@@ -6,7 +6,7 @@ export class UserInfoApi {
     avatar: number
   ) => {
     try {
-      const response = await fetch("api/users", {
+      const response = await fetch("/api/users", {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
@@ -22,7 +22,7 @@ export class UserInfoApi {
   };
   static login = async (email: string, password: string) => {
     try {
-      const response = await fetch("api/users/login", {
+      const response = await fetch("/api/users/login", {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
@@ -38,7 +38,7 @@ export class UserInfoApi {
   };
   static logout = async () => {
     try {
-      const response = await fetch("api/users/logout", {
+      const response = await fetch("/api/users/logout", {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
@@ -53,7 +53,27 @@ export class UserInfoApi {
   };
   static getUserInfo = async () => {
     try {
-      const response = await fetch("api/users/profile");
+      const response = await fetch("/api/users/profile");
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  static updateUserInfo = async (
+    email: string,
+    username: string,
+    avatar: number
+  ) => {
+    try {
+      const response = await fetch("/api/users/profile", {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        method: "PUT",
+        body: JSON.stringify({ email, username, avatar }),
+      });
       const data = await response.json();
       return data;
     } catch (error) {

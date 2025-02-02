@@ -2,7 +2,9 @@ import { CircleUserRound, Mail, User } from "lucide-react";
 import { Input } from "../components/Input";
 import { useUserInfo } from "../context/UserInfoContext";
 import AvatarPicker from "./AvatarPicker";
-import { useState } from "react";
+import { FormEvent, useState } from "react";
+import { UserInfoApi } from "../api/userApi";
+import { toast } from "react-toastify";
 
 interface UpdateProfileFormProps {
   onClose: () => void;
@@ -10,16 +12,37 @@ interface UpdateProfileFormProps {
 
 export function UpdateProfileForm({ onClose }: UpdateProfileFormProps) {
   const { userInfo } = useUserInfo();
-  const [avatar,setAvatar]=useState(userInfo?.avatar ?? 0)
+  const [avatar, setAvatar] = useState(userInfo?.avatar ?? 0);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const { setUserInfo } = useUserInfo();
+
+  const submitHandler = async (e: FormEvent<HTMLFormElement>) => {
+    setIsLoading(true);
     e.preventDefault();
-
+    const formData = new FormData(e.currentTarget);
+    const res = await UserInfoApi.updateUserInfo(
+      formData.get("email") as string,
+      formData.get("username") as string,
+      avatar
+    );
+    if (res.errorMessage) {
+      toast.error(res.errorMessage);
+    } else {
+      toast.success("Successfully updated your profile");
+      setUserInfo({
+        _id: res._id,
+        email: res.email,
+        username: res.name,
+        avatar: res.avatar,
+      });
+    }
+    setIsLoading(false);
     onClose();
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 max-w-xl">
+    <form onSubmit={submitHandler} className="space-y-4 max-w-xl">
       <div>
         <label htmlFor="username" className="mb-1 block">
           <User className="inline mr-0.5 mb-1" size={16} /> Username
@@ -42,11 +65,11 @@ export function UpdateProfileForm({ onClose }: UpdateProfileFormProps) {
         />
       </div>
       <div>
-      <label className="mb-1 block">
-              <CircleUserRound className="inline mr-0.5 mb-1" size={16} />
-              Avatar
-            </label>
-           <AvatarPicker setAvatar={setAvatar} avatar={avatar} />
+        <label className="mb-1 block">
+          <CircleUserRound className="inline mr-0.5 mb-1" size={16} />
+          Avatar
+        </label>
+        <AvatarPicker setAvatar={setAvatar} avatar={avatar} />
       </div>
       <div className="flex justify-end space-x-4 items-center">
         <button
@@ -58,8 +81,9 @@ export function UpdateProfileForm({ onClose }: UpdateProfileFormProps) {
         <button
           type="submit"
           className="inline-flex justify-center gap-x-1.5 rounded-md bg-slate-900  px-3 py-2 text-sm font-semibold text-white ring-1 shadow-xs ring-indigo-400 ring-inset hover:bg-indigo-500 focus:bg-indigo-500"
+          disabled={isLoading}
         >
-          Save Changes
+          {isLoading ? "Saving..." : "Save Changes"}
         </button>
       </div>
     </form>

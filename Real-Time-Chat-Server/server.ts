@@ -67,9 +67,13 @@ app.use(errorHandler);
 
 const PORT = process.env.PORT || 3000;
 
-const server = app.listen(PORT, () =>
-  console.log(`Server running on http://localhost:${PORT}`)
-);
+const server = app.listen(PORT, () => {
+  if (process.env.NODE_ENV === "production") {
+    console.log(`Server running on port: ${PORT}`);
+  } else {
+    console.log(`Server running on http://localhost:${PORT}`);
+  }
+});
 
 const io = new Server(server, {
   cors: corsOptions,
