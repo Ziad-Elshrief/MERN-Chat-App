@@ -26,6 +26,7 @@ export default function MessagesContainer({
   const [messagesList, setMessagesList] =
     useState<MessageType[]>(intialMessageList);
   const [scrolledUp, setScrolledUp] = useState(0);
+  const [scrollFlag, setScrollFlag] = useState(false);
   const [viewImage, setViewImage] = useState("");
   const [viewProfilePicture, setViewProfilePicture] = useState("");
   const [viewReactMenu, setViewReactMenu] = useState(false);
@@ -102,12 +103,18 @@ export default function MessagesContainer({
           }),
         },
       ]);
-      if (message.userId === socket.id) scrollToBottom();
+      if (message.userId === socket.id) setScrollFlag(true);
     });
     socket.on("updateReact", (MessageReact: MessageReactType) => {
       updateReacts(MessageReact);
     });
   }, []);
+  useEffect(() => {
+    if (scrollFlag) {
+      scrollToBottom();
+      setScrollFlag(false);
+    }
+  }, [scrollFlag]);
   return (
     <>
       {viewProfilePicture !== "" && (

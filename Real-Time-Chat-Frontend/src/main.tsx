@@ -33,7 +33,7 @@ const router = createBrowserRouter(
         <Route path="/join-chat" element={<JoinChat />} />
         <Route path="/room/:room" element={<ChatRoom />} />
       </Route>
-      <Route path="*" element={<NotFound/>}  />
+      <Route path="*" element={<NotFound />} />
     </Route>
   )
 );
