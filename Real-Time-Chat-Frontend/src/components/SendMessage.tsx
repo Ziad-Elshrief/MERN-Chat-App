@@ -84,7 +84,7 @@ export default function SendMessage({
       </div>
       {reply && (
         <div
-          className={` relative mb-2 overflow-hidden rounded-xl bg-violet-400  flex gap-x-2.5 w-full justify-between`}
+          className={` relative mb-2 overflow-hidden rounded-xl bg-violet-400  flex gap-x-2.5 w-full justify-between items-stretch`}
         >
           <div className="border-l-8 border-indigo-800 p-2 max-w-[80%]">
             <h6 className="text-indigo-900 font-semibold">
@@ -99,7 +99,7 @@ export default function SendMessage({
           </div>
           {reply.image !== "" && (
             <img
-              className="w-1/5 self-stretch object-cover object-center rounded-e-xl"
+              className="w-1/5 self-stretch object-cover object-center rounded-e-xl  max-h-28"
               src={reply.image}
             />
           )}

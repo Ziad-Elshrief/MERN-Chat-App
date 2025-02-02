@@ -201,7 +201,7 @@ export default function MessagesContainer({
                     <>
                       {replyIndex !== -1 ? (
                         <div
-                          className="cursor-pointer my-1 rounded-xl bg-slate-800 bg-opacity-30 flex gap-x-2.5 justify-between items-end overflow-hidden"
+                          className="cursor-pointer my-1 rounded-xl bg-slate-800 bg-opacity-30 flex gap-x-2.5 justify-between items-stretch overflow-hidden"
                           onClick={() =>
                             messagesRef.current?.children[
                               replyIndex

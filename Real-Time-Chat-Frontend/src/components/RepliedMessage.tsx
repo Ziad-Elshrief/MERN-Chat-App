@@ -31,7 +31,7 @@ export default function RepliedMessage({
       </div>
       {messageInReply.image !== "" && (
         <img
-          className="w-16 self-stretch object-cover object-center rounded-e-xl"
+          className="w-16 self-stretch object-cover object-center rounded-e-xl max-h-28"
           src={messageInReply.image}
         />
       )}
