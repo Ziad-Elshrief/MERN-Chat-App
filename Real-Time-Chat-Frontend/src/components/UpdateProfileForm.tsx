@@ -42,7 +42,7 @@ export function UpdateProfileForm({ onClose }: UpdateProfileFormProps) {
   };
 
   return (
-    <form onSubmit={submitHandler} className="space-y-4 max-w-xl">
+    <form onSubmit={submitHandler} className="space-y-4">
       <div>
         <label htmlFor="username" className="mb-1 block">
           <User className="inline mr-0.5 mb-1" size={16} /> Username

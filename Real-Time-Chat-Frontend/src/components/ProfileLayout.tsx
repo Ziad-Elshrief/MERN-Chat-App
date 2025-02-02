@@ -60,8 +60,12 @@ export default function ProfileLayout() {
           </SidebarSection>
         </SidebarContent>
       </Sidebar>
-
+      <main className="flex-1 p-8 w-full md:overflow-y-auto">
+        <h1 className="text-3xl font-bold mb-6 text-indigo-800">
+          Welcome, {userInfo?.username}!
+        </h1>
       <Outlet />
+      </main>
     </div>
   );
 }
