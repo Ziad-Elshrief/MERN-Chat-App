@@ -46,7 +46,7 @@ export class UserInfoApi {
   };
   static updateUserInfo = async (
     email: string,
-    username: string,
+    name: string,
     avatar: number
   ) => {
     const response = await fetch("/api/users/profile", {
@@ -55,7 +55,7 @@ export class UserInfoApi {
         "Content-Type": "application/json",
       },
       method: "PUT",
-      body: JSON.stringify({ email, username, avatar }),
+      body: JSON.stringify({ email, name, avatar }),
     });
     const data = await response.json();
     console.log(data);

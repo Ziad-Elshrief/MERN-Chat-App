@@ -1,0 +1,32 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Open Frontend folder
+        run: cd Real-Time-Chat-Frontend
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Typecheck and build
+        run: npm run build
+
+      - name: Open Backend folder
+        run: cd Real-Time-Chat-Server
+
+      - name: Copy .env.example files
+        shell: bash
+        run: find . -type f -name ".env.example" -exec sh -c 'cp "$1" "${1%.*}"' _ {} \;
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Typecheck and build
+        run: npm run build
