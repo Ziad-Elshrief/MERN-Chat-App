@@ -1,5 +1,5 @@
+import { useUserInfo } from "../context/UserInfoContext";
 import { MessageReactType, MessageType } from "../lib/types";
-import { socket } from "../socket";
 import { reacts } from "../utils/reacts";
 
 type TotalReactsButtonPropsType = {
@@ -13,6 +13,8 @@ export default function TotalReactsButton({
   MessageIndex,
   setViewReactsList,
 }: TotalReactsButtonPropsType) {
+  const { userInfo } = useUserInfo();
+
   function generateReacts(MsgReactsList: MessageReactType[]) {
     const reactsCount = new Array(reacts.length).fill(0);
     MsgReactsList.forEach((reactObject) => reactsCount[reactObject.react]++);
@@ -33,7 +35,7 @@ export default function TotalReactsButton({
   return (
     <button
       className={`absolute  ${
-        Message.userId === socket.id ? "right-11" : "left-11"
+        Message.userId === userInfo?._id ? "right-11" : "left-11"
       } bottom-0 translate-y-1/2 p-1 rounded-2xl bg-gray-500 text-white text-sm font-semibold flex items-center`}
       data-index={MessageIndex}
       onClick={(e) =>

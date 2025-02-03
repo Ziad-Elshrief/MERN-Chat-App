@@ -1,26 +1,27 @@
 import { MessageSquareMore } from "lucide-react";
 import { useEffect, useState } from "react";
 import { socket } from "../socket";
+import { useUserInfo } from "../context/UserInfoContext";
 
 type typingPersonType = {
     username: string;
-    id: string;
+    userId: string;
   };
 
 export default function TypingPeopleInfo(){
   const [typingPeople, setTypingPeople] = useState<typingPersonType[]>([]);
-
+  const {userInfo}=useUserInfo()
     useEffect(()=>{
         socket.on("typingPeople", (typing) => {
             setTypingPeople(
               typing
                 .filter(
-                  (typingPerson: typingPersonType) => typingPerson.id !== socket.id
+                  (typingPerson: typingPersonType) => typingPerson.userId !== userInfo?._id
                 )
                 .map((typingPerson: typingPersonType) => typingPerson.username)
             );
           });
-    },[])
+    },[userInfo?._id])
     return (
         <p
         className={`${

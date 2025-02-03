@@ -24,7 +24,7 @@ export default function ProfilePictureViewer({
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="absolute bottom-1/2 translate-y-1/2 right-[20%] rounded-xl p-3 space-y-4 h-fit w-[60%] shadow-md bg-slate-300 dark:bg-slate-700 dark:text-white overflow-hidden"
+        className="absolute bottom-1/2 translate-y-1/2 right-[20%] rounded-xl p-3 space-y-4 h-fit w-[60%] max-w-72 shadow-md bg-slate-300 dark:bg-slate-700 dark:text-white overflow-hidden"
       >
         <header className="flex justify-between items-center px-1.5">
           <h3 className="bg-indigo-800 text-white rounded-xl p-2">
@@ -37,7 +37,7 @@ export default function ProfilePictureViewer({
         <img
           src={profilePictures[Number(index || 0)]}
           alt={username}
-          className="w-fit object-contain rounded-2xl"
+          className="w-fit max-w-64 object-contain rounded-2xl"
         />
       </div>
     </div>

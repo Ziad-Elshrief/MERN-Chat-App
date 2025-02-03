@@ -89,9 +89,7 @@ export default function SendMessage({
           <div className="border-l-8 border-indigo-800 p-2 max-w-[80%]">
             <h6 className="text-indigo-900 font-semibold">
               Replying to{" "}
-              {reply.username === userInfo?.username
-                ? "yourself"
-                : reply.username}
+              {reply.userId === userInfo?._id ? "yourself" : reply.username}
             </h6>
             <p className="whitespace-pre-line line-clamp-2" dir="auto">
               {reply.content}

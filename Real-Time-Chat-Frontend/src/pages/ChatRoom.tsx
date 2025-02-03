@@ -19,7 +19,6 @@ export default function ChatRoom() {
   const [reply, setReply] = useState<MessageType>();
   const [showSide, setShowSide] = useState(false);
   const [willLeave, setWillLeave] = useState(false);
-  const [willRejoin, setWillRejoin] = useState(false);
   const [usersList, setUsersList] = useState<UserType[]>([]);
   const navigate = useNavigate();
 
@@ -27,24 +26,13 @@ export default function ChatRoom() {
     socket.disconnect();
     navigate("/join-chat");
   }
-  function rejoin() {
-    if (userInfo) {
-      socket.emit("rejoinConfirm", {
-        username: userInfo.username,
-        room,
-        avatar: userInfo.avatar,
-      });
-      socket.on("roomUsers", ({ users }) => {
-        setUsersList(users);
-      });
-    }
-    setWillRejoin(false);
-  }
+
   useEffect(() => {
     if (userInfo) {
       socket.connect();
       socket.emit("joinRoom", {
         username: userInfo.username,
+        userId: userInfo._id,
         room,
         avatar: userInfo.avatar,
       });
@@ -52,28 +40,16 @@ export default function ChatRoom() {
         setUsersList(users);
       });
     }
-    socket.on("rejoin", () => {
-      setWillRejoin(true);
-    });
     socket.on("leave", () => toast.error("Chat session expired"));
     const sidebarHandler = () => {
       if (window.innerWidth > SMALL_SCREEN_WIDTH) setShowSide(false);
     };
     window.addEventListener("resize", sidebarHandler);
     return () => window.removeEventListener("resize", sidebarHandler);
-  }, [room, userInfo]);
+  },[room, userInfo]);
 
   return (
     <>
-      {willRejoin && (
-        <Popup
-          popupHeader="You have another window active with this room. would you like to use this instead?"
-          confirmText="Use this window"
-          confirmOnClick={rejoin}
-          cancelText="Cancel"
-          cancelOnClick={() => setWillRejoin(false)}
-        />
-      )}
       {willLeave && (
         <Popup
           popupHeader="Are you sure you want to leave?"

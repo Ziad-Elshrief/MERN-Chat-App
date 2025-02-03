@@ -3,24 +3,41 @@ import { UserType } from "../lib/types";
 const users: UserType[] = [];
 
 function userJoin(
-  id: string,
+  socketId: string,
+  userId: string,
   username: string,
   room: string,
   avatar: number
 ): UserType {
-  const user = { id, username, room, avatar };
+  const user = { socketIds: [socketId], userId, username, room, avatar };
   users.push(user);
   return user;
 }
 
-function getCurrentUser(id: string): UserType | undefined {
-  return users.find((user) => user.id === id);
+function userRejoin(socketId: string, userId: string, room: string) {
+  const index = users.findIndex(
+    (user) => user.userId === userId && user.room === room
+  );
+  if (index !== -1) {
+    users[index].socketIds.push(socketId);
+  }
+  return users[index]
 }
 
-function userLeave(id: string) {
-  const index = users.findIndex((user) => user.id === id);
+function getCurrentUser(socketId: string): UserType | undefined {
+  return users.find((user) => user.socketIds.includes(socketId));
+}
+
+function userLeave(socketId: string) {
+  const index = users.findIndex((user) => user.socketIds.includes(socketId));
   if (index !== -1) {
-    return users.splice(index, 1)[0];
+    const socketIndex = users[index].socketIds.findIndex(
+      (socket) => socket === socketId
+    );
+    users[index].socketIds.splice(socketIndex, 1);
+    if (users[index].socketIds.length === 0) {
+      return users.splice(index, 1)[0];
+    }
   }
 }
 
@@ -28,12 +45,15 @@ function getRoomUsers(room: string): UserType[] {
   return users.filter((user) => user.room === room);
 }
 
-function checkUserInRoom(room: string, username: string) {
-  const userRooms = users.filter((user) => user.username === username);
-  if (userRooms.length > 0) {
-    return userRooms.find((userRoom) => userRoom.room === room);
-  }
-  return undefined;
+function checkUserInRoom(room: string, userId: string) {
+  return users.find((user) => user.userId === userId && user.room === room);
 }
 
-export { userJoin, getCurrentUser, userLeave, getRoomUsers, checkUserInRoom };
+export {
+  userJoin,
+  userRejoin,
+  getCurrentUser,
+  userLeave,
+  getRoomUsers,
+  checkUserInRoom,
+};

@@ -14,7 +14,7 @@ export default function RepliedMessage({
     <>
       <div className="border-l-8 border-indigo-800 p-2 max-w-[calc(100%-64px)]">
         <h6 className="text-indigo-900 font-semibold">
-          {messageInReply.username === userInfo?.username
+          {messageInReply.userId === userInfo?._id
             ? "You"
             : messageInReply.username}
         </h6>

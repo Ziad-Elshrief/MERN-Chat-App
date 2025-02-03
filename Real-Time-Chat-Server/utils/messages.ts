@@ -1,10 +1,5 @@
-import { MessageReactType, MessageType, userActionType } from "../lib/types";
+import { MessageReactType,sentMessage, MessageType, UserType } from "../lib/types";
 
-type sentMessage = {
-  content?: string;
-  image?: string;
-  repliedMessageId?: string;
-};
 
 const formatMessage = (
   username: string,
@@ -28,11 +23,11 @@ const formatMessage = (
 
 const updateReact = (
   reactInfo: { react: number; messageId: string },
-  user: userActionType
+  user: UserType
 ): MessageReactType => {
   return {
     ...reactInfo,
-    userId: user.id,
+    userId: user.userId,
     userAvatar: user.avatar,
     username: user.username,
   };

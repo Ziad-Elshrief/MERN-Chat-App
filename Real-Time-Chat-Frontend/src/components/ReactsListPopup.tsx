@@ -3,6 +3,7 @@ import { MessageType } from "../lib/types";
 import { socket } from "../socket";
 import { profilePictures } from "../utils/profilePictures";
 import { reacts } from "../utils/reacts";
+import { useUserInfo } from "../context/UserInfoContext";
 
 type ReactsListPopupType = {
   message: MessageType;
@@ -13,6 +14,8 @@ export default function ReactsListPopup({
   message,
   setViewReactsList,
 }: ReactsListPopupType) {
+  const { userInfo } = useUserInfo();
+
   function removeReact(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     const messageId = e.currentTarget.getAttribute("data-id");
     socket.emit("sendReact", { react: -1, messageId });
@@ -36,7 +39,7 @@ export default function ReactsListPopup({
               />
               <div>
                 <h5>{reactElement.username}</h5>
-                {reactElement.userId === socket.id && (
+                {reactElement.userId === userInfo?._id && (
                   <button
                     className="text-sm font-semibold"
                     data-id={reactElement.messageId}

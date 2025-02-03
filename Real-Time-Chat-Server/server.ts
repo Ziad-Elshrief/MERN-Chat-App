@@ -9,6 +9,7 @@ import {
   userLeave,
   getRoomUsers,
   checkUserInRoom,
+  userRejoin,
 } from "./utils/users.js";
 import { router as usersRouter } from "./routes/userRoutes.js";
 import { router as refreshRouter } from "./routes/refreshTokenRoute.js";
@@ -61,14 +62,13 @@ if (process.env.NODE_ENV === "production") {
   app.use(
     cors({
       origin: [process.env.FRONTEND_DEV_URL as string],
-      methods: ["GET", "POST","PUT"],
+      methods: ["GET", "POST", "PUT"],
     })
   );
   app.get("/", (_req: Request, res: Response) => {
     res.send("Please convert to production enviroment");
   });
 }
-
 
 const PORT = process.env.PORT || 3000;
 
@@ -84,33 +84,22 @@ const io = new Server(server, {
   cors: corsOptions,
 });
 
-let typingPeople: { username: string; id: string }[] = [];
+let typingPeople: { username: string; userId: string }[] = [];
 
 // Run when client connects
 io.on("connection", (socket: Socket) => {
-  socket.on("joinRoom", ({ username, room, avatar }) => {
-    let userInroom = checkUserInRoom(room, username);
+  socket.on("joinRoom", ({ username, userId, room, avatar }) => {
+    let userInroom = checkUserInRoom(room, userId);
     if (userInroom) {
-      socket.emit("rejoin");
-      /* Check if user tries to join from another tab or device 
-      and disconnect them from old session if they confirm */
-      socket.on("rejoinConfirm", ({ username, room, avatar }) => {
-        userLeave(userInroom.id);
-        const oldSocket = io.sockets.sockets.get(userInroom.id);
-        if (oldSocket) {
-          oldSocket.emit("leave");
-          oldSocket.disconnect();
-        }
-        const user = userJoin(socket.id, username, room, avatar);
-        socket.join(user.room);
-        // Send users and room info
-        io.to(user.room).emit("roomUsers", {
-          room: user.room,
-          users: getRoomUsers(user.room),
-        });
+      const user = userRejoin(socket.id, userId, room);
+      socket.join(user.room);
+      // Send users and room info
+      socket.emit("roomUsers", {
+        room: user.room,
+        users: getRoomUsers(user.room),
       });
     } else {
-      const user = userJoin(socket.id, username, room, avatar);
+      const user = userJoin(socket.id, userId, username, room, avatar);
       socket.join(user.room);
       //Welcome current user
       socket.emit(
@@ -139,7 +128,7 @@ io.on("connection", (socket: Socket) => {
     if (user)
       io.to(user.room).emit(
         "message",
-        formatMessage(user.username, user.id, msg, user.avatar)
+        formatMessage(user.username, user.userId, msg, user.avatar)
       );
   });
   //Listen for react
@@ -152,8 +141,8 @@ io.on("connection", (socket: Socket) => {
   socket.on("typing", () => {
     const user = getCurrentUser(socket.id);
     if (user) {
-      if (!typingPeople.find((person) => person.id === user.id)) {
-        typingPeople.push({ username: user.username, id: user.id });
+      if (!typingPeople.find((person) => person.userId === user.userId)) {
+        typingPeople.push({ username: user.username, userId: user.userId });
         io.to(user.room).emit("typingPeople", typingPeople);
       }
     }
@@ -161,7 +150,9 @@ io.on("connection", (socket: Socket) => {
   socket.on("notTyping", () => {
     const user = getCurrentUser(socket.id);
     if (user) {
-      typingPeople = typingPeople.filter((typing) => typing.id !== user.id);
+      typingPeople = typingPeople.filter(
+        (typing) => typing.userId !== user.userId
+      );
       io.to(user.room).emit("typingPeople", typingPeople);
     }
   });
@@ -181,7 +172,9 @@ io.on("connection", (socket: Socket) => {
         users: getRoomUsers(user.room),
       });
       // remove from typing
-      typingPeople = typingPeople.filter((typing) => typing.id !== user.id);
+      typingPeople = typingPeople.filter(
+        (typing) => typing.userId !== user.userId
+      );
       io.to(user.room).emit("typingPeople", typingPeople);
     }
   });

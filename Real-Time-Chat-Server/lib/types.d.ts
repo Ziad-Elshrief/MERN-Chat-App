@@ -1,5 +1,6 @@
 export type UserType = {
-  id: string;
+  socketIds: string[];
+  userId: string;
   username: string;
   room: string;
   avatar: number;
@@ -32,8 +33,9 @@ export type MessageType = {
   time: string;
 };
 
-export type userActionType = {
-  id: string;
-  username: string;
-  avatar: number;
+// from user in frontend
+export type sentMessage = {
+  content?: string;
+  image?: string;
+  repliedMessageId?: string;
 };

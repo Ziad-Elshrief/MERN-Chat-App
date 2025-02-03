@@ -72,7 +72,7 @@ export default function MessagesContainer({
             if (reactIndex !== -1) {
               msg.reactsList[reactIndex] = MessageReact;
             } else {
-              if (MessageReact.userId === socket.id) {
+              if (MessageReact.userId === userInfo?._id) {
                 msg.reactsList = [MessageReact, ...msg.reactsList];
               } else {
                 msg.reactsList = [...msg.reactsList, MessageReact];
@@ -103,12 +103,12 @@ export default function MessagesContainer({
           }),
         },
       ]);
-      if (message.userId === socket.id) setScrollFlag(true);
+      if (message.userId === userInfo?._id) setScrollFlag(true);
     });
     socket.on("updateReact", (MessageReact: MessageReactType) => {
       updateReacts(MessageReact);
     });
-  }, []);
+  }, [ userInfo?._id]);
   useEffect(() => {
     if (scrollFlag) {
       scrollToBottom();
@@ -159,7 +159,7 @@ export default function MessagesContainer({
               <div
                 key={msg.messageId}
                 className={` mb-5 gap-2 sm:gap-3 flex items-end ${
-                  msg.username === userInfo?.username
+                  msg.userId === userInfo?._id
                     ? "ml-auto flex-row-reverse"
                     : ""
                 }`}
@@ -172,7 +172,7 @@ export default function MessagesContainer({
                 />
                 <div
                   className={`relative p-3 ${
-                    msg.username === userInfo?.username
+                    msg.userId === userInfo?._id
                       ? "bg-violet-400"
                       : "bg-indigo-300 bg-opacity-85"
                   } rounded-md w-[calc(100%-88px)] break-words shadow-md`}
@@ -180,7 +180,7 @@ export default function MessagesContainer({
                   <button
                     data-id={msg.messageId}
                     className={`absolute  ${
-                      msg.username === userInfo?.username ? "right-2" : "left-2"
+                      msg.userId === userInfo?._id ? "right-2" : "left-2"
                     } bottom-0 translate-y-1/2 py-1 px-1.5 rounded-2xl bg-gray-500`}
                     onClick={(e) => handleReactMenu(e)}
                   >
@@ -238,7 +238,7 @@ export default function MessagesContainer({
                   )}
                   <p
                     className={` ${
-                      msg.userId === socket.id ? "" : "text-right"
+                      msg.userId === userInfo?._id ? "" : "text-right"
                     } mt-1 text-gray-800 font-semibold text-xs pl-1 `}
                   >
                     {msg.time}
