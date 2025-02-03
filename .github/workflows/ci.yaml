@@ -7,7 +7,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
 
       - name: Open Frontend folder
         run: cd Real-Time-Chat-Frontend
@@ -19,7 +21,7 @@ jobs:
         run: npm run build
 
       - name: Open Backend folder
-        run: cd Real-Time-Chat-Server
+        run: cd .. && cd Real-Time-Chat-Server
 
       - name: Copy .env.example files
         shell: bash
