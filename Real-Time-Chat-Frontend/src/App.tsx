@@ -7,7 +7,6 @@ import Spinner from "./components/Spinner";
 
 export default function App() {
   const { isLoading } = useUserInfo();
-  console.log(isLoading)
   return (
     <>
       <ToastContainer

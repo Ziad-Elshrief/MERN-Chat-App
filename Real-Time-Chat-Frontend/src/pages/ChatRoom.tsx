@@ -47,7 +47,7 @@ export default function ChatRoom() {
       socket.disconnect()
       window.removeEventListener("resize", sidebarHandler)
     };
-  },[room, userInfo]);
+  },[room]);
 
   return (
     <>
