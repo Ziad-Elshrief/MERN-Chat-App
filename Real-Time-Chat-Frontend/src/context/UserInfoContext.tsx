@@ -23,12 +23,34 @@ export const UserInfoContextProvider = ({
 }) => {
   const [userInfo, setUserInfo] = useState<UserInfoType | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  let refreshTimeout: number | undefined = undefined;
+
+  const refreshToken = async () => {
+    try {
+      const refreshTokenResult = await UserInfoApi.refreshToken();
+      if (refreshTokenResult.errorMessage) {
+        setUserInfo(null);
+      } else {
+        scheduleTokenRefresh();
+      }
+    } catch (error) {
+      console.error("Token refresh failed:", error);
+    }
+  };
+
+  const scheduleTokenRefresh = () => {
+    // Refresh after 14min -> access token is valid for 15min in backend
+    const refreshTime = 14 * 60 * 1000;
+    if (refreshTimeout) clearTimeout(refreshTimeout);
+    refreshTimeout = setTimeout(refreshToken, refreshTime);
+  };
+
   useEffect(() => {
     async function fetchUserInfo() {
       const res = await UserInfoApi.getUserInfo();
-
       if (res.errorMessage) {
         const refreshTokenResult = await UserInfoApi.refreshToken();
+        scheduleTokenRefresh();
         if (refreshTokenResult.errorMessage) {
           setUserInfo(null);
         } else {
@@ -51,7 +73,8 @@ export const UserInfoContextProvider = ({
       setIsLoading(false);
     }
     fetchUserInfo();
-  }, []);
+    return () => clearTimeout(refreshTimeout);
+  },);
   return (
     <UserInfoContext.Provider
       value={{
