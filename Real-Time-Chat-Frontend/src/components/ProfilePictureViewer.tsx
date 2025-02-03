@@ -37,7 +37,7 @@ export default function ProfilePictureViewer({
         <img
           src={profilePictures[Number(index || 0)]}
           alt={username}
-          className="w-fit max-w-64 object-contain rounded-2xl"
+          className="w-fit object-contain rounded-2xl"
         />
       </div>
     </div>
