@@ -9,7 +9,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import Popup from "../components/Popup";
 import Container from "../components/Container";
 import { useUserInfo } from "../context/UserInfoContext";
-import { toast } from "react-toastify";
 
 const SMALL_SCREEN_WIDTH = 640;
 
@@ -40,12 +39,14 @@ export default function ChatRoom() {
         setUsersList(users);
       });
     }
-    socket.on("leave", () => toast.error("Chat session expired"));
     const sidebarHandler = () => {
       if (window.innerWidth > SMALL_SCREEN_WIDTH) setShowSide(false);
     };
     window.addEventListener("resize", sidebarHandler);
-    return () => window.removeEventListener("resize", sidebarHandler);
+    return () => {
+      socket.disconnect()
+      window.removeEventListener("resize", sidebarHandler)
+    };
   },[room, userInfo]);
 
   return (
