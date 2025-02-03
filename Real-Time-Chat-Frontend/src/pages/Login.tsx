@@ -66,9 +66,15 @@ export default function Login() {
             <button
               type="submit"
               disabled={isLoading}
-              className="mt-5 w-full bg-indigo-900 p-2 rounded-lg hover:bg-indigo-700"
+              className="mt-5 w-full bg-indigo-900 p-2 rounded-lg hover:bg-indigo-700 disabled:bg-gray-600"
             >
-              <LogIn className="inline mr-0.5 mb-1" size={14} /> Sign In
+              {isLoading ? (
+                "Signing in..."
+              ) : (
+                <>
+                  <LogIn className="inline mr-0.5 mb-1" size={14} /> Sign In
+                </>
+              )}
             </button>
           </form>
           <p className="mt-3">

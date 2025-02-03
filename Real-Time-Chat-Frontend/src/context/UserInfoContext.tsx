@@ -10,7 +10,8 @@ import { UserInfoApi } from "../api/userApi";
 
 type UserInfoContextType = {
   userInfo: UserInfoType | null;
-  setUserInfo: (user: UserInfoType | null) => void;
+  setUserInfo: React.Dispatch<React.SetStateAction<UserInfoType | null>>;
+  isLoading: boolean;
 };
 
 const UserInfoContext = createContext<UserInfoContextType | null>(null);
@@ -20,17 +21,19 @@ export const UserInfoContextProvider = ({
 }: {
   children: ReactNode;
 }) => {
-  const [userInfo, setUser] = useState<UserInfoType | null>(null);
+  const [userInfo, setUserInfo] = useState<UserInfoType | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
-    async function getUserInfoContext() {
+    async function fetchUserInfo() {
       const res = await UserInfoApi.getUserInfo();
+
       if (res.errorMessage) {
         const refreshTokenResult = await UserInfoApi.refreshToken();
         if (refreshTokenResult.errorMessage) {
-          return setUserInfo(null);
+          setUserInfo(null);
         } else {
           const res = await UserInfoApi.getUserInfo();
-          return setUserInfo({
+          setUserInfo({
             _id: res._id,
             email: res.email,
             username: res.name,
@@ -38,31 +41,23 @@ export const UserInfoContextProvider = ({
           });
         }
       } else {
-        return setUserInfo({
+        setUserInfo({
           _id: res._id,
           email: res.email,
           username: res.name,
           avatar: res.avatar,
         });
       }
+      setIsLoading(false);
     }
-    getUserInfoContext();
-  }, [userInfo]);
-  function setUserInfo(user: UserInfoType | null) {
-    if (user) {
-      setUser((prev) => ({
-        ...prev,
-        ...user,
-      }));
-    } else {
-      setUser(null);
-    }
-  }
+    fetchUserInfo();
+  }, []);
   return (
     <UserInfoContext.Provider
       value={{
         userInfo,
         setUserInfo,
+        isLoading,
       }}
     >
       {children}

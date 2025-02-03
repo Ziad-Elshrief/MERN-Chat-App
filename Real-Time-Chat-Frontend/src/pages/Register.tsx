@@ -104,13 +104,20 @@ export default function Register() {
             <p className="text-gray-300 mb-3">
               You can change your avatar any time later
             </p>
-           <AvatarPicker setAvatar={setAvatar} avatar={avatar} />
+            <AvatarPicker setAvatar={setAvatar} avatar={avatar} />
             <button
               type="submit"
               disabled={isLoading}
-              className="mt-5 w-full bg-indigo-900 p-2 rounded-lg hover:bg-indigo-700"
+              className="mt-5 w-full bg-indigo-900 p-2 rounded-lg hover:bg-indigo-700 disabled:bg-gray-600"
             >
-              <CirclePlus className="inline mr-0.5 mb-1" size={14} /> Register
+              {isLoading ? (
+                "Registering..."
+              ) : (
+                <>
+                  <CirclePlus className="inline mr-0.5 mb-1" size={14} />{" "}
+                  Register
+                </>
+              )}
             </button>
           </form>
           <p className="mt-3">

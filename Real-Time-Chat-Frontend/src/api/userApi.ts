@@ -5,89 +5,71 @@ export class UserInfoApi {
     password: string,
     avatar: number
   ) => {
-    try {
-      const response = await fetch("/api/users", {
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        method: "POST",
-        body: JSON.stringify({ name, email, password, avatar }),
-      });
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      console.log(error);
-    }
+    const response = await fetch("/api/users", {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+      body: JSON.stringify({ name, email, password, avatar }),
+    });
+    const data = await response.json();
+    return data;
   };
   static login = async (email: string, password: string) => {
-    try {
-      const response = await fetch("/api/users/login", {
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        method: "POST",
-        body: JSON.stringify({ email, password }),
-      });
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      console.log(error);
-    }
+    const response = await fetch("/api/users/login", {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+      body: JSON.stringify({ email, password }),
+    });
+    const data = await response.json();
+    return data;
   };
   static logout = async () => {
-    try {
-      const response = await fetch("/api/users/logout", {
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        method: "POST",
-      });
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      console.log(error);
-    }
+    const response = await fetch("/api/users/logout", {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+    });
+    const data = await response.json();
+    return data;
   };
   static getUserInfo = async () => {
-    try {
-      const response = await fetch("/api/users/profile");
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      console.log(error);
-    }
+    const response = await fetch("/api/users/profile");
+    const data = await response.json();
+    return data;
   };
   static updateUserInfo = async (
     email: string,
     username: string,
     avatar: number
   ) => {
-    try {
-      const response = await fetch("/api/users/profile", {
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        method: "PUT",
-        body: JSON.stringify({ email, username, avatar }),
-      });
-      const data = await response.json();
-      console.log(data)
-      return data;
-    } catch (error) {
-      console.log(error);
-    }
+    const response = await fetch("/api/users/profile", {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      method: "PUT",
+      body: JSON.stringify({ email, username, avatar }),
+    });
+    const data = await response.json();
+    console.log(data);
+    return data;
   };
   static refreshToken = async () => {
-    try {
-      const response = await fetch("/api/refresh-token");
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      console.log(error);
-    }
+    const response = await fetch("/api/refresh-token", {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+    });
+    const data = await response.json();
+    return data;
   };
 }

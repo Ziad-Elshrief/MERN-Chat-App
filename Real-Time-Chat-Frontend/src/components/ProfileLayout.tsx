@@ -14,7 +14,7 @@ import { UserInfoApi } from "../api/userApi";
 import { Outlet } from "react-router-dom";
 
 export default function ProfileLayout() {
-  const { userInfo, setUserInfo } = useUserInfo();
+  const { userInfo, } = useUserInfo();
   function logout() {
     UserInfoApi.logout();
     setUserInfo(null);

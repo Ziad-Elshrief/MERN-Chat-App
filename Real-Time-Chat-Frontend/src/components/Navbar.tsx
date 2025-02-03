@@ -9,7 +9,7 @@ import { UserInfoApi } from "../api/userApi";
 import { profilePictures } from "../utils/profilePictures";
 
 export default function Navbar() {
-  const { userInfo, setUserInfo } = useUserInfo();
+  const { userInfo, setUserInfo, isLoading } = useUserInfo();
   function logout() {
     UserInfoApi.logout();
     setUserInfo(null);
@@ -61,56 +61,58 @@ export default function Navbar() {
         </Link>
       </div>
 
-      <div>
-        {userInfo ? (
-          <DropdownMenu
-            direction="right-0"
-            variant="indigo-btn"
-            heading={
-              <>
-                <img
-                  src={profilePictures[userInfo.avatar]}
-                  alt={userInfo.username}
-                  className="size-5 rounded-full"
-                />{" "}
-                {userInfo.username}
-              </>
-            }
-          >
-            <DropdownMenuLinkItem
-              linkLabel={
+      {!isLoading && (
+        <div>
+          {userInfo ? (
+            <DropdownMenu
+              direction="right-0"
+              variant="indigo-btn"
+              heading={
                 <>
-                  <User2 className="inline size-3.5 mb-1" /> Profile
+                  <img
+                    src={profilePictures[userInfo.avatar]}
+                    alt={userInfo.username}
+                    className="size-5 rounded-full"
+                  />{" "}
+                  {userInfo.username}
                 </>
               }
-              linkHref="/profile"
-            />
-            <DropdownMenuButtonItem
-              buttonLabel={
-                <>
-                  <LogOut className="inline size-3.5 mb-1" /> Sign Out
-                </>
-              }
-              onClick={logout}
-            />
-          </DropdownMenu>
-        ) : (
-          <div className="flex items-center gap-2">
-            <Link
-              to="/login"
-              className="inline-flex justify-center gap-x-1.5 rounded-md bg-slate-900  px-3 py-2 text-sm font-semibold text-white ring-1 shadow-xs ring-indigo-400 ring-inset hover:bg-indigo-500 focus:bg-indigo-500"
             >
-              Sign In
-            </Link>
-            <Link
-              to="/register"
-              className="inline-flex justify-center gap-x-1.5 text-sm font-semibold text-white  hover:text-indigo-400 focus:text-indigo-400"
-            >
-              Sign Up
-            </Link>
-          </div>
-        )}
-      </div>
+              <DropdownMenuLinkItem
+                linkLabel={
+                  <>
+                    <User2 className="inline size-3.5 mb-1" /> Profile
+                  </>
+                }
+                linkHref="/profile"
+              />
+              <DropdownMenuButtonItem
+                buttonLabel={
+                  <>
+                    <LogOut className="inline size-3.5 mb-1" /> Sign Out
+                  </>
+                }
+                onClick={logout}
+              />
+            </DropdownMenu>
+          ) : (
+            <div className="flex items-center gap-2">
+              <Link
+                to="/login"
+                className="inline-flex justify-center gap-x-1.5 rounded-md bg-slate-900  px-3 py-2 text-sm font-semibold text-white ring-1 shadow-xs ring-indigo-400 ring-inset hover:bg-indigo-500 focus:bg-indigo-500"
+              >
+                Sign In
+              </Link>
+              <Link
+                to="/register"
+                className="inline-flex justify-center gap-x-1.5 text-sm font-semibold text-white  hover:text-indigo-400 focus:text-indigo-400"
+              >
+                Sign Up
+              </Link>
+            </div>
+          )}
+        </div>
+      )}
     </nav>
   );
 }

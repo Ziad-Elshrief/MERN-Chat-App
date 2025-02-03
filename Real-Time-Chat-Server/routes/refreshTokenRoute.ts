@@ -5,9 +5,10 @@ import {
   generateRefreshToken,
 } from "../utils/generateToken.js";
 
-const refreshTokenController = (req:Request, res:Response) => {
-  const refreshToken = req.cookies.refreshToken;
-  if (refreshToken) {
+const refreshTokenController = (req: Request, res: Response) => {
+  let refreshToken;
+  refreshToken = req.cookies.refreshToken;
+  if (refreshToken && refreshToken !== "") {
     try {
       const decoded = jwt.verify(
         refreshToken,
@@ -17,7 +18,7 @@ const refreshTokenController = (req:Request, res:Response) => {
       };
       generateAccessToken(res, decoded.userId);
       generateRefreshToken(res, decoded.userId);
-      res.status(200).json({ message: "Refreshed token" })
+      res.status(200).json({ message: "Refreshed token" });
     } catch (error) {
       res.status(403);
       throw new Error("Not authorized, invalid token");

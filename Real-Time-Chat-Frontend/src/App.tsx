@@ -6,7 +6,6 @@ import Navbar from "./components/Navbar";
 export default function App() {
   return (
     <>
-      <Navbar />
       <ToastContainer
         position="bottom-left"
         autoClose={5000}
@@ -19,7 +18,8 @@ export default function App() {
         pauseOnHover
         theme="colored"
       />
-      <Outlet />
+          <Navbar />
+          <Outlet />
     </>
   );
 }

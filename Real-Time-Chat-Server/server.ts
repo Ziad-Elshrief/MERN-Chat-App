@@ -31,6 +31,7 @@ app.use(cookieParser());
 
 app.use("/api/users", usersRouter);
 app.use("/api/refresh-token", refreshRouter);
+app.use(errorHandler);
 
 if (process.env.NODE_ENV === "production") {
   const __dirname = path.resolve();
@@ -60,7 +61,7 @@ if (process.env.NODE_ENV === "production") {
   app.use(
     cors({
       origin: [process.env.FRONTEND_DEV_URL as string],
-      methods: ["GET", "POST"],
+      methods: ["GET", "POST","PUT"],
     })
   );
   app.get("/", (_req: Request, res: Response) => {
@@ -68,7 +69,6 @@ if (process.env.NODE_ENV === "production") {
   });
 }
 
-app.use(errorHandler);
 
 const PORT = process.env.PORT || 3000;
 

@@ -25,7 +25,6 @@ const generateRefreshToken = (res: Response, userId: string) => {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "strict",
-    path: "/api/refresh-token",
     maxAge: 3 * 24 * 60 * 60 * 1000,
   });
 };
