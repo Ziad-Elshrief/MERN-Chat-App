@@ -1,4 +1,4 @@
-import { User, LogOut, UserRoundPen } from "lucide-react";
+import { User, LogOut, UserRoundPen, KeyRound } from "lucide-react";
 import {
   Sidebar,
   SidebarHeader,
@@ -14,7 +14,7 @@ import { UserInfoApi } from "../api/userApi";
 import { Outlet } from "react-router-dom";
 
 export default function ProfileLayout() {
-  const { userInfo,setUserInfo } = useUserInfo();
+  const { userInfo, setUserInfo } = useUserInfo();
   function logout() {
     UserInfoApi.logout();
     setUserInfo(null);
@@ -48,6 +48,12 @@ export default function ProfileLayout() {
             </SidebarLinkItem>
           </SidebarSection>
           <SidebarSection title="Account">
+            <SidebarLinkItem
+              href="/profile/change-password"
+              icon={<KeyRound className="size-5" />}
+            >
+              Change Password
+            </SidebarLinkItem>
             <SidebarButtonItem
               onClick={logout}
               icon={<LogOut className="size-5" />}

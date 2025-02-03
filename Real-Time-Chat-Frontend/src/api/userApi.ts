@@ -61,6 +61,22 @@ export class UserInfoApi {
     console.log(data);
     return data;
   };
+  static updateUserPassword = async (
+    currentPassword: string,
+    newPassword: string,
+  ) => {
+    const response = await fetch("/api/users/update-password", {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+      body: JSON.stringify({ currentPassword, newPassword }),
+    });
+    const data = await response.json();
+    console.log(data);
+    return data;
+  };
   static refreshToken = async () => {
     const response = await fetch("/api/refresh-token", {
       headers: {

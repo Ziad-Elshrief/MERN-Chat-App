@@ -106,9 +106,6 @@ const updateUserProfile = asyncHandler(async (req: UserRequest, res) => {
       user.name = req.body.name || user.name;
       user.email = req.body.email || user.email;
       user.avatar = req.body.avatar || user.avatar;
-      if (req.body.password) {
-        user.password = req.body.password;
-      }
       const updatedUser = await user.save();
       res.status(200).json({
         _id: updatedUser._id,
@@ -123,10 +120,31 @@ const updateUserProfile = asyncHandler(async (req: UserRequest, res) => {
   }
 });
 
+const updateUserPassword = asyncHandler(async (req: UserRequest, res) => {
+  if (req.user) {
+    const { currentPassword, newPassword } = req.body;
+    const user = await User.findById(req.user._id);
+    if (user && (await user.matchPassword(currentPassword))) {
+      if (newPassword) {
+        user.password = newPassword;
+        await user.save();
+        res.status(200).json({ message: "updated password" });
+      }
+    } else {
+      res.status(401);
+      throw new Error("You entered a wrong password");
+    }
+  } else {
+    res.status(404);
+    throw new Error("User not found");
+  }
+});
+
 export {
   registerUser,
   loginUser,
   logoutUser,
   getUserProfile,
   updateUserProfile,
+  updateUserPassword,
 };

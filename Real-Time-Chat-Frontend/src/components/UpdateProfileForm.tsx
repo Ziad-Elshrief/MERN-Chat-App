@@ -11,8 +11,7 @@ interface UpdateProfileFormProps {
 }
 
 export function UpdateProfileForm({ onClose }: UpdateProfileFormProps) {
-  const { userInfo } = useUserInfo();
-  const { setUserInfo } = useUserInfo();
+  const { userInfo, setUserInfo } = useUserInfo();
   const [avatar, setAvatar] = useState(userInfo?.avatar ?? 0);
   const [isLoading, setIsLoading] = useState(false);
 
