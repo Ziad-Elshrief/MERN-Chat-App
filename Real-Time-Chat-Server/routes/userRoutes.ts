@@ -6,6 +6,7 @@ import {
   getUserProfile,
   updateUserProfile,
   updateUserPassword,
+  deleteAccount,
 } from "../controllers/userController.js";
 import { protect } from "../middleware/authMiddleware.js";
 
@@ -14,6 +15,7 @@ router.post("/", registerUser);
 router.post("/login", loginUser);
 router.post("/logout", logoutUser);
 router.post("/update-password", protect, updateUserPassword);
+router.post("/delete-account", protect, deleteAccount);
 router
   .route("/profile")
   .get(protect, getUserProfile)

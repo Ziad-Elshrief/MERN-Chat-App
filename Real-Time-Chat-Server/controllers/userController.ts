@@ -140,6 +140,25 @@ const updateUserPassword = asyncHandler(async (req: UserRequest, res) => {
   }
 });
 
+const deleteAccount = asyncHandler(async (req: UserRequest, res) => {
+  if (req.user) {
+    const { password } = req.body;
+    const user = await User.findById(req.user._id);
+    if (user && (await user.matchPassword(password))) {
+      await User.findByIdAndDelete(req.user._id);
+      res.clearCookie("jwt");
+      res.clearCookie("refreshToken");
+      res.status(200).json({ message: "Your account has been deleted" });
+    } else {
+      res.status(401);
+      throw new Error("You entered a wrong password");
+    }
+  } else {
+    res.status(404);
+    throw new Error("User not found");
+  }
+});
+
 export {
   registerUser,
   loginUser,
@@ -147,4 +166,5 @@ export {
   getUserProfile,
   updateUserProfile,
   updateUserPassword,
+  deleteAccount,
 };
