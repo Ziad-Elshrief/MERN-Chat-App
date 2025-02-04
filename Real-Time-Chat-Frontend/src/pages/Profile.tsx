@@ -26,18 +26,17 @@ export default function Profile() {
         </p>
       </div>
       <button
-        onClick={() => setIsUpdateFormOpen(true)}
-        className="inline-flex justify-center gap-x-1.5 rounded-md bg-slate-900  px-3 py-2 text-sm font-semibold text-white ring-1 shadow-xs ring-indigo-400 ring-inset hover:bg-indigo-500 focus:bg-indigo-500"
+        onClick={() => setIsUpdateFormOpen((prev) => !prev)}
+        className="inline-flex items-center gap-x-1.5 rounded-md bg-slate-900  px-3 py-2 text-sm font-semibold text-white ring-1 shadow-xs ring-indigo-400 ring-inset hover:bg-indigo-500 focus:bg-indigo-500"
       >
-        <Edit className="mr-2 size-4" />
+        <Edit className="size-4" />
         Update Profile
       </button>
 
       {isUpdateFormOpen && (
         <div className="mt-6">
-          <h3 className="text-lg font-semibold mb-4 text-indigo-700 dark:text-indigo-200">
-            <UserRoundPen className="mr-0.5 mb-1 size-5 inline" /> Update
-            Profile
+          <h3 className="flex items-center gap-x-1  text-lg font-semibold mb-4 text-indigo-700 dark:text-indigo-200">
+            <UserRoundPen className="size-5" /> Update Profile
           </h3>
           <UpdateProfileForm onClose={() => setIsUpdateFormOpen(false)} />
         </div>

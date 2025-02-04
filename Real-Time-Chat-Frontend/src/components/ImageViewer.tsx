@@ -13,6 +13,8 @@ export default function ImageViewer({
     <div className="absolute top-0 left-0 w-full z-30 h-[calc(100dvh-168px)] bg-black flex justify-center items-center overflow-hidden">
       <img src={viewImage} alt="image" className="max-h-96" />
       <button
+      title="Close image"
+      aria-label="Close image"
         className="absolute right-2 top-2 z-[35]"
         onClick={() => setViewImage("")}
       >

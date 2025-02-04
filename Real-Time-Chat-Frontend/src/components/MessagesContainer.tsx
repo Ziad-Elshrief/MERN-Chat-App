@@ -108,7 +108,7 @@ export default function MessagesContainer({
     socket.on("updateReact", (MessageReact: MessageReactType) => {
       updateReacts(MessageReact);
     });
-  }, [ userInfo?._id]);
+  }, [userInfo?._id]);
   useEffect(() => {
     if (scrollFlag) {
       scrollToBottom();
@@ -159,9 +159,7 @@ export default function MessagesContainer({
               <div
                 key={msg.messageId}
                 className={` mb-5 gap-2 sm:gap-3 flex items-end ${
-                  msg.userId === userInfo?._id
-                    ? "ml-auto flex-row-reverse"
-                    : ""
+                  msg.userId === userInfo?._id ? "ml-auto flex-row-reverse" : ""
                 }`}
               >
                 <img
@@ -178,6 +176,8 @@ export default function MessagesContainer({
                   } rounded-md w-[calc(100%-88px)] break-words shadow-md`}
                 >
                   <button
+                    title="Add react"
+                    aria-label="Add react"
                     data-id={msg.messageId}
                     className={`absolute  ${
                       msg.userId === userInfo?._id ? "right-2" : "left-2"
@@ -236,15 +236,17 @@ export default function MessagesContainer({
                       onClick={(e) => setViewImage(e.currentTarget.src)}
                     />
                   )}
-                  <p
+                  <time
                     className={` ${
                       msg.userId === userInfo?._id ? "" : "text-right"
                     } mt-1 text-gray-800 font-semibold text-xs pl-1 `}
                   >
                     {msg.time}
-                  </p>
+                  </time>
                 </div>
                 <button
+                  title="Add reply"
+                  aria-label="Add reply"
                   className="bg-indigo-800 p-1 self-center rounded-full text-white"
                   data-id={msg.messageId}
                   onClick={(e) => addReply(e)}
@@ -255,6 +257,8 @@ export default function MessagesContainer({
             );
           })}
           <button
+          title="Scroll to bottom"
+          aria-label="Scroll to bottom"
             className={`${
               scrolledUp > SCROLL_DISTANCE ? "" : "hidden"
             } sticky bottom-4 right-4 left-full p-1 bg-indigo-900 text-indigo-400 shadow-gray-900 rounded-full shadow-sm`}

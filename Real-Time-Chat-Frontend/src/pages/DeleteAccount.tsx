@@ -27,8 +27,8 @@ export default function DeleteAccount() {
   };
   return (
     <div className="bg-white p-6 rounded-lg max-w-xl shadow-md dark:bg-slate-700 dark:text-white">
-      <h2 className="text-2xl font-semibold mb-4 text-indigo-700 dark:text-indigo-200">
-        <Trash2 className="mr-0.5 mb-1 size-6 inline" /> Delete Account
+      <h2 className="flex items-center gap-x-1 text-2xl font-semibold mb-4 text-indigo-700 dark:text-indigo-200">
+        <Trash2 className="size-6" /> Delete Account
       </h2>
       <form onSubmit={submitHandler} className="space-y-4">
         <div>
