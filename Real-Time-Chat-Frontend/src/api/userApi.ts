@@ -63,7 +63,7 @@ export class UserInfoApi {
   };
   static updateUserPassword = async (
     currentPassword: string,
-    newPassword: string,
+    newPassword: string
   ) => {
     const response = await fetch("/api/users/update-password", {
       headers: {
@@ -75,6 +75,18 @@ export class UserInfoApi {
     });
     const data = await response.json();
     console.log(data);
+    return data;
+  };
+  static deleteAccount = async (password: string) => {
+    const response = await fetch("/api/users/delete-account", {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+      body: JSON.stringify({ password }),
+    });
+    const data = await response.json();
     return data;
   };
   static refreshToken = async () => {

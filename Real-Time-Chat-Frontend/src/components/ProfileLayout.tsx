@@ -1,4 +1,4 @@
-import { User, LogOut, UserRoundPen, KeyRound } from "lucide-react";
+import { User, LogOut, UserRoundPen, KeyRound, Trash2 } from "lucide-react";
 import {
   Sidebar,
   SidebarHeader,
@@ -60,6 +60,12 @@ export default function ProfileLayout() {
             >
               Logout
             </SidebarButtonItem>
+            <SidebarLinkItem
+              href="/profile/delete-account"
+              icon={<Trash2 className="size-5" />}
+            >
+              Delete Account
+            </SidebarLinkItem>
           </SidebarSection>
         </SidebarContent>
       </Sidebar>

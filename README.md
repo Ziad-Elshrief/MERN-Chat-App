@@ -16,12 +16,13 @@ Once you join a room, a chat box gets displayed where you can send messages that
 6. Ability to react to messages and view others' reacts on messages.
 7. Scroll to bottom button in the corner of the chat window.
 8. Ability to view images inside the chat window.
-9. Ability to update your profile info.
+9. Ability to update your profile info and change your password.
+10. Ability to join from multiple devices.
 
 ## Tech Features:
 
 1. Mongodb database to store users registered.
-2. User validation using express routes that depends on http only cookies and jwt.
+2. User validation using express api routes that depends on http only cookies and jwt access and refresh tokens to garntee security.
 
 ## Deployed Version
 

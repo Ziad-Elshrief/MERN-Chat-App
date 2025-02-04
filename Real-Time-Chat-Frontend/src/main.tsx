@@ -22,6 +22,7 @@ import NotFound from "./pages/NotFound.tsx";
 import ProfileLayout from "./components/ProfileLayout.tsx";
 import ProfileUpdate from "./pages/ProfileUpdate.tsx";
 import PasswordChange from "./pages/PasswordChange.tsx";
+import DeleteAccount from "./pages/DeleteAccount.tsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -36,6 +37,7 @@ const router = createBrowserRouter(
           <Route index element={<Profile />} />
           <Route path="/profile/update" element={<ProfileUpdate />} />
           <Route path="/profile/change-password" element={<PasswordChange />} />
+          <Route path="/profile/delete-account" element={<DeleteAccount />} />
         </Route>
         <Route path="/join-chat" element={<JoinChat />} />
         <Route path="/room/:room" element={<ChatRoom />} />
