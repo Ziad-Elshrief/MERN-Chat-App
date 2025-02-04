@@ -1,5 +1,4 @@
 import SendMessage from "../components/SendMessage";
-import ChatRoomSidebar from "../components/ChatRoomSidebar";
 import MessagesContainer from "../components/MessagesContainer";
 import { Info, LogOut, MessagesSquare, Users } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -9,13 +8,19 @@ import { useNavigate, useParams } from "react-router-dom";
 import Popup from "../components/Popup";
 import Container from "../components/Container";
 import { useUserInfo } from "../context/UserInfoContext";
-
-const SMALL_SCREEN_WIDTH = 640;
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarHeader,
+  SidebarSection,
+} from "../components/Sidebar";
+import { profilePictures } from "../utils/profilePictures";
+import CopyClipboardLink from "../components/CopyClipboardLink";
 
 export default function ChatRoom() {
   const { room } = useParams();
   const { userInfo } = useUserInfo();
-  const [showSide, setShowSide] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [willLeave, setWillLeave] = useState(false);
   const [usersList, setUsersList] = useState<UserType[]>([]);
   const navigate = useNavigate();
@@ -38,13 +43,8 @@ export default function ChatRoom() {
         setUsersList(users);
       });
     }
-    const sidebarHandler = () => {
-      if (window.innerWidth > SMALL_SCREEN_WIDTH) setShowSide(false);
-    };
-    window.addEventListener("resize", sidebarHandler);
     return () => {
       socket.disconnect();
-      window.removeEventListener("resize", sidebarHandler);
     };
   }, [room]);
 
@@ -62,13 +62,13 @@ export default function ChatRoom() {
       <Container>
         <div className="relative overflow-hidden rounded-xl shadow-md w-full max-w-5xl h-[calc(100dvh-100px)] flex flex-col">
           <header className="text-white bg-indigo-700 px-4 py-3.5 flex justify-between items-center h-[68px]">
-            <h1 className="hidden sm:block text-lg">
+            <h1 className="hidden md:block text-lg">
               <MessagesSquare className="inline mr-0.5 mb-1" /> Chat App
             </h1>
-            <div className="overflow-hidden rounded-lg flex sm:hidden">
+            <div className="overflow-hidden rounded-lg flex md:hidden">
               <button
                 className=" bg-indigo-900 p-2  hover:bg-indigo-500"
-                onClick={() => setShowSide((prev) => !prev)}
+                onClick={() => setIsSidebarOpen((prev) => !prev)}
               >
                 <Info className="size-5" />
               </button>
@@ -89,15 +89,52 @@ export default function ChatRoom() {
               Leave
             </button>
           </header>
-          <main className="relative grid grid-cols-1 sm:grid-cols-[1fr_3fr] flex-1 min-h-0">
-            <ChatRoomSidebar
-              usersList={usersList}
-              customClass={`${
-                showSide
-                  ? "absolute top-0 left-0 z-40 w-full h-[calc(100dvh-168px)]"
-                  : "hidden sm:block"
-              } `}
-            />
+          <main className="relative grid grid-cols-1 md:grid-cols-[1fr_3fr] flex-1 min-h-0">
+            <Sidebar
+              setIsOpen={setIsSidebarOpen}
+              isOpen={isSidebarOpen}
+              inPlaceheightClass="h-[calc(100dvh-248px)]"
+            >
+              {isSidebarOpen && (
+                <SidebarHeader>
+                  <div className="flex items-center space-x-3">
+                    <img
+                      className="size-10 rounded-full border-2 border-indigo-300"
+                      src={profilePictures[userInfo?.avatar || 0]}
+                      alt={userInfo?.username}
+                    />
+                    <div>
+                      <h2 className="text-lg font-semibold">
+                        {userInfo?.username}
+                      </h2>
+                      <p className="text-sm text-indigo-200">
+                        {userInfo?.email}
+                      </p>
+                    </div>
+                  </div>
+                </SidebarHeader>
+              )}
+              <SidebarContent>
+                <SidebarSection title="Room:">
+                  <h3 className="mb-4 pl-4 text-lg font-bold">{room}</h3>
+                  <CopyClipboardLink />
+                </SidebarSection>
+                <SidebarSection title="Users:">
+                  <ul id="users">
+                    {usersList.map((user) => (
+                      <li className="py-3" key={user.id}>
+                        <img
+                          src={profilePictures[user.avatar]}
+                          alt={`${user.avatar}-${user.username}`}
+                          className="size-10 object-contain rounded-full inline mr-1.5"
+                        />
+                        {user.username}
+                      </li>
+                    ))}
+                  </ul>
+                </SidebarSection>
+              </SidebarContent>
+            </Sidebar>
             <MessagesContainer />
           </main>
           <SendMessage />

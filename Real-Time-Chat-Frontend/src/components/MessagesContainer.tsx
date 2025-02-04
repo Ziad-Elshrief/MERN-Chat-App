@@ -113,7 +113,7 @@ export default function MessagesContainer() {
       )}
       <section className="relative overflow-hidden">
         <div
-          className=" bg-white dark:bg-slate-800 p-4 h-full overflow-x-hidden overflow-y-scroll border-l-2 border-l-indigo-700 sm:border-0"
+          className=" bg-white dark:bg-slate-800 p-4 h-full overflow-x-hidden overflow-y-scroll border-l-2 border-l-indigo-700 md:border-0"
           ref={messagesRef}
           onScroll={(e) =>
             setScrolledUp(

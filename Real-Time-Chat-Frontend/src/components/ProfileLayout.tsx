@@ -1,4 +1,12 @@
-import { User, LogOut, UserRoundPen, KeyRound, Trash2 } from "lucide-react";
+import {
+  User,
+  LogOut,
+  UserRoundPen,
+  KeyRound,
+  Trash2,
+  X,
+  Menu,
+} from "lucide-react";
 import {
   Sidebar,
   SidebarHeader,
@@ -12,6 +20,7 @@ import { useUserInfo } from "../context/UserInfoContext";
 import { profilePictures } from "../utils/profilePictures";
 import { UserInfoApi } from "../api/userApi";
 import { Outlet } from "react-router-dom";
+import { useState } from "react";
 
 export default function ProfileLayout() {
   const { userInfo, setUserInfo } = useUserInfo();
@@ -19,9 +28,24 @@ export default function ProfileLayout() {
     UserInfoApi.logout();
     setUserInfo(null);
   }
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   return (
     <div className="flex flex-col md:flex-row min-h-[calc(100dvh-68px)] md:h-[calc(100dvh-68px)] md:overflow-hidden bg-indigo-50">
-      <Sidebar mobileHeader="Profile">
+      <div className="md:hidden bg-indigo-600 text-white p-4 flex justify-between items-center">
+        <h1 className="text-xl font-bold">Profile</h1>
+        <button
+          onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+          className="text-white hover:bg-indigo-500"
+        >
+          {isSidebarOpen ? <X /> : <Menu />}
+        </button>
+      </div>
+
+      <Sidebar
+        setIsOpen={setIsSidebarOpen}
+        isOpen={isSidebarOpen}
+        inPlaceheightClass="h-[calc(100dvh-68px)]"
+      >
         <SidebarHeader>
           <div className="flex items-center space-x-3">
             <img
