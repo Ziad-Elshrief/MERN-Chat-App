@@ -28,7 +28,7 @@ export function Sidebar({
   return (
     <>
       <div
-        className={`fixed inset-y-0 left-0 transform md:relative md:translate-x-0 transition duration-200 ease-in-out z-30
+        className={`fixed inset-y-0 left-0 transform md:relative md:translate-x-0 transition duration-200 ease-in-out z-40
           ${isOpen ? "translate-x-0" : "-translate-x-full"}`}
       >
         <div
