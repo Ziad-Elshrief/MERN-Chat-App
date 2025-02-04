@@ -3,7 +3,7 @@ import ChatRoomSidebar from "../components/ChatRoomSidebar";
 import MessagesContainer from "../components/MessagesContainer";
 import { Info, LogOut, MessagesSquare, Users } from "lucide-react";
 import { useEffect, useState } from "react";
-import { MessageType, UserType } from "../lib/types";
+import { UserType } from "../lib/types";
 import { socket } from "../socket";
 import { useNavigate, useParams } from "react-router-dom";
 import Popup from "../components/Popup";
@@ -15,7 +15,6 @@ const SMALL_SCREEN_WIDTH = 640;
 export default function ChatRoom() {
   const { room } = useParams();
   const { userInfo } = useUserInfo();
-  const [reply, setReply] = useState<MessageType>();
   const [showSide, setShowSide] = useState(false);
   const [willLeave, setWillLeave] = useState(false);
   const [usersList, setUsersList] = useState<UserType[]>([]);
@@ -44,10 +43,10 @@ export default function ChatRoom() {
     };
     window.addEventListener("resize", sidebarHandler);
     return () => {
-      socket.disconnect()
-      window.removeEventListener("resize", sidebarHandler)
+      socket.disconnect();
+      window.removeEventListener("resize", sidebarHandler);
     };
-  },[room]);
+  }, [room]);
 
   return (
     <>
@@ -99,9 +98,9 @@ export default function ChatRoom() {
                   : "hidden sm:block"
               } `}
             />
-            <MessagesContainer setReply={setReply} />
+            <MessagesContainer />
           </main>
-          <SendMessage reply={reply} setReply={setReply} />
+          <SendMessage />
         </div>
       </Container>
     </>

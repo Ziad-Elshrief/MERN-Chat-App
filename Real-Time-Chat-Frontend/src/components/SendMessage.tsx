@@ -2,33 +2,34 @@ import { ImageUp, Send, X } from "lucide-react";
 import { socket } from "../socket";
 import { useRef, useState } from "react";
 import TextareaAutosize from "react-textarea-autosize";
-import { MessageType } from "../lib/types";
 import { useUserInfo } from "../context/UserInfoContext";
+import { useMessageList } from "../context/MessageListContext";
 
-export default function SendMessage({
-  setReply,
-  reply,
-}: {
-  setReply: React.Dispatch<React.SetStateAction<MessageType | undefined>>;
-  reply: MessageType | undefined;
-}) {
-  const [image, setImage] = useState("");
+export default function SendMessage() {
   const { userInfo } = useUserInfo();
+  const { messageList, repliedMessageId, setRepliedMessageId } =
+    useMessageList();
+  const messageInReply = messageList.filter(
+    (msg) => msg.messageId === repliedMessageId
+  )[0];
+  const [image, setImage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const fileInput = useRef<HTMLInputElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   function sendMessage(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    setIsLoading(true);
     const target = e.target as HTMLFormElement;
     const message = target.msg.value.trim();
     if (!(message === "" && image === "")) {
       socket.emit("chatMessage", {
         content: message,
         image,
-        repliedMessageId: reply?.messageId || "",
+        repliedMessageId: repliedMessageId || "",
       });
       socket.emit("notTyping");
       setImage("");
-      setReply(undefined);
+      setRepliedMessageId(undefined);
       target.msg.value = "";
       target.msg.style = "height:40px !important";
       target.msg.focus();
@@ -36,6 +37,7 @@ export default function SendMessage({
         fileInput.current.value = "";
       }
     }
+    setIsLoading(false);
   }
   function handleTyping(e: React.ChangeEvent<HTMLTextAreaElement>) {
     if (e.target.value.trim() === "") {
@@ -82,28 +84,30 @@ export default function SendMessage({
           <X className="text-indigo-950 " size={20} />
         </button>
       </div>
-      {reply && (
+      {repliedMessageId && (
         <div
           className={` relative mb-2 overflow-hidden rounded-xl bg-violet-400  flex gap-x-2.5 w-full justify-between items-stretch`}
         >
           <div className="border-l-8 border-indigo-800 p-2 max-w-[80%]">
             <h6 className="text-indigo-900 font-semibold">
               Replying to{" "}
-              {reply.userId === userInfo?._id ? "yourself" : reply.username}
+              {messageInReply.userId === userInfo?._id
+                ? "yourself"
+                : messageInReply.username}
             </h6>
             <p className="whitespace-pre-line line-clamp-2" dir="auto">
-              {reply.content}
+              {messageInReply.content}
             </p>
           </div>
-          {reply.image !== "" && (
+          {messageInReply.image !== "" && (
             <img
               className="w-1/5 self-stretch object-cover object-center rounded-e-xl  max-h-28"
-              src={reply.image}
+              src={messageInReply.image}
             />
           )}
           <button
             className="absolute right-1 top-1  bg-indigo-300 border border-indigo-950 rounded-full"
-            onClick={() => setReply(undefined)}
+            onClick={() => setRepliedMessageId(undefined)}
           >
             <X className="text-indigo-950 " size={20} />
           </button>
@@ -139,7 +143,10 @@ export default function SendMessage({
           dir="auto"
           onChange={(e) => handleTyping(e)}
         />
-        <button className="h-10 flex-shrink-0  bg-indigo-900 p-2 rounded-e-lg text-white hover:bg-indigo-500 focus:outline-none focus:border focus:border-indigo-300 focus:ring-0 focus:ring-offset-0">
+        <button
+          disabled={isLoading}
+          className="h-10 flex-shrink-0  bg-indigo-900 p-2 rounded-e-lg text-white hover:bg-indigo-500 focus:outline-none focus:border focus:border-indigo-300 focus:ring-0 focus:ring-offset-0 disabled:bg-gray-600"
+        >
           <Send className="mr-0.5 inline mb-1" size={14} /> Send
         </button>
       </form>

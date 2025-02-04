@@ -23,6 +23,7 @@ import ProfileLayout from "./components/ProfileLayout.tsx";
 import ProfileUpdate from "./pages/ProfileUpdate.tsx";
 import PasswordChange from "./pages/PasswordChange.tsx";
 import DeleteAccount from "./pages/DeleteAccount.tsx";
+import { MessageListContextProvider } from "./context/MessageListContext.tsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -50,7 +51,9 @@ const router = createBrowserRouter(
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <UserInfoContextProvider>
-      <RouterProvider router={router} />
+      <MessageListContextProvider>
+        <RouterProvider router={router} />
+      </MessageListContextProvider>
     </UserInfoContextProvider>
   </StrictMode>
 );
