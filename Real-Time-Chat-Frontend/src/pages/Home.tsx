@@ -34,7 +34,9 @@ export default function Home() {
       </div>
       <section className="py-20">
         <div className="container mx-auto px-6">
-          <h2 className="text-3xl font-bold flex justify-center gap-x-1 items-center mb-12 dark:text-white"><LayoutList /> Features</h2>
+          <h2 className="text-3xl font-bold flex justify-center gap-x-1 items-center mb-12 dark:text-white">
+            <LayoutList /> Features
+          </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <FeatureCard
               icon={<Users className="h-8 w-8 text-indigo-500" />}

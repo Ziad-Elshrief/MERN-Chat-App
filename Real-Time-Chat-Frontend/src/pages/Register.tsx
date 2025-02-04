@@ -54,8 +54,9 @@ export default function Register() {
           <p className="text-gray-300">Create a new account</p>
         </header>
         <main className="py-4 px-8 bg-indigo-500">
-          <form method="post" onSubmit={submitHandler}>
-            <label htmlFor="username" className="mb-1 block">
+          <form method="post" onSubmit={submitHandler} className="space-y-4">
+           <div>
+           <label htmlFor="username" className="mb-1 block">
               <User className="inline mr-0.5 mb-1" size={16} /> Username
             </label>
             <Input
@@ -66,7 +67,9 @@ export default function Register() {
               required
               maxLength={MAX_LENGTH}
             />
-            <label htmlFor="email" className="mb-1 block">
+           </div>
+          <div>
+          <label htmlFor="email" className="mb-1 block">
               <Mail className="inline mr-0.5 mb-1" size={16} /> Email
             </label>
             <Input
@@ -76,7 +79,9 @@ export default function Register() {
               placeholder="Enter your email..."
               required
             />
-            <label htmlFor="password" className="mb-1 block">
+          </div>
+           <div>
+           <label htmlFor="password" className="mb-1 block">
               <KeySquare className="inline mr-0.5 mb-1" size={16} /> Password
             </label>
             <Input
@@ -86,7 +91,9 @@ export default function Register() {
               placeholder="Enter your password"
               required
             />
-            <label htmlFor="confirmPassword" className="mb-1 block">
+           </div>
+          <div>
+          <label htmlFor="confirmPassword" className="mb-1 block">
               <KeySquare className="inline mr-0.5 mb-1" size={16} /> Confirm
               Password
             </label>
@@ -97,14 +104,14 @@ export default function Register() {
               placeholder="Confirm your password"
               required
             />
-            <label className="mb-1 block">
+          </div>
+           <div>
+           <label className="mb-1 block">
               <CircleUserRound className="inline mr-0.5 mb-1" size={16} />
               Avatar
             </label>
-            <p className="text-gray-300 mb-3">
-              You can change your avatar any time later
-            </p>
             <AvatarPicker setAvatar={setAvatar} avatar={avatar} />
+           </div>
             <button
               type="submit"
               disabled={isLoading}

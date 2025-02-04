@@ -42,8 +42,9 @@ export default function Login() {
           </h1>
         </header>
         <main className="py-4 px-8 bg-indigo-500">
-          <form onSubmit={submitHandler}>
-            <label htmlFor="email" className="mb-1 block">
+          <form onSubmit={submitHandler} className="space-y-4">
+           <div>
+           <label htmlFor="email" className="mb-1 block">
               <Mail className="inline mr-0.5 mb-1" size={16} /> Email
             </label>
             <Input
@@ -53,7 +54,9 @@ export default function Login() {
               placeholder="Enter your email..."
               required
             />
-            <label htmlFor="password" className="mb-1 block">
+           </div>
+          <div>
+          <label htmlFor="password" className="mb-1 block">
               <KeySquare className="inline mr-0.5 mb-1" size={16} /> Password
             </label>
             <Input
@@ -63,6 +66,7 @@ export default function Login() {
               placeholder="Enter your password"
               required
             />
+          </div>
             <button
               type="submit"
               disabled={isLoading}
