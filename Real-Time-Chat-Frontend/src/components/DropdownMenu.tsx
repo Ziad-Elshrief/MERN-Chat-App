@@ -21,7 +21,7 @@ export default function DropdownMenu({
     muted: "hover:text-indigo-400 data-focus:text-indigo-400",
   };
   return (
-    <Menu as="div" className=" relative inline-block text-left">
+    <Menu as="div" className=" relative inline-block text-left ">
       <MenuButton
         className={`inline-flex w-full justify-center gap-x-1.5 rounded-md  text-sm font-semibold text-white ${variants[variant]}`}
       >

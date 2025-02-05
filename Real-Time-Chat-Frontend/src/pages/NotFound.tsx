@@ -7,7 +7,7 @@ export default function NotFound() {
   return (
     <>
       <div
-        className=" bg-cover bg-center w-full relative h-[calc(100dvh-68px)] overflow-hidden"
+        className=" bg-cover bg-center w-full relative h-[calc(100vh-68px)] overflow-hidden"
         style={{ backgroundImage: `url(${bg})` }}
       >
         <Container>

@@ -60,7 +60,7 @@ export default function ChatRoom() {
         />
       )}
       <Container>
-        <div className="relative overflow-hidden rounded-xl shadow-md w-full max-w-5xl h-[calc(100dvh-100px)] flex flex-col">
+        <div className="relative overflow-hidden rounded-xl shadow-md w-full max-w-5xl h-[calc(100vh-100px)] flex flex-col">
           <header className="text-white bg-indigo-700 px-4 py-3.5 flex justify-between items-center h-[68px]">
             <h1 className="hidden md:block text-lg">
               <MessagesSquare className="inline mr-0.5 mb-1" /> Chat App
