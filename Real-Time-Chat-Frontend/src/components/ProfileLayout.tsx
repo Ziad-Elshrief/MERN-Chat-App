@@ -30,7 +30,7 @@ export default function ProfileLayout() {
   }
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   return (
-    <div className="flex flex-col md:flex-row min-h-[calc(100vh-68px)] md:h-[calc(100vh-68px)] md:overflow-hidden bg-indigo-50">
+    <div className="flex flex-col md:flex-row min-h-[calc(100dvh-68px)] md:h-[calc(100dvh-68px)] md:overflow-hidden bg-indigo-50">
       <div className="md:hidden bg-indigo-600 text-white p-4 flex justify-between items-center">
         <h1 className="text-xl font-bold">Profile</h1>
         <button
@@ -44,7 +44,7 @@ export default function ProfileLayout() {
       <Sidebar
         setIsOpen={setIsSidebarOpen}
         isOpen={isSidebarOpen}
-        inPlaceheightClass="h-[calc(100vh-68px)]"
+        inPlaceheightClass="h-[calc(100dvh-68px)]"
       >
         <SidebarHeader>
           <div className="flex items-center space-x-3">
