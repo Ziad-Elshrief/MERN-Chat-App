@@ -44,9 +44,10 @@ export default function ChatRoom() {
       });
     }
     return () => {
+      if(socket.connected)
       socket.disconnect();
     };
-  }, [room]);
+  });
 
   return (
     <>
