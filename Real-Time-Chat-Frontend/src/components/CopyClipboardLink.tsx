@@ -25,11 +25,10 @@ export default function CopyClipboardLink() {
           readOnly
           name="roomLink"
           id="roomLink"
-          
         />
         <button
           type="submit"
-          className="text-white bg-indigo-800 hover:bg-indigo-600 focus:ring-4 focus:outline-none focus:ring-indigo-400 font-medium rounded-lg text-sm  p-2.5 text-center"
+          className="text-white bg-indigo-800 hover:bg-indigo-700 focus:ring-4 focus:outline-none focus:ring-indigo-400 font-medium rounded-lg text-sm  p-2.5 text-center"
           disabled={isClicked}
         >
           {isClicked ? (

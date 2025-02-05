@@ -24,6 +24,7 @@ import ProfileUpdate from "./pages/ProfileUpdate.tsx";
 import PasswordChange from "./pages/PasswordChange.tsx";
 import DeleteAccount from "./pages/DeleteAccount.tsx";
 import { MessageListContextProvider } from "./context/MessageListContext.tsx";
+import { SiteThemeContextProvider } from "./context/SiteThemeContext.tsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -51,9 +52,11 @@ const router = createBrowserRouter(
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <UserInfoContextProvider>
-      <MessageListContextProvider>
-        <RouterProvider router={router} />
-      </MessageListContextProvider>
+      <SiteThemeContextProvider>
+        <MessageListContextProvider>
+          <RouterProvider router={router} />
+        </MessageListContextProvider>
+      </SiteThemeContextProvider>
     </UserInfoContextProvider>
   </StrictMode>
 );

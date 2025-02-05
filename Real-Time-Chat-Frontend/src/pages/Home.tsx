@@ -57,7 +57,7 @@ export default function Home() {
         </div>
       </section>
 
-      <footer className="bg-indigo-800 text-white py-8">
+      <footer className="bg-indigo-900 text-white py-8">
         <div className="container mx-auto px-6 text-center">
           <p>&copy; {new Date().getFullYear()} ChatApp. All rights reserved.</p>
         </div>
