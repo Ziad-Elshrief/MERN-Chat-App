@@ -21,14 +21,15 @@ export const MessageListContextProvider = ({
 }: {
   children: ReactNode;
 }) => {
-  const [messageList, setMessageList] =
-    useState<MessageType[]>([]);
+  const [messageList, setMessageList] = useState<MessageType[]>([]);
   const [repliedMessageId, setRepliedMessageId] = useState<string>();
   useEffect(() => {
-    sessionStorage.setItem(
-      `room-${location.pathname}`,
-      JSON.stringify(messageList)
-    );
+    if (messageList.length > 0) {
+      sessionStorage.setItem(
+        `room-${location.pathname}`,
+        JSON.stringify(messageList)
+      );
+    }
   }, [messageList]);
   return (
     <MessageListContext.Provider
