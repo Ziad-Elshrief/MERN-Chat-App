@@ -50,13 +50,13 @@ const router = createBrowserRouter(
 );
 
 createRoot(document.getElementById("root")!).render(
-  // <StrictMode>
+  <StrictMode>
     <UserInfoContextProvider>
       <SiteThemeContextProvider>
         <MessageListContextProvider>
-          <RouterProvider router={router}/>
+          <RouterProvider router={router} />
         </MessageListContextProvider>
       </SiteThemeContextProvider>
     </UserInfoContextProvider>
-  // </StrictMode>
+  </StrictMode>
 );
