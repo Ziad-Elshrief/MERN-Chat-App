@@ -105,7 +105,7 @@ const updateUserProfile = asyncHandler(async (req: UserRequest, res) => {
       }
       user.name = req.body.name || user.name;
       user.email = req.body.email || user.email;
-      user.avatar = req.body.avatar || user.avatar;
+      user.avatar = req.body.avatar;
       const updatedUser = await user.save();
       res.status(200).json({
         _id: updatedUser._id,
