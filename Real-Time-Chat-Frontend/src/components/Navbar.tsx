@@ -69,14 +69,14 @@ export default function Navbar() {
               }
               linkHref="/join-chat"
             />
-            <DropdownMenuLinkItem
+            {!userInfo && <DropdownMenuLinkItem
               linkLabel={
                 <>
                   <UserPlus className="inline size-3.5 mb-1" /> Sign Up
                 </>
               }
               linkHref="/register"
-            />
+            />}
           </DropdownMenu>
         </div>
         <NavbarThemeButton />

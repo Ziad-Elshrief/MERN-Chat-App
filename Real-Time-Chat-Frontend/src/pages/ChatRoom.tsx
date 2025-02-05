@@ -89,11 +89,10 @@ export default function ChatRoom() {
               Leave
             </button>
           </header>
-          <main className="relative grid grid-cols-1 md:grid-cols-[1fr_3fr] flex-1 min-h-0">
+          <main className="relative grid grid-cols-1 md:grid-cols-[1fr_3fr] flex-1 min-h-0 overflow-clip">
             <Sidebar
               setIsOpen={setIsSidebarOpen}
               isOpen={isSidebarOpen}
-              inPlaceheightClass="h-[calc(100dvh-248px)]"
             >
               {isSidebarOpen && (
                 <SidebarHeader>
@@ -132,6 +131,7 @@ export default function ChatRoom() {
                       </li>
                     ))}
                   </ul>
+
                 </SidebarSection>
               </SidebarContent>
             </Sidebar>

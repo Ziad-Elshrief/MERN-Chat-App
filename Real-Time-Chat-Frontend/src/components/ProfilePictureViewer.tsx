@@ -19,12 +19,12 @@ export default function ProfilePictureViewer({
   );
   return (
     <div
-      className="absolute top-0 left-0 w-full h-full z-[21] bg-slate-800 bg-opacity-90"
+      className="absolute top-0 left-0 w-full h-full z-20 bg-slate-800 bg-opacity-90 flex justify-center items-center overflow-hidden"
       onClick={() => setViewProfilePicture("")}
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="absolute bottom-1/2 translate-y-1/2 right-[20%] rounded-xl p-3 space-y-4 h-fit w-[60%] max-w-72 shadow-md bg-slate-300 dark:bg-slate-700 dark:text-white overflow-hidden"
+        className=" rounded-xl p-3 space-y-4 h-fit w-[60%] max-w-64 shadow-md bg-slate-300 dark:bg-slate-700 dark:text-white overflow-hidden"
       >
         <header className="flex justify-between items-center px-1.5">
           <h3 className="bg-indigo-800 text-white rounded-xl p-2">

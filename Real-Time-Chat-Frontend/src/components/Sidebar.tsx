@@ -133,7 +133,7 @@ export function SidebarSection({ title, children }: SidebarSectionProps) {
       <h3 className="mb-2 px-3 text-sm font-semibold uppercase tracking-wider text-indigo-200">
         {title}
       </h3>
-      <nav className="space-y-1">{children}</nav>
+      <div className="space-y-1">{children}</div>
     </div>
   );
 }

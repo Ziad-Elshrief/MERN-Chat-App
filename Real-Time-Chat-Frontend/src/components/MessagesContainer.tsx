@@ -102,6 +102,7 @@ export default function MessagesContainer() {
   }, [scrollFlag]);
   return (
     <>
+      <section className="relative overflow-hidden">
       {viewProfilePicture !== "" && (
         <ProfilePictureViewer
           setViewProfilePicture={setViewProfilePicture}
@@ -111,7 +112,6 @@ export default function MessagesContainer() {
       {viewImage !== "" && (
         <ImageViewer setViewImage={setViewImage} viewImage={viewImage} />
       )}
-      <section className="relative overflow-hidden">
         <div
           className=" bg-white dark:bg-slate-800 p-4 h-full overflow-x-hidden overflow-y-scroll border-l-2 border-l-indigo-700 md:border-0"
           ref={messagesRef}
