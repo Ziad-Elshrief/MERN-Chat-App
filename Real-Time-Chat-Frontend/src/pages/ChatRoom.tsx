@@ -16,9 +16,11 @@ import {
 } from "../components/Sidebar";
 import { profilePictures } from "../utils/profilePictures";
 import CopyClipboardLink from "../components/CopyClipboardLink";
+import { useMessageList } from "../context/MessageListContext";
 
 export default function ChatRoom() {
   const { room } = useParams();
+  const { setMessageList } = useMessageList();
   const { userInfo } = useUserInfo();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [willLeave, setWillLeave] = useState(false);
@@ -33,6 +35,13 @@ export default function ChatRoom() {
   useEffect(() => {
     if (userInfo) {
       socket.connect();
+      setMessageList(
+        sessionStorage.getItem(`room-${location.pathname}`)
+          ? JSON.parse(
+              sessionStorage.getItem(`room-${location.pathname}`) as string
+            )
+          : []
+      );
       socket.emit("joinRoom", {
         username: userInfo.username,
         userId: userInfo._id,
@@ -44,10 +53,12 @@ export default function ChatRoom() {
       });
     }
     return () => {
-      if(socket.connected)
-      socket.disconnect();
+      if (socket.connected) {
+        setMessageList([]);
+        socket.disconnect();
+      }
     };
-  });
+  }, [room]);
 
   return (
     <>
@@ -91,10 +102,7 @@ export default function ChatRoom() {
             </button>
           </header>
           <main className="relative grid grid-cols-1 md:grid-cols-[1fr_3fr] flex-1 min-h-0 overflow-clip">
-            <Sidebar
-              setIsOpen={setIsSidebarOpen}
-              isOpen={isSidebarOpen}
-            >
+            <Sidebar setIsOpen={setIsSidebarOpen} isOpen={isSidebarOpen}>
               {isSidebarOpen && (
                 <SidebarHeader>
                   <div className="flex items-center space-x-3">
@@ -132,7 +140,6 @@ export default function ChatRoom() {
                       </li>
                     ))}
                   </ul>
-
                 </SidebarSection>
               </SidebarContent>
             </Sidebar>

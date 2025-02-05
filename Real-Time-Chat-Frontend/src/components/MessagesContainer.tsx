@@ -76,17 +76,23 @@ export default function MessagesContainer() {
 
   useEffect(() => {
     socket.on("message", (message: MessageType) => {
-      setMessageList((prev) => [
-        ...prev,
-        {
-          ...message,
-          time: new Date(message.time).toLocaleTimeString(["en-US"], {
-            hour: "numeric",
-            minute: "2-digit",
-            hour12: true,
-          }),
-        },
-      ]);
+      setMessageList((prev) => {
+        if (prev.find((msg) => msg.messageId === message.messageId)) {
+          return prev;
+        } else {
+          return [
+            ...prev,
+            {
+              ...message,
+              time: new Date(message.time).toLocaleTimeString(["en-US"], {
+                hour: "numeric",
+                minute: "2-digit",
+                hour12: true,
+              }),
+            },
+          ];
+        }
+      });
       if (message.userId === userInfo?._id) setScrollFlag(true);
     });
     socket.on("updateReact", (MessageReact: MessageReactType) => {
@@ -103,15 +109,15 @@ export default function MessagesContainer() {
   return (
     <>
       <section className="relative overflow-hidden">
-      {viewProfilePicture !== "" && (
-        <ProfilePictureViewer
-          setViewProfilePicture={setViewProfilePicture}
-          viewProfilePicture={viewProfilePicture}
-        />
-      )}
-      {viewImage !== "" && (
-        <ImageViewer setViewImage={setViewImage} viewImage={viewImage} />
-      )}
+        {viewProfilePicture !== "" && (
+          <ProfilePictureViewer
+            setViewProfilePicture={setViewProfilePicture}
+            viewProfilePicture={viewProfilePicture}
+          />
+        )}
+        {viewImage !== "" && (
+          <ImageViewer setViewImage={setViewImage} viewImage={viewImage} />
+        )}
         <div
           className=" bg-white dark:bg-slate-800 p-4 h-full overflow-x-hidden overflow-y-scroll border-l-2 border-l-indigo-700 md:border-0"
           ref={messagesRef}

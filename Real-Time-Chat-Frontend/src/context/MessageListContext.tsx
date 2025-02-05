@@ -21,13 +21,9 @@ export const MessageListContextProvider = ({
 }: {
   children: ReactNode;
 }) => {
-  const intialMessageList = sessionStorage.getItem(`room-${location.pathname}`)
-    ? JSON.parse(sessionStorage.getItem(`room-${location.pathname}`) as string)
-    : [];
   const [messageList, setMessageList] =
-    useState<MessageType[]>(intialMessageList);
+    useState<MessageType[]>([]);
   const [repliedMessageId, setRepliedMessageId] = useState<string>();
-
   useEffect(() => {
     sessionStorage.setItem(
       `room-${location.pathname}`,

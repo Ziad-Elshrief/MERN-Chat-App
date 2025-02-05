@@ -93,6 +93,13 @@ io.on("connection", (socket: Socket) => {
     if (userInroom) {
       const user = userRejoin(socket.id, userId, room);
       socket.join(user.room);
+        //Welcome current user
+        socket.emit(
+          "message",
+          formatMessage("System", "0", {
+            content: `You joined ${user.room} room chat from another device/tab`,
+          })
+        );
       // Send users and room info
       socket.emit("roomUsers", {
         room: user.room,
